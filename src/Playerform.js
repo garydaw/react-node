@@ -3,21 +3,16 @@ import React, { useState } from 'react';
 
 function AllyCodeForm() {
   const [ally_code, setAllyCode] = useState('');
-  const [response, setResponse] = useState('');
+  const [player, setPlayer] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
 
-      fetch('http://localhost:5000/api/players/'+ally_code)
-    .then((response) => response.json())
-    .then((data) => console.log(data))
-    .catch((error) => console.error(error));
+      const result = await (await fetch('http://localhost:5000/api/players/'+ally_code)).json()
+      setPlayer(result);
 
-      //const data = await response.json();
-
-     // setResponse(data);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -37,7 +32,11 @@ function AllyCodeForm() {
         <button type="submit">Submit</button>
       </form>
       <div>
-        <pre>{JSON.stringify(response, null, 2)}</pre>
+        {player.map((unit, index) => {
+          return (
+              <div>{unit.name}, {unit.ally_code}</div>
+          );
+        })}
       </div>
     </div>
   );

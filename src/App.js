@@ -22,7 +22,7 @@ function App() {
         setAllyCode(thisAllyCode);
   
         //get data
-        const data = await (await fetch(apiUrl + "players/" + thisAllyCode +'/')).json();
+        const data = await (await fetch(apiUrl + "player/" + thisAllyCode +'/')).json();
         if(data.length === 0){
           setLoadingMessage("No data found, going to SWGOH.");
           refreshPlayerData(thisAllyCode);
@@ -40,7 +40,7 @@ function App() {
     try {
   
         //get data
-        const data = await (await fetch(apiUrl + "refreshPlayer/" + allyCode +'/')).json();
+        const data = await (await fetch(apiUrl + "swgoh/player/" + allyCode +'/')).json();
         if(data.length === 0){
           setLoadingMessage("No data found please check your Ally Code.");
         } else {

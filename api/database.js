@@ -1,3 +1,4 @@
+//maria db
 const mariadb = require('mariadb');
 
 //vars to be swapped with env variables
@@ -8,6 +9,7 @@ const pool = mariadb.createPool({
   database: 'swgoh'
 });
 
+//connect to db, run query and return results
 var connectAndRun = async function sqlConnection(sql, values) {
 
     const conn = await pool.getConnection();

@@ -6,7 +6,7 @@ function Player(props) {
         return (
             <div>
                 <div>{props.allyCode}</div>
-                <button>{props.playerData.length > 0 ? "Refresh Data" : "Get Data"}</button>
+                <button onClick={props.refreshPlayerData}>{props.playerData.length > 0 ? "Refresh Data" : "Get Data"}</button>
             </div>
         )
 }

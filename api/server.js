@@ -8,6 +8,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+//split out api routes to separate files
 app.use("/api/database", databaseRouter);
 app.use("/api/swgoh", swgohRouter);
 app.use("/api/player", playerRouter);

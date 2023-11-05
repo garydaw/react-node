@@ -25,7 +25,7 @@ function App() {
         const data = await (await fetch(apiUrl + "player/" + thisAllyCode +'/')).json();
         if(data.length === 0){
           setLoadingMessage("No data found, going to SWGOH.");
-          refreshPlayerData(thisAllyCode);
+          refreshPlayerData();
         } else {
           setLoadingMessage("");
           setPlayerData(data);
@@ -36,9 +36,8 @@ function App() {
     }
   }
 
-  let refreshPlayerData = async (allyCode) => {
+  let refreshPlayerData = async () => {
     try {
-  
         //get data
         const data = await (await fetch(apiUrl + "swgoh/player/" + allyCode +'/')).json();
         if(data.length === 0){
@@ -53,7 +52,18 @@ function App() {
     }
   }
 
-
+  let getUnits = async () => {
+    try {
+        //get data
+        setLoadingMessage("Getting Units.");
+        const data = await (await fetch(apiUrl + "swgoh/units/")).json();
+        setLoadingMessage("");
+        
+        
+    } catch (err) {
+        console.log(err.message)
+    }
+  }
 
   function Loading(props) {
     if(props.loadingMessage === "")
@@ -77,9 +87,10 @@ function App() {
             ></input>
         
         <button className="form-control btn btn-primary" onClick={getPlayerInfo}>Search</button>
+        <button className="form-control btn btn-primary" onClick={getUnits}>Get Units</button>
       </div>
         <Loading loadingMessage={loadingMessage}></Loading>
-        <Player allyCode={allyCode} playerData={playerData}></Player>
+        <Player allyCode={allyCode} playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
     </div>
   );
 }

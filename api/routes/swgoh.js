@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
+const runSQL = require('../database');
 
 router.get('/player/:ally_code', async (req, res) => {
 
@@ -18,7 +19,7 @@ router.get('/player/:ally_code', async (req, res) => {
     axios.get(apiUrl, { headers })
       .then(response => {
         // Handle the response data
-        console.log('API response data:', response.data);
+        //console.log('API response data:', response.data);
         populatePlayer(response.data);
       })
       .catch(error => {
@@ -29,12 +30,10 @@ router.get('/player/:ally_code', async (req, res) => {
 
 populatePlayer = async (data) => {
 
-    const conn = await pool.getConnection();
-    const rows = await conn.query("SELECT ally_code FROM player WHERE ally_code = ?", data.data.ally_code);
+    const rows = await runSQL("SELECT ally_code FROM player WHERE ally_code = ?", data.data.ally_code);
     if(rows.length === 0){
-      await conn.query("INSERT INTO player (ally_code, `name`) VALUES (?,?)", [data.data.ally_code,data.data.name]);
+      await runSQL("INSERT INTO player (ally_code, `name`) VALUES (?,?)", [data.data.ally_code,data.data.name]);
     }
-    conn.release();
   };
 
   module.exports = router;

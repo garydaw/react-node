@@ -34,7 +34,7 @@ function AllyCodeForm() {
       <div>
         {player.map((unit, index) => {
           return (
-              <div>{unit.NAME}, {unit.ally_code}</div>
+              <div>{unit.name}, {unit.ally_code}</div>
           );
         })}
       </div>

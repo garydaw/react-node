@@ -1,7 +1,9 @@
 import './App.css';
 import { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap/dist/js/bootstrap.min.js';
 import Player from './Player'
+import logo from './img/sw.png'
 
 //import PlayerForm from './Playerform.js'
 
@@ -74,24 +76,59 @@ function App() {
   
 
   return (
-    <div className="container">
-      <h1>SWGOH Player Utils</h1>832233694
-      <div className="input-group mb-3">
-          <span className="input-group-text">Ally Code</span>
-          <input type="text"  
-            className="form-control"
-            placeholder="Ally Code"
-            aria-label="Ally Code"
-            aria-describedby="Ally Code"
-            id="allyCode"
-            ></input>
+    <div className="bg">
+      <div className="container p-3">
+        <div className="row">
+          <div className="col-6 offset-2">
+            <div className="input-group">
+              <span className="input-group-text w-25">Ally Code</span>
+              <input type="text"  
+                className="form-control w-50"
+                placeholder="Ally Code"
+                aria-label="Ally Code"
+                aria-describedby="Ally Code"
+                id="allyCode"></input>
         
-        <button className="form-control btn btn-primary" onClick={getPlayerInfo}>Search</button>
-        <button className="form-control btn btn-primary" onClick={getUnits}>Get Units</button>
-      </div>
+              <button className="form-control btn btn-primary w-25" onClick={getPlayerInfo}>Search</button>
+            </div>
+          </div>
+          <div className="col-2 offset-2 text-end">
+            <div className="btn-group">
+              <button type="button" className="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                SWGOH Refresh
+              </button>
+              <ul className="dropdown-menu dropdown-menu-end">
+                <li><a className="dropdown-item" onClick={getUnits}>Units</a></li>
+                <li><a className="dropdown-item" href="832233694">Mods</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
         <Loading loadingMessage={loadingMessage}></Loading>
         <Player allyCode={allyCode} playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
+      </div>
+
+<section className="intro text-center">
+  A long time ago, in a galaxy far, far away....
+</section>
+
+<section className="logo">
+<img className="logoImage" src={logo} alt="Your Image" />
+</section>
+
+<div id="board">  
+  <div id="content">
+    <p id="title">Version I</p>
+    <p id="subtitle">THE INITIAL DEPLOYMENT</p>
+    <p>Through tireless hours and countless web searches the SWGOH utilities is here.</p>
+    <p>This is the site you're looking for. It is not a trap! Do or do not use this site, there is no try! But if you don't
+       I will find your lack of faith disturbing!</p>        
+  </div>  
+</div>
+
+
     </div>
+
   );
 }
 

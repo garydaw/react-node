@@ -1,17 +1,14 @@
+require("dotenv").config();
 const express = require('express');
 const cors = require('cors');
-var databaseRouter = require("../api/routes/database");
-var swgohRouter = require("../api/routes/swgoh");
-var playerRouter = require("../api/routes/player");
+const apiRouter = require('./routes');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-//split out api routes to separate files
-app.use("/api/database", databaseRouter);
-app.use("/api/swgoh", swgohRouter);
-app.use("/api/player", playerRouter);
+
+app.use('/api',apiRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {

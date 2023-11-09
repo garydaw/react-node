@@ -7,7 +7,6 @@ const runSQL = require('../database');
 router.get('/migrate', async (req, res) => {
 
     console.log("starting");
-  
     console.log("creating player");
     await runSQL("CREATE TABLE IF NOT EXISTS player ("+
         "id int auto_increment, "+

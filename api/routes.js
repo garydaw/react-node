@@ -1,12 +1,14 @@
-const express = require("express");
-var databaseRouter = require("../api/routes/database");
-var swgohRouter = require("../api/routes/swgoh");
-var playerRouter = require("../api/routes/player");
+const express =require('express');
+const apiRouter = express.Router();
 
-module.exports = function(app) {
-  app.use(express.json());
+const databaseRouter = require("../api/routes/database");
+const swgohRouter = require("../api/routes/swgoh");
+const playerRouter = require("../api/routes/player");
 
-  app.use("/database", databaseRouter);
-  app.use("/swgoh", swgohRouter);
-  app.use("/player", playerRouter);
-};
+
+//split out api routes to separate files
+apiRouter.use("/database", databaseRouter);
+apiRouter.use("/swgoh", swgohRouter);
+apiRouter.use("/player", playerRouter);
+
+module.exports = apiRouter;

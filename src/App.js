@@ -108,24 +108,23 @@ function App() {
         <Player allyCode={allyCode} playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
       </div>
 
-<section className="intro text-center">
-  A long time ago, in a galaxy far, far away....
-</section>
+      <section className="intro text-center">
+        A long time ago, in a galaxy far, far away....
+      </section>
 
-<section className="logo">
-<img className="logoImage" src={logo} alt="Your Image" />
-</section>
+      <section className="logo">
+      <img className="logoImage" src={logo} alt="Your Image" />
+      </section>
 
-<div id="board">  
-  <div id="content">
-    <p id="title">Version I</p>
-    <p id="subtitle">THE INITIAL DEPLOYMENT</p>
-    <p>Through tireless hours and countless web searches the SWGOH utilities is here.</p>
-    <p>This is the site you're looking for. It is not a trap! Do or do not use this site, there is no try! But if you don't
-       I will find your lack of faith disturbing!</p>        
-  </div>  
-</div>
-
+      <div id="board">  
+        <div id="content">
+          <p id="title">Version I</p>
+          <p id="subtitle">THE INITIAL DEPLOYMENT</p>
+          <p>Through tireless hours and countless web searches the SWGOH utilities is here.</p>
+          <p>This is the site you're looking for. It is not a trap! Do or do not use this site, there is no try! But if you don't
+            I will find your lack of faith disturbing!</p>        
+        </div>  
+      </div>
 
     </div>
 

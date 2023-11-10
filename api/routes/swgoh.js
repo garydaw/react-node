@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const runSQL = require('../database');
+const runSQL = require('../model/database');
 
 const apiRoot = 'https://swgoh.gg/api';
 //blank at the moment

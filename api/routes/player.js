@@ -1,7 +1,7 @@
 //player api
 const express = require('express');
 const router = express.Router();
-const runSQL = require('../database');
+const runSQL = require('../model/database');
 
 //get player details
 router.get('/:ally_code', async (req, res) => {

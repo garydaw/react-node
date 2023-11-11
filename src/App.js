@@ -13,25 +13,20 @@ const apiUrl = 'http://localhost:5000/api/';
 function App() {
 
     //variables
-  const [allyCode,setAllyCode] = useState("");
   const [playerData, setPlayerData] = useState({});
   const [loadingMessage, setLoadingMessage] = useState("");
 
   let getPlayerInfo = async () => {
     try {
+
+        //set loading
         setLoadingMessage("Getting Player Data from database.");
-        let thisAllyCode = document.getElementById("allyCode").value;
-        setAllyCode(thisAllyCode);
+        let ally_code = document.getElementById("allyCode").value;
   
         //get data
-        const data = await (await fetch(apiUrl + "player/" + thisAllyCode +'/')).json();
-        if(data.length === 0){
-          setLoadingMessage("No data found, going to SWGOH.");
-          refreshPlayerData();
-        } else {
-          setLoadingMessage("");
-          setPlayerData(data);
-        }
+        const data = await (await fetch(apiUrl + "player/" + ally_code +'/')).json();
+        setLoadingMessage("");
+        setPlayerData(data);
         
     } catch (err) {
         console.log(err.message)
@@ -40,8 +35,9 @@ function App() {
 
   let refreshPlayerData = async () => {
     try {
+      setLoadingMessage("Getting data from SWGOH.");
         //get data
-        const data = await (await fetch(apiUrl + "swgoh/player/" + allyCode +'/')).json();
+        const data = await (await fetch(apiUrl + "swgoh/player/" + playerData.ally_code +'/')).json();
         if(data.length === 0){
           setLoadingMessage("No data found please check your Ally Code.");
         } else {
@@ -105,8 +101,9 @@ function App() {
           </div>
         </div>
         <Loading loadingMessage={loadingMessage}></Loading>
-        <Player allyCode={allyCode} playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
+        <Player playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
       </div>
+
 
       <section className="intro text-center">
         A long time ago, in a galaxy far, far away....

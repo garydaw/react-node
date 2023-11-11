@@ -54,9 +54,8 @@ function App() {
     try {
         //get data
         setLoadingMessage("Getting Units.");
-        const data = await (await fetch(apiUrl + "swgoh/units/")).json();
+        await (await fetch(apiUrl + "swgoh/units/")).json();
         setLoadingMessage("");
-        
         
     } catch (err) {
         console.log(err.message)
@@ -110,15 +109,15 @@ function App() {
       </section>
 
       <section className="logo">
-      <img className="logoImage" src={logo} alt="Your Image" />
+      <img className="logoImage" src={logo} alt="Bobba Daw" />
       </section>
 
       <div id="board">  
         <div id="content">
-          <p id="title">Version I</p>
-          <p id="subtitle">THE INITIAL DEPLOYMENT</p>
-          <p>Through tireless hours and countless web searches the SWGOH utilities is here.</p>
-          <p>This is the site you're looking for. It is not a trap! Do or do not use this site, there is no try! But if you don't
+          <p className="crawlText" id="title">Version I</p>
+          <p className="crawlText" id="subtitle">THE INITIAL DEPLOYMENT</p>
+          <p className="crawlText">Through tireless hours and countless web searches the SWGOH utilities is here.</p>
+          <p className="crawlText">This is the site you're looking for. It is not a trap! Do or do not use this site, there is no try! But if you don't
             I will find your lack of faith disturbing!</p>        
         </div>  
       </div>

@@ -1,6 +1,5 @@
 body, html {
   height: 100%;
-  color:#FFE81F !important;
 }
 
 #root{
@@ -99,7 +98,7 @@ body {
     }
 }
 
-p {
+.crawlText {
   color: #FFFF82;
 }
 

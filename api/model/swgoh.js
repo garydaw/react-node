@@ -7,7 +7,6 @@ swgoh.setUnits = async (units) => {
     //loop round units
     for(var u = 0; u < units.length; u++){
 
-        console.log(units[u].base_id);
         //insert or update
         let sql = "INSERT INTO unit (base_id, combat_type, character_name, url) ";
         sql += "VALUES (?, ?, ?, ?) ";
@@ -64,6 +63,61 @@ swgoh.setPlayer = async (player) => {
             player.units[u].data.gear_level, player.units[u].data.level, player.units[u].data.power, player.units[u].data.rarity,
             player.units[u].data.gear_level, player.units[u].data.level, player.units[u].data.power, player.units[u].data.rarity]);
 
+    }
+
+    const deleteAll = true;
+
+    if(deleteAll){
+        await runSQL("DELETE FROM player_mod WHERE ally_code  = ?", [ally_code]);
+    }
+
+    //loop round mods
+    for(var m = 0; m < player.mods.length; m++){
+
+        //insert or update
+        let sql = "INSERT INTO player_mod (id, ";
+        sql += "ally_code, base_id, level, tier, rarity, slot, group_set, ";
+        sql += "primary_stat, primary_stat_value, secondary_stat_1, secondary_stat_1_value, secondary_stat_2, secondary_stat_2_value, ";
+        sql += "secondary_stat_3, secondary_stat_3_value, secondary_stat_4, secondary_stat_4_value) ";
+        sql += "VALUES (?, ";
+        sql += "?, ?, ?, ?, ?, ?, ?, ";
+        sql += "?, ?, ?, ?, ?, ?, ";
+        sql += "?, ?, ?, ?) ";
+        if(!deleteAll){
+            sql += "ON DUPLICATE KEY UPDATE ";
+            sql += "ally_code  = ?, ";
+            sql += "base_id  = ?, ";
+            sql += "level  = ?, ";
+            sql += "tier  = ?, ";
+            sql += "rarity  = ?, ";
+            sql += "slot  = ?, ";
+            sql += "group_set  = ?, ";
+            sql += "primary_stat  = ?, ";
+            sql += "primary_stat_value  = ?, ";
+            sql += "secondary_stat_1  = ?, ";
+            sql += "secondary_stat_1_value  = ?, ";
+            sql += "secondary_stat_2  = ?, ";
+            sql += "secondary_stat_2_value  = ?, ";
+            sql += "secondary_stat_3  = ?, ";
+            sql += "secondary_stat_3_value  = ?, ";
+            sql += "secondary_stat_4  = ?, ";
+            sql += "secondary_stat_4_value  = ? ";
+        }
+
+        if(deleteAll){
+            await runSQL(sql, [ player.mods[m].id,
+                ally_code, player.mods[m].character, player.mods[m].level, player.mods[m].tier, player.mods[m].rarity, player.mods[m].slot, player.mods[m].set,
+                player.mods[m].primary_stat.name, player.mods[m].primary_stat.display_value, player.mods[m].secondary_stats[0].name, player.mods[m].secondary_stats[0].display_value, player.mods[m].secondary_stats[1].name, player.mods[m].secondary_stats[1].display_value,
+                player.mods[m].secondary_stats[2].name, player.mods[m].secondary_stats[2].display_value, player.mods[m].secondary_stats[3].name, player.mods[m].secondary_stats[3].display_value]);
+        } else {
+            await runSQL(sql, [ player.mods[m].id,
+                ally_code, player.mods[m].character, player.mods[m].level, player.mods[m].tier, player.mods[m].rarity, player.mods[m].slot, player.mods[m].set,
+                player.mods[m].primary_stat.name, player.mods[m].primary_stat.display_value, player.mods[m].secondary_stats[0].name, player.mods[m].secondary_stats[0].display_value, player.mods[m].secondary_stats[1].name, player.mods[m].secondary_stats[1].display_value,
+                player.mods[m].secondary_stats[2].name, player.mods[m].secondary_stats[2].display_value, player.mods[m].secondary_stats[3].name, player.mods[m].secondary_stats[3].display_value,
+                ally_code, player.mods[m].character, player.mods[m].level, player.mods[m].tier, player.mods[m].rarity, player.mods[m].slot, player.mods[m].set,
+                player.mods[m].primary_stat.name, player.mods[m].primary_stat.display_value, player.mods[m].secondary_stats[0].name, player.mods[m].secondary_stats[0].display_value, player.mods[m].secondary_stats[1].name, player.mods[m].secondary_stats[1].display_value,
+                player.mods[m].secondary_stats[2].name, player.mods[m].secondary_stats[2].display_value, player.mods[m].secondary_stats[3].name, player.mods[m].secondary_stats[3].display_value]);
+        }
     }
 
 }

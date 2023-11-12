@@ -7,7 +7,6 @@ function Player(props) {
         return "";
     else
         return (
-            <div>
             <div className="pt-3">
                 <div className="card">
                     <div className="card-header d-flex justify-content-between align-items-center">
@@ -35,30 +34,27 @@ function Player(props) {
                         </div>
                     </div>
                 </div>
-                <div className="pt-3">
+                <div className='pt-3'>
                     <div className="card">
-                        <div className="card-header">
-                        <ul className="nav nav-tabs card-header-tabs">
-                            <li className="nav-item">
-                                <a className="nav-link active" href="#" data-target="content1">Units</a>
+                        <ul className="nav nav-tabs card-header pb-0" id="myTab" role="tablist">
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link active" id="units-tab" data-bs-toggle="tab" data-bs-target="#units" type="button" role="tab" aria-controls="units" aria-selected="true">Units</button>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#" data-target="content2">Ships</a>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="ships-tab" data-bs-toggle="tab" data-bs-target="#ships" type="button" role="tab" aria-controls="ships" aria-selected="false">Ships</button>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#" data-target="content3">Mod Tools</a>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="modTools-tab" data-bs-toggle="tab" data-bs-target="#modTools" type="button" role="tab" aria-controls="modTools" aria-selected="false">Mod Tools</button>
                             </li>
                         </ul>
-                        </div>
-                        <div className="card-body">
-                            <p id="content1" className="active">Content for Link 1</p>
-                            <p id="content2">Content for Link 2</p>
-                            <p id="content3">Content for Link 3</p>
+
+                        <div className="tab-content">
+                            <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{props.playerData.units && <Units unitData={props.playerData.units}></Units>}</div>
+                            <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{props.playerData.ships && <Units unitData={props.playerData.ships}></Units>}</div>
+                            <div className="tab-pane fade" id="modTools" role="tabpanel" aria-labelledby="modTools-tab">modTools</div>
                         </div>
                     </div>
                 </div>
-                {props.playerData.units && <Units unitData={props.playerData.units}></Units>}
-            </div>
             </div>
         );
 }

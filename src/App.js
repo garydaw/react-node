@@ -1,11 +1,10 @@
 import './App.css';
 import { useState } from 'react';
+import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import Player from './Player'
-import logo from './img/sw.png'
-
-//import PlayerForm from './Playerform.js'
+import Crawler from './Crawler';
 
 //to change to env vars
 const apiUrl = 'http://localhost:5000/api/';
@@ -62,16 +61,44 @@ function App() {
     }
   }
 
+  let getBestMods = async () => {
+    try {
+        //get data
+        setLoadingMessage("Getting Best Mods.");
+        await (await fetch(apiUrl + "swgoh/mods/")).json();
+        setLoadingMessage("");
+        
+    } catch (err) {
+        console.log(err.message)
+    }
+  }
+
   function Loading(props) {
     if(props.loadingMessage === "")
       return "";
     else
-      return (<div>{props.loadingMessage}</div>);
+      return (<div className="loading-div">{props.loadingMessage}</div>);
   }
-  
 
+  const [showIntro, setShowIntro] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      clearIntro();
+    }, 50000); 
+
+    return () => clearTimeout(timer);
+  }, []);
+  
+  function clearIntro() {
+    setShowIntro(false);
+  }
   return (
     <div className="bg">
+      {showIntro ? (
+        <Crawler clearIntro={clearIntro}></Crawler>
+      ) : (
+       
       <div className="container p-3">
         <div className="row">
           <div className="col-6 offset-2">
@@ -94,7 +121,7 @@ function App() {
               </button>
               <ul className="dropdown-menu dropdown-menu-end">
                 <li><a className="dropdown-item" onClick={getUnits}>Units</a></li>
-                <li><a className="dropdown-item" href="832233694">Mods</a></li>
+                <li><a className="dropdown-item" onClick={getBestMods}>Mods</a></li>
               </ul>
             </div>
           </div>
@@ -102,26 +129,7 @@ function App() {
         <Loading loadingMessage={loadingMessage}></Loading>
         <Player playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
       </div>
-
-
-      <section className="intro text-center">
-        A long time ago, in a galaxy far, far away....
-      </section>
-
-      <section className="logo">
-      <img className="logoImage" src={logo} alt="Bobba Daw" />
-      </section>
-
-      <div id="board">  
-        <div id="content">
-          <p className="crawlText" id="title">Version I</p>
-          <p className="crawlText" id="subtitle">THE INITIAL DEPLOYMENT</p>
-          <p className="crawlText">Through tireless hours and countless web searches the SWGOH utilities is here.</p>
-          <p className="crawlText">This is the site you're looking for. It is not a trap! Do or do not use this site, there is no try! But if you don't
-            I will find your lack of faith disturbing!</p>        
-        </div>  
-      </div>
-
+    )}
     </div>
 
   );

@@ -8,7 +8,7 @@ export default function UnitOverview({unit}) {
                                 <li>Omicron: {unit.omicron_abilities.length}</li>
                             }*/
     return (
-        <div className="col">
+        <div className="col pb-3">
             <div className="card">
                 <div className="card-body">
                     <h5 className="card-title">{unit.character_name}</h5>
@@ -22,7 +22,7 @@ export default function UnitOverview({unit}) {
                             
                         </ol>
                     </div>
-                    <a href="#" className="btn btn-primary">Details</a>
+                    <button className="btn btn-primary">Details</button>
                 </div>
             </div>
         </div>

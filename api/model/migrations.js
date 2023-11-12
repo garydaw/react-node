@@ -53,8 +53,8 @@ async function versionOne (){
         "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
   
-    console.log("creating player_mods");
-    await runSQL("CREATE TABLE IF NOT EXISTS player_mods ("+
+    console.log("creating player_mod");
+    await runSQL("CREATE TABLE IF NOT EXISTS player_mod ("+
         "id varchar(32) NOT NULL, "+
         "ally_code int NOT NULL, "+
         "base_id VARCHAR(64) NOT NULL, "+
@@ -74,7 +74,7 @@ async function versionOne (){
         "secondary_stat_4 varchar(64) NOT NULL, "+
         "secondary_stat_4_value varchar(16) NOT NULL, "+
         "primary key(id), "+
-        "CONSTRAINT fk_player_mods__player_unit "+
+        "CONSTRAINT fk_player_mod__player_unit "+
         "FOREIGN KEY (ally_code, base_id) REFERENCES player_unit (ally_code, base_id) "+
         "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");

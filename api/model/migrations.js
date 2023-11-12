@@ -78,6 +78,19 @@ async function versionOne (){
         "FOREIGN KEY (ally_code, base_id) REFERENCES player_unit (ally_code, base_id) "+
         "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
+  
+    console.log("creating unit_mod");
+    await runSQL("CREATE TABLE IF NOT EXISTS unit_mod ("+
+        "date date NOT NULL DEFAULT CURDATE(), "+
+        "base_id varchar(64) NOT NULL, "+
+        "slot int NOT NULL, "+
+        "group_set varchar(64) NOT NULL, "+
+        "primary_stat varchar(64) NOT NULL, "+
+        "primary key(date, base_id, slot), "+
+        "CONSTRAINT fk_unit_mod__unit "+
+        "FOREIGN KEY (base_id) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT);");
 }
 
 module.exports = migrations;

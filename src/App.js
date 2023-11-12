@@ -65,7 +65,7 @@ function App() {
     try {
         //get data
         setLoadingMessage("Getting Best Mods.");
-        await (await fetch(apiUrl + "swgoh/mods/")).json();
+        await (await fetch(apiUrl + "swgoh/bestmods/")).json();
         setLoadingMessage("");
         
     } catch (err) {

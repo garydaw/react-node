@@ -28,6 +28,15 @@ swgoh.setUnits = async (units) => {
 
 }
 
+swgoh.getUnits = async () => {
+
+    //get unit count
+    let rows = await runSQL(" SELECT base_id, combat_type, character_name, url FROM unit");
+    
+    return rows;
+}
+
+
 swgoh.setPlayer = async (player) => {
 
     const ally_code = player.data.ally_code;
@@ -120,6 +129,111 @@ swgoh.setPlayer = async (player) => {
         }
     }
 
+}
+
+swgoh.deleteBestMods = async () => {
+
+    await runSQL("DELETE FROM unit_mod WHERE date = CURDATE()", []);
+}
+
+swgoh.setMods = async (base_id, character_name, html) => {
+    
+    var mod_start = 0;
+
+    //triangle
+    var mod_text = "Best Triangle (Holo-Array) Mod Primary Stat: <strong>";
+    mod_start = html.indexOf(mod_text, mod_start) + mod_text.length;
+
+    //no mods found
+    if(mod_start === mod_text.length - 1){
+        console.log("not Found");
+        return;
+    }
+
+    var mod_end = html.indexOf("</strong>", mod_start);
+    var triangle = html.substr(mod_start, mod_end - mod_start);
+
+    //Cross
+    mod_text = "Best Cross (Multiplexer) Mod Primary Stat: <strong>";
+    mod_start = html.indexOf(mod_text, mod_start) + mod_text.length;
+    mod_end = html.indexOf("</strong>", mod_start);
+    var cross = html.substr(mod_start, mod_end - mod_start);
+
+    //circle
+    mod_text = "Best Circle (Data-Bus) Mod Primary Stat: <strong>";
+    mod_start = html.indexOf(mod_text, mod_start) + mod_text.length;
+    mod_end = html.indexOf("</strong>", mod_start);
+    var circle = html.substr(mod_start, mod_end - mod_start);
+
+    //arrow
+    mod_text = "Best Arrow (Receiver) Mod Primary Stat: <strong>";
+    mod_start = html.indexOf(mod_text, mod_start) + mod_text.length;
+    mod_end = html.indexOf("</strong>", mod_start);
+    var arrow = html.substr(mod_start, mod_end - mod_start);
+
+    //sets
+    mod_text = "The most popular Mod Set for " + htmlEncode(character_name) + " is";
+    mod_start = html.indexOf(mod_text, mod_start) + mod_text.length;
+    mod_end = html.indexOf("</p>", mod_start);
+    var full_set = html.substr(mod_start, mod_end - mod_start);
+
+    var set_start = 0;
+    var set = [];
+
+    var set_text = '<span style="font-weight: bold;">';
+    set_start = full_set.indexOf(set_text, set_start) + set_text.length;
+    var set_end = full_set.indexOf("</span>", set_start);
+    set.push(full_set.substr(set_start, set_end - set_start));
+
+    //double set
+    if(full_set.substr(set_end + 9,1) === "4"){
+        set.push(full_set.substr(set_start, set_end - set_start));
+    }
+    
+    set_start = full_set.indexOf(set_text, set_start) + set_text.length;
+    var set_end = full_set.indexOf("</span>", set_start);
+    set.push(full_set.substr(set_start, set_end - set_start));
+
+    //double set
+    if(full_set.substr(set_end + 9,1) === "4"){
+        set.push(full_set.substr(set_start, set_end - set_start));
+    }
+
+    if(set.length === 2){
+        set_start = full_set.indexOf(set_text, set_start) + set_text.length;
+        var set_end = full_set.indexOf("</span>", set_start);
+        set.push(full_set.substr(set_start, set_end - set_start));
+    }
+
+    let sql = "INSERT INTO unit_mod (base_id, slot, group_set, primary_stat) VALUES (?, ?, ?, ?)";
+
+    //square
+    await runSQL(sql, [base_id, 1, set[0], "Offense"]);
+
+    //arrow
+    await runSQL(sql, [base_id, 2, set[0], arrow]);
+
+    //diamond
+    await runSQL(sql, [base_id, 3, set[1], "Defense"]);
+
+    //triangle
+    await runSQL(sql, [base_id, 4, set[1], triangle]);
+
+    //circle
+    await runSQL(sql, [base_id, 5, set[2], circle]);
+
+    //cross
+    await runSQL(sql, [base_id, 6, set[2], cross]);
+
+}
+
+function htmlEncode(str) {
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#x27;');
 }
 
 module.exports = swgoh;

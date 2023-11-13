@@ -85,7 +85,7 @@ swgoh.setPlayer = async (player) => {
 
         //insert or update
         let sql = "INSERT INTO player_mod (id, ";
-        sql += "ally_code, base_id, level, tier, rarity, slot, group_set, ";
+        sql += "ally_code, base_id, level, tier, rarity, slot_id, group_set, ";
         sql += "primary_stat, primary_stat_value, secondary_stat_1, secondary_stat_1_value, secondary_stat_2, secondary_stat_2_value, ";
         sql += "secondary_stat_3, secondary_stat_3_value, secondary_stat_4, secondary_stat_4_value) ";
         sql += "VALUES (?, ";
@@ -99,7 +99,7 @@ swgoh.setPlayer = async (player) => {
             sql += "level  = ?, ";
             sql += "tier  = ?, ";
             sql += "rarity  = ?, ";
-            sql += "slot  = ?, ";
+            sql += "slot_id  = ?, ";
             sql += "group_set  = ?, ";
             sql += "primary_stat  = ?, ";
             sql += "primary_stat_value  = ?, ";
@@ -205,7 +205,7 @@ swgoh.setMods = async (base_id, character_name, html) => {
         set.push(full_set.substr(set_start, set_end - set_start));
     }
 
-    let sql = "INSERT INTO unit_mod (base_id, slot, group_set, primary_stat) VALUES (?, ?, ?, ?)";
+    let sql = "INSERT INTO unit_mod (base_id, slot_id, group_set, primary_stat) VALUES (?, ?, ?, ?)";
 
     //square
     await runSQL(sql, [base_id, 1, set[0], "Offense"]);

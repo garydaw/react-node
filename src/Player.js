@@ -5,12 +5,24 @@ function Player(props) {
     const numFormatter = new Intl.NumberFormat('en-US');
     if(Object.keys(props.playerData).length === 0)
         return "";
+    else if (props.playerData.error_message)
+        return (
+            <div className="pt-3">
+                <div className="card">
+                    <div className="card-header d-flex justify-content-between align-items-center">
+                        <span>Player Details</span>
+                    </div>
+                    <div className="card-body pt-3">
+                        {props.playerData.error_message}
+                    </div>
+                </div>
+            </div>)
     else
         return (
             <div className="pt-3">
                 <div className="card">
                     <div className="card-header d-flex justify-content-between align-items-center">
-                        <span>Player Details </span>
+                        <span>Player Details</span>
                         <button className="btn btn-sm btn-primary" onClick={props.refreshPlayerData}>{props.playerData.units ? "Refresh Data" : "Get Data"}</button>
                     </div>
                     <div className="row">

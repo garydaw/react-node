@@ -28,11 +28,18 @@ router.get('/player/:ally_code', async (req, res) => {
   
   //get parameters
   const ally_code = req.params.ally_code;
-
-  const response = await axios.get(
-		siteRoot + 'api/player/'+ally_code, { headers }
-	);
-
+  let response;
+  try {
+    response = await axios.get(
+      siteRoot + 'api/player/'+ally_code, { headers }
+    );
+  } catch(error){
+    let returnObj = {};
+    returnObj.error_message = "Ally code " + ally_code + " not found, please check and try again.";
+    res.status(200).json(returnObj);
+    return;
+  }
+  
   await swgoh.setPlayer(response.data);
 
   const this_player = await player.get(ally_code);

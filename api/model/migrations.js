@@ -35,6 +35,20 @@ async function versionOne (){
         "url VARCHAR(256), "+
         "primary key(base_id));");
   
+    console.log("creating slot");
+    await runSQL("CREATE TABLE IF NOT EXISTS slot ("+
+        "slot_id int NOT NULL, "+
+        "slot_name varchar(16) NOT NULL, "+
+        "slot_long_name varchar(64) NOT NULL, "+
+        "primary key(slot_id));");
+
+    await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 1, 'Square', 'Transmitter' WHERE 1 NOT IN (SELECT slot_id FROM slot)");
+    await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 2, 'Arrow', 'Receiver' WHERE 2 NOT IN (SELECT slot_id FROM slot)");
+    await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 3, 'Diamond', 'Processor' WHERE 3 NOT IN (SELECT slot_id FROM slot)");
+    await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 4, 'Triangle', 'Holo-Array' WHERE 4 NOT IN (SELECT slot_id FROM slot)");
+    await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 5, 'Circle', 'Data-Bus' WHERE 5 NOT IN (SELECT slot_id FROM slot)");
+    await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 6, 'Cross', 'Multiplexer' WHERE 6 NOT IN (SELECT slot_id FROM slot)");
+  
     console.log("creating player_unit");
     await runSQL("CREATE TABLE IF NOT EXISTS player_unit ("+
         "ally_code int NOT NULL, "+
@@ -61,7 +75,7 @@ async function versionOne (){
         "level int NOT NULL, "+
         "tier int NOT NULL, "+
         "rarity int NOT NULL, "+
-        "slot int NOT NULL, "+
+        "slot_id int NOT NULL, "+
         "group_set int NOT NULL, "+
         "primary_stat varchar(64) NOT NULL, "+
         "primary_stat_value varchar(16) NOT NULL, "+
@@ -77,18 +91,26 @@ async function versionOne (){
         "CONSTRAINT fk_player_mod__player_unit "+
         "FOREIGN KEY (ally_code, base_id) REFERENCES player_unit (ally_code, base_id) "+
         "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_player_mod__slot "+
+        "FOREIGN KEY (slot_id) REFERENCES slot (slot_id) "+
+        "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
   
     console.log("creating unit_mod");
     await runSQL("CREATE TABLE IF NOT EXISTS unit_mod ("+
         "date date NOT NULL DEFAULT CURDATE(), "+
         "base_id varchar(64) NOT NULL, "+
-        "slot int NOT NULL, "+
+        "slot_id int NOT NULL, "+
         "group_set varchar(64) NOT NULL, "+
         "primary_stat varchar(64) NOT NULL, "+
-        "primary key(date, base_id, slot), "+
+        "primary key(date, base_id, slot_id), "+
         "CONSTRAINT fk_unit_mod__unit "+
         "FOREIGN KEY (base_id) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_unit_mod__slot "+
+        "FOREIGN KEY (slot_id) REFERENCES slot (slot_id) "+
         "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
 }

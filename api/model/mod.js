@@ -11,7 +11,7 @@ mod.checkPrimary = async (ally_code, date) => {
 	sql += "    ON pm.base_id = u.base_id ";
     sql += "LEFT OUTER JOIN unit_mod um ";
     sql += "    ON pm.base_id = um.base_id ";
-    sql += "    AND pm.slot = um.slot ";
+    sql += "    AND pm.slot_id = um.slot_id ";
     sql += "WHERE pm.primary_stat <> um.primary_stat ";
     sql += "AND	 pm.ally_code =  ?";
     sql += "AND	 um.date = ? ";

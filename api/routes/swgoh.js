@@ -48,13 +48,13 @@ router.get('/bestmods', async (req, res) => {
 
   for(var u = 0; units.length > u; u++){
     if(units[u].combat_type === 1){
- //if(units[u].base_id === "MOFFGIDEONS3"){
+      
       const response = await axios.get(
         'https:' + units[u].url + 'best-mods/', { headers }
       );
       console.log(units[u].base_id);
       await swgoh.setMods(units[u].base_id, units[u].character_name, response.data);
-//}
+      
     }
   }
   

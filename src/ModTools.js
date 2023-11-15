@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import ModToolsPrimary from './ModToolsPrimary';
+
 
 export default function ModTools({ally_code}) {
     const [activeTool, setActiveTool] = useState("modtools_primary");
@@ -35,7 +37,7 @@ export default function ModTools({ally_code}) {
                 </div>
                 <div className="col-9">
                     <div id="modtools_primary_content" className={activeTool === 'modtools_primary' ? "d-show" : "d-none"}>
-                        Primary
+                        <ModToolsPrimary ally_code={ally_code}></ModToolsPrimary>
                     </div>
                     <div id="modtools_set_content" className={activeTool === 'modtools_set' ? "d-show" : "d-none"}>
                         Set

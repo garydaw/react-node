@@ -14,4 +14,12 @@ router.get('/checkprimary/:ally_code/:date', async (req, res) => {
   
 });
 
+router.get('/dates/', async (req, res) => {
+    
+    const dates = await mod.getDates();
+    
+    res.status(200).json(dates);
+  
+});
+
 module.exports = router;

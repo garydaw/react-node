@@ -20,7 +20,7 @@ function App() {
 
         //set loading
         setLoadingMessage("Getting Player Data from database.");
-        let ally_code = document.getElementById("allyCode").value;
+        const ally_code = document.getElementById("allyCode").value;
   
         //get data
         const data = await (await fetch(apiUrl + "player/" + ally_code +'/')).json();

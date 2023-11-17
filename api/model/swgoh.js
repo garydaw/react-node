@@ -85,7 +85,7 @@ swgoh.setPlayer = async (player) => {
 
         //insert or update
         let sql = "INSERT INTO player_mod (id, ";
-        sql += "ally_code, base_id, level, tier, rarity, slot_id, group_set, ";
+        sql += "ally_code, base_id, level, tier, rarity, slot_id, group_set_id, ";
         sql += "primary_stat, primary_stat_value, secondary_stat_1, secondary_stat_1_value, secondary_stat_2, secondary_stat_2_value, ";
         sql += "secondary_stat_3, secondary_stat_3_value, secondary_stat_4, secondary_stat_4_value) ";
         sql += "VALUES (?, ";
@@ -100,7 +100,7 @@ swgoh.setPlayer = async (player) => {
             sql += "tier  = ?, ";
             sql += "rarity  = ?, ";
             sql += "slot_id  = ?, ";
-            sql += "group_set  = ?, ";
+            sql += "group_set_id  = ?, ";
             sql += "primary_stat  = ?, ";
             sql += "primary_stat_value  = ?, ";
             sql += "secondary_stat_1  = ?, ";
@@ -205,25 +205,26 @@ swgoh.setMods = async (base_id, character_name, html) => {
         set.push(full_set.substr(set_start, set_end - set_start));
     }
 
-    let sql = "INSERT INTO unit_mod (base_id, slot_id, group_set, primary_stat) VALUES (?, ?, ?, ?)";
+    
+    let sql = "INSERT INTO unit_mod (base_id, slot_id, group_set_id, primary_stat) SELECT ?, ?, group_set_id, ? FROM group_set WHERE group_set_name = ?";
 
     //square
-    await runSQL(sql, [base_id, 1, set[0], "Offense"]);
+    await runSQL(sql, [base_id, 1, "Offense", set[0]]);
 
     //arrow
-    await runSQL(sql, [base_id, 2, set[0], arrow]);
+    await runSQL(sql, [base_id, 2, arrow, set[0]]);
 
     //diamond
-    await runSQL(sql, [base_id, 3, set[1], "Defense"]);
+    await runSQL(sql, [base_id, 3, "Defense", set[1]]);
 
     //triangle
-    await runSQL(sql, [base_id, 4, set[1], triangle]);
+    await runSQL(sql, [base_id, 4, triangle, set[1]]);
 
     //circle
-    await runSQL(sql, [base_id, 5, set[2], circle]);
+    await runSQL(sql, [base_id, 5, circle, set[2]]);
 
     //cross
-    await runSQL(sql, [base_id, 6, set[2], cross]);
+    await runSQL(sql, [base_id, 6, cross, set[2]]);
 
 }
 

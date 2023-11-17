@@ -33,6 +33,13 @@ mod.getDates = async () => {
     const dates = await runSQL("SELECT DISTINCT date FROM unit_mod ORDER BY date DESC", []);
     
     return dates;
+} 
+
+mod.getSlots = async () => {
+
+    const slots = await runSQL("SELECT slot_id, slot_name, slot_long_name FROM slot ORDER BY slot_name", []);
+    
+    return slots;
 }
 
 module.exports = mod;

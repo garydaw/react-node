@@ -1,38 +1,21 @@
 import { useState } from 'react';
-import { useEffect } from 'react';
-import axios from 'axios';
-
+import { useLoading } from './LoadingContext';
 const apiUrl = 'http://localhost:5000/api/';
 
-export default function ModToolsPrimary({ally_code}) {
 
-    const [dates, setDates] = useState([]);
+export default function ModToolsPrimary({ally_code, dates}) {
+
     const [mismatches, setMismatches] = useState([]);
-    
-    useEffect(() => {
-      axios
-        .get(apiUrl + "mod/dates/")
-        .then((res) => {
-          setDates(res.data)
-        })
-    }, []);
-
-    function formatDate(value) {
-        let date = new Date(value);
-        const day = date.toLocaleString('default', { day: '2-digit' });
-        const month = date.toLocaleString('default', { month: 'short' });
-        const year = date.toLocaleString('default', { year: 'numeric' });
-        return day + '-' + month + '-' + year;
-    }
+    const { isLoading, showLoading, hideLoading } = useLoading();
 
     let getPrimaryMismatch = async () => {
       try {
-  
+          showLoading("Checking mis-match primaries.")
           const date = document.getElementById("modTools_primary_date").value;
 
           //get data
           const data = await (await fetch(apiUrl + "mod/checkprimary/" + ally_code + "/" + date)).json();
-          
+          hideLoading();
           setMismatches(data);
           
       } catch (err) {
@@ -46,10 +29,10 @@ export default function ModToolsPrimary({ally_code}) {
       <div className="pt-3">
         <div className="row">
           <div className="col-4">
-          <select id="modTools_primary_date" className="form-select" aria-label="Default select example">
-            <option>Open this select menu</option>
+          <select id="modTools_primary_date" className="form-select" aria-label="Date">
+            <option>Please Select</option>
             {dates.map((date, index) => {
-              return <option value={date.date}>{formatDate(date.date)}</option>
+              return <option value={date.date}>{date.formatted}</option>
             })}   
           </select>
           </div>

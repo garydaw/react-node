@@ -48,6 +48,21 @@ async function versionOne (){
     await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 4, 'Triangle', 'Holo-Array' WHERE 4 NOT IN (SELECT slot_id FROM slot)");
     await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 5, 'Circle', 'Data-Bus' WHERE 5 NOT IN (SELECT slot_id FROM slot)");
     await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 6, 'Cross', 'Multiplexer' WHERE 6 NOT IN (SELECT slot_id FROM slot)");
+
+    console.log("creating group_set");
+    await runSQL("CREATE TABLE IF NOT EXISTS group_set ("+
+        "group_set_id int NOT NULL, "+
+        "group_set_name varchar(16) NOT NULL, "+
+        "primary key(group_set_id));");
+
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 1, 'Health' WHERE 1 NOT IN (SELECT group_set_id FROM group_set)");
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 2, 'Offense' WHERE 2 NOT IN (SELECT group_set_id FROM group_set)");
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 3, 'Defense' WHERE 3 NOT IN (SELECT group_set_id FROM group_set)");
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 4, 'Speed' WHERE 4 NOT IN (SELECT group_set_id FROM group_set)");
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 5, 'Crit Chance' WHERE 5 NOT IN (SELECT group_set_id FROM group_set)");
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 6, 'Crit Damage' WHERE 6 NOT IN (SELECT group_set_id FROM group_set)");
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 7, 'Potency' WHERE 7 NOT IN (SELECT group_set_id FROM group_set)");
+    await runSQL("INSERT INTO group_set (group_set_id, group_set_name) SELECT 8, 'Tenacity' WHERE 8 NOT IN (SELECT group_set_id FROM group_set)");
   
     console.log("creating player_unit");
     await runSQL("CREATE TABLE IF NOT EXISTS player_unit ("+
@@ -76,7 +91,7 @@ async function versionOne (){
         "tier int NOT NULL, "+
         "rarity int NOT NULL, "+
         "slot_id int NOT NULL, "+
-        "group_set int NOT NULL, "+
+        "group_set_id int NOT NULL, "+
         "primary_stat varchar(64) NOT NULL, "+
         "primary_stat_value varchar(16) NOT NULL, "+
         "secondary_stat_1 varchar(64) NOT NULL, "+
@@ -95,6 +110,10 @@ async function versionOne (){
         "CONSTRAINT fk_player_mod__slot "+
         "FOREIGN KEY (slot_id) REFERENCES slot (slot_id) "+
         "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_player_mod__group_set "+
+        "FOREIGN KEY (group_set_id) REFERENCES group_set (group_set_id) "+
+        "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
   
     console.log("creating unit_mod");
@@ -102,7 +121,7 @@ async function versionOne (){
         "date date NOT NULL DEFAULT CURDATE(), "+
         "base_id varchar(64) NOT NULL, "+
         "slot_id int NOT NULL, "+
-        "group_set varchar(64) NOT NULL, "+
+        "group_set_id int NOT NULL, "+
         "primary_stat varchar(64) NOT NULL, "+
         "primary key(date, base_id, slot_id), "+
         "CONSTRAINT fk_unit_mod__unit "+
@@ -111,6 +130,10 @@ async function versionOne (){
         "ON UPDATE RESTRICT, "+
         "CONSTRAINT fk_unit_mod__slot "+
         "FOREIGN KEY (slot_id) REFERENCES slot (slot_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_unit_mod__group_set "+
+        "FOREIGN KEY (group_set_id) REFERENCES group_set (group_set_id) "+
         "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
 }

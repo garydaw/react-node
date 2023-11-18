@@ -1,5 +1,6 @@
 import Units from './Units'
 import ModTools from './ModTools'
+import JourneyGuide from './JourneyGuide'
 
 function Player(props) {
 
@@ -59,12 +60,16 @@ function Player(props) {
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="modTools-tab" data-bs-toggle="tab" data-bs-target="#modTools" type="button" role="tab" aria-controls="modTools" aria-selected="false">Mod Tools</button>
                             </li>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="journeyGuide-tab" data-bs-toggle="tab" data-bs-target="#journeyGuide" type="button" role="tab" aria-controls="journeyGuide" aria-selected="false">Journey Guides</button>
+                            </li>
                         </ul>
 
                         <div className="tab-content">
                             <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{props.playerData.units && <Units unitType="units" unitData={props.playerData.units}></Units>}</div>
                             <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{props.playerData.ships && <Units unitType="ships" unitData={props.playerData.ships}></Units>}</div>
                             <div className="tab-pane fade" id="modTools" role="tabpanel" aria-labelledby="modTools-tab">{props.playerData.units && <ModTools ally_code={props.playerData.ally_code}></ModTools>}</div>
+                            <div className="tab-pane fade" id="journeyGuide" role="tabpanel" aria-labelledby="journeyGuide-tab"><JourneyGuide ally_code={props.playerData.ally_code}></JourneyGuide></div>
                         </div>
                     </div>
                 </div>

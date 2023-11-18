@@ -143,6 +143,20 @@ async function versionOne (){
         "FOREIGN KEY (group_set_id) REFERENCES group_set (group_set_id) "+
         "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
+
+    console.log("creating journey_guide");
+    await runSQL("CREATE TABLE IF NOT EXISTS journey_guide ("+
+        "base_id VARCHAR(64) NOT NULL, "+
+        "list_order int NOT NULL, "+
+        "guide text, " +
+        "primary key(base_id), "+
+        "CONSTRAINT fk_journey_guide__unit "+
+        "FOREIGN KEY (base_id) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT);");
+
+    await runSQL("INSERT INTO journey_guide (base_id, list_order, guide) SELECT 'DARTHMALAK', 1, 'Hints and tips to come.' WHERE 'DARTHMALAK' NOT IN (SELECT base_id FROM journey_guide)");
+    await runSQL("INSERT INTO journey_guide (base_id, list_order, guide) SELECT 'GENERALSKYWALKER', 2, 'Hints and tips to come.' WHERE 'GENERALSKYWALKER' NOT IN (SELECT base_id FROM journey_guide)");
 }
 
 module.exports = migrations;

@@ -15,22 +15,22 @@ player.get = async (ally_code) => {
     player_details = rows[0];
     let sql2 = "";
     let sql = "";
-    sql += "SELECT u.base_id, u.combat_type, u.character_name, ";
-	sql += "	pu.gear_level, pu.level, pu.power, pu.rarity ";
+    sql += "SELECT u.base_id, u.combat_type, u.character_name, u.alignment, ";
+	sql += "	pu.gear_level, pu.gear_level_plus, pu.level, pu.power, pu.rarity, ";
+	sql += "	pu.zeta_abilities, pu.omicron_abilities, pu.relic_tier, pu.has_ultimate, pu.is_galactic_legend ";
     sql += "FROM player_unit pu ";
     sql += "INNER JOIN unit u ";
     sql += "    ON pu.base_id = u.base_id ";
     sql += "WHERE pu.ally_code = ? ";
     sql2 += "AND     u.combat_type = 1 ";
-    sql2 += "ORDER BY u.character_name ";
+    sql2 += "ORDER BY pu.power DESC ";
 
     player_details.units = await runSQL(sql + sql2, ally_code);
 
     sql2 = "AND     u.combat_type = 2 ";
-    sql2 += "ORDER BY u.character_name ";
+    sql2 += "ORDER BY pu.power DESC ";
     player_details.ships = await runSQL(sql + sql2, ally_code);
 
-    
     return player_details;
 
 } 

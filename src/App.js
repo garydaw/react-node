@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
+import "bootstrap-icons/font/bootstrap-icons.css";
 import { LoadingProvider } from './LoadingContext';
+import { ErrorProvider } from './ErrorContext';
 import Crawler from './Crawler';
 import Main from './Main';
 
@@ -26,11 +28,13 @@ function App() {
   return (
     <div className="bg">
       <LoadingProvider>
-        {showIntro ? (
-          <Crawler clearIntro={clearIntro}></Crawler>
-        ) : (
-          <Main></Main>
-        )}
+        <ErrorProvider>
+          {showIntro ? (
+            <Crawler clearIntro={clearIntro}></Crawler>
+          ) : (
+            <Main></Main>
+          )}
+        </ErrorProvider>
       </LoadingProvider>
     </div>
 

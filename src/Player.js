@@ -62,8 +62,8 @@ function Player(props) {
                         </ul>
 
                         <div className="tab-content">
-                            <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{props.playerData.units && <Units unitData={props.playerData.units}></Units>}</div>
-                            <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{props.playerData.ships && <Units unitData={props.playerData.ships}></Units>}</div>
+                            <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{props.playerData.units && <Units unitType="units" unitData={props.playerData.units}></Units>}</div>
+                            <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{props.playerData.ships && <Units unitType="ships" unitData={props.playerData.ships}></Units>}</div>
                             <div className="tab-pane fade" id="modTools" role="tabpanel" aria-labelledby="modTools-tab">{props.playerData.units && <ModTools ally_code={props.playerData.ally_code}></ModTools>}</div>
                         </div>
                     </div>

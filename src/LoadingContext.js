@@ -4,7 +4,7 @@ const LoadingContext = createContext();
 
 export const LoadingProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [loadingMessage, setLoadingMessage] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("");
 
   const showLoading = (message) => {
     setLoadingMessage(message);

@@ -8,16 +8,17 @@ swgoh.setUnits = async (units) => {
     for(var u = 0; u < units.length; u++){
 
         //insert or update
-        let sql = "INSERT INTO unit (base_id, combat_type, character_name, url) ";
-        sql += "VALUES (?, ?, ?, ?) ";
+        let sql = "INSERT INTO unit (base_id, combat_type, character_name, url, alignment) ";
+        sql += "VALUES (?, ?, ?, ?, ?) ";
         sql += "ON DUPLICATE KEY UPDATE ";
         sql += "combat_type = ?, ";
         sql += "character_name = ?, ";
-        sql += "url = ? ";
+        sql += "url = ?, ";
+        sql += "alignment = ?"
 
         await runSQL(sql, [units[u].base_id,
-                            units[u].combat_type, units[u].name, units[u].url, 
-                            units[u].combat_type, units[u].name, units[u].url]);
+                            units[u].combat_type, units[u].name, units[u].url, units[u].alignment, 
+                            units[u].combat_type, units[u].name, units[u].url, units[u].alignment]);
 
     }
 
@@ -59,18 +60,33 @@ swgoh.setPlayer = async (player) => {
     //loop round units
     for(var u = 0; u < player.units.length; u++){
 
+        let gear_level_plus = 0;
+        for(var g = 0; g < player.units[u].data.gear.length; g++){
+            if(player.units[u].data.gear[g].is_obtained)
+                gear_level_plus++;
+        }
+
         //insert or update
-        let sql = "INSERT INTO player_unit (ally_code, base_id, gear_level, level, power, rarity) ";
-        sql += "VALUES (?, ?, ?, ?, ?, ?) ";
+        let sql = "INSERT INTO player_unit (ally_code, base_id, gear_level, gear_level_plus, level, power, rarity, ";
+        sql += "zeta_abilities, omicron_abilities, relic_tier, has_ultimate, is_galactic_legend) ";
+        sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
         sql += "ON DUPLICATE KEY UPDATE ";
         sql += "gear_level = ?, ";
+        sql += "gear_level_plus = ?, ";
         sql += "level = ?, ";
         sql += "power = ?, ";
-        sql += "rarity = ? ";
+        sql += "rarity = ?, ";
+        sql += "zeta_abilities = ?, ";
+        sql += "omicron_abilities = ?, ";
+        sql += "relic_tier = ?, ";
+        sql += "has_ultimate = ?, ";
+        sql += "is_galactic_legend = ? ";
 
         await runSQL(sql, [ally_code, player.units[u].data.base_id,
-            player.units[u].data.gear_level, player.units[u].data.level, player.units[u].data.power, player.units[u].data.rarity,
-            player.units[u].data.gear_level, player.units[u].data.level, player.units[u].data.power, player.units[u].data.rarity]);
+            player.units[u].data.gear_level, gear_level_plus, player.units[u].data.level, player.units[u].data.power, player.units[u].data.rarity,
+            player.units[u].data.zeta_abilities.length, player.units[u].data.omicron_abilities.length, player.units[u].data.relic_tier, player.units[u].data.has_ultimate, player.units[u].data.is_galactic_legend, 
+            player.units[u].data.gear_level, gear_level_plus, player.units[u].data.level, player.units[u].data.power, player.units[u].data.rarity,
+            player.units[u].data.zeta_abilities.length, player.units[u].data.omicron_abilities.length, player.units[u].data.relic_tier, player.units[u].data.has_ultimate, player.units[u].data.is_galactic_legend]);
 
     }
 

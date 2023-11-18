@@ -33,6 +33,7 @@ async function versionOne (){
         "combat_type int, "+
         "character_name VARCHAR(128), "+
         "url VARCHAR(256), "+
+        "alignment int, " +
         "primary key(base_id));");
   
     console.log("creating slot");
@@ -69,9 +70,15 @@ async function versionOne (){
         "ally_code int NOT NULL, "+
         "base_id VARCHAR(64) NOT NULL, "+
         "gear_level int, "+
+        "gear_level_plus int, "+
         "level int, "+
         "power int, "+
         "rarity int, "+
+        "zeta_abilities int, "+
+        "omicron_abilities int, "+
+        "relic_tier int, "+
+        "has_ultimate boolean, "+
+        "is_galactic_legend boolean, "+
         "primary key(ally_code, base_id), "+
         "CONSTRAINT fk_player_unit__player "+
         "FOREIGN KEY (ally_code) REFERENCES player (ally_code) "+

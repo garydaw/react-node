@@ -8,7 +8,7 @@ router.get('/:ally_code', async (req, res) => {
     
     const ally_code = req.params.ally_code;
     const this_player = await player.get(ally_code);
-    
+    console.log(this_player);
     res.status(200).json(this_player);
   
 });

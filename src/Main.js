@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Player from './Player'
 import { useLoading } from './LoadingContext';
+import { useError } from './ErrorContext';
 
 //to change to env vars
 const apiUrl = 'http://localhost:5000/api/';
@@ -9,6 +10,7 @@ export default function Main() {
 
     const [playerData, setPlayerData] = useState({});
     const { isLoading, showLoading, hideLoading } = useLoading();
+    const { isError, showError, hideError } = useError();
 
     let getPlayerInfo = async () => {
         try {
@@ -19,11 +21,11 @@ export default function Main() {
       
             //get data
             const data = await (await fetch(apiUrl + "player/" + ally_code +'/')).json();
-            hideLoading("Getting Player Data from database.");
+            hideLoading();
             setPlayerData(data);
             
         } catch (err) {
-            console.log(err.message)
+            showError(err.message)
         }
       }
 
@@ -32,10 +34,10 @@ export default function Main() {
             //get data
             showLoading("Getting Units.");
             await (await fetch(apiUrl + "swgoh/units/")).json();
-            hideLoading("Getting Units.");
+            hideLoading();
             
         } catch (err) {
-            console.log(err.message)
+            showError(err.message)
         }
       }
     
@@ -44,10 +46,10 @@ export default function Main() {
             //get data
             showLoading("Getting Best Mods.");
             await (await fetch(apiUrl + "swgoh/bestmods/")).json();
-            hideLoading("Getting Best Mods.");
+            hideLoading();
             
         } catch (err) {
-            console.log(err.message)
+            showError(err.message)
         }
       }
 
@@ -56,15 +58,13 @@ export default function Main() {
             showLoading("Getting data from SWGOH.");
             //get data
             const data = await (await fetch(apiUrl + "swgoh/player/" + playerData.ally_code +'/')).json();
-            if(data.length === 0){
-              //setLoadingMessage("No data found please check your Ally Code.");
-            } else {
-                hideLoading("Getting data from SWGOH.");
+            if(data.length !== 0){
+              hideLoading();
               setPlayerData(data);
             }
             
         } catch (err) {
-            console.log(err.message)
+          showError(err.message)
         }
       }
 

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Player from './Player'
 import { useLoading } from './LoadingContext';
 import { useError } from './ErrorContext';
+import Help from './Help';
 
 //to change to env vars
 const apiUrl = 'http://localhost:5000/api/';
@@ -11,6 +12,7 @@ export default function Main() {
     const [playerData, setPlayerData] = useState({});
     const { isLoading, showLoading, hideLoading } = useLoading();
     const { isError, showError, hideError } = useError();
+    const helpText = "Search for you player using you ally code. This can be found by clicking on your name from the home screen.";
 
     let getPlayerInfo = async () => {
         try {
@@ -83,17 +85,23 @@ export default function Main() {
                     id="allyCode"></input>
             
                   <button className="form-control btn btn-primary w-25" onClick={getPlayerInfo}>Search</button>
+                  
                 </div>
               </div>
-              <div className="col-2 offset-2 text-end">
-                <div className="btn-group">
-                  <button type="button" className="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                    SWGOH Refresh
-                  </button>
-                  <ul className="dropdown-menu dropdown-menu-end">
-                    <li><a className="dropdown-item" onClick={getUnits}>Units</a></li>
-                    <li><a className="dropdown-item" onClick={getBestMods}>Mods</a></li>
-                  </ul>
+              <div className="col-1">
+                <Help modal_id="mainHelp" header="Main" content={helpText} colour="white"></Help>
+              </div>
+              <div className="col-2 offset-1 text-end">
+                <div className="row">
+                  <div className="btn-group">
+                    <button type="button" className="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                      SWGOH Refresh
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-end">
+                      <li><a className="dropdown-item" onClick={getUnits}>Units</a></li>
+                      <li><a className="dropdown-item" onClick={getBestMods}>Mods</a></li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>

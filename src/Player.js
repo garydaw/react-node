@@ -1,10 +1,14 @@
-import Units from './Units'
-import ModTools from './ModTools'
-import JourneyGuide from './JourneyGuide'
+import Units from './Units';
+import ModTools from './ModTools';
+import JourneyGuide from './JourneyGuide';
+import GAC from './GAC';
+import Help from './Help';
 
 function Player(props) {
 
     const numFormatter = new Intl.NumberFormat('en-US');
+    const helpText = "Refresh your data from SWGOH, data can take 24hrs to sync to SWGOH."
+
     if(Object.keys(props.playerData).length === 0)
         return "";
     else if (props.playerData.error_message)
@@ -25,7 +29,14 @@ function Player(props) {
                 <div className="card">
                     <div className="card-header d-flex justify-content-between align-items-center">
                         <span>Player Details</span>
-                        <button className="btn btn-sm btn-primary" onClick={props.refreshPlayerData}>{props.playerData.units ? "Refresh Data" : "Get Data"}</button>
+                        <div className='row'>
+                            <div className='col-2'>
+                                <Help modal_id="playerHelp" header="Player Refresh" content={helpText} colour="black"></Help>
+                            </div>
+                            <div className='col-10'>
+                                <button className="btn btn-sm btn-primary" onClick={props.refreshPlayerData}>{props.playerData.units ? "Refresh Data" : "Get Data"}</button>
+                            </div>
+                        </div>
                     </div>
                     <div className="row">
                         <div className="col-4">
@@ -63,13 +74,17 @@ function Player(props) {
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="journeyGuide-tab" data-bs-toggle="tab" data-bs-target="#journeyGuide" type="button" role="tab" aria-controls="journeyGuide" aria-selected="false">Journey Guides</button>
                             </li>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="gac-tab" data-bs-toggle="tab" data-bs-target="#gac" type="button" role="tab" aria-controls="gac" aria-selected="false">GAC</button>
+                            </li>
                         </ul>
 
                         <div className="tab-content">
                             <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{props.playerData.units && <Units unitType="units" unitData={props.playerData.units}></Units>}</div>
                             <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{props.playerData.ships && <Units unitType="ships" unitData={props.playerData.ships}></Units>}</div>
                             <div className="tab-pane fade" id="modTools" role="tabpanel" aria-labelledby="modTools-tab">{props.playerData.units && <ModTools ally_code={props.playerData.ally_code}></ModTools>}</div>
-                            <div className="tab-pane fade" id="journeyGuide" role="tabpanel" aria-labelledby="journeyGuide-tab"><JourneyGuide ally_code={props.playerData.ally_code}></JourneyGuide></div>
+                            <div className="tab-pane fade" id="journeyGuide" role="tabpanel" aria-labelledby="journeyGuide-tab"><JourneyGuide key="jg" ally_code={props.playerData.ally_code}></JourneyGuide></div>
+                            <div className="tab-pane fade" id="gac" role="tabpanel" aria-labelledby="gac-tab"><GAC ally_code={props.playerData.ally_code}></GAC></div>
                         </div>
                     </div>
                 </div>

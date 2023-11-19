@@ -19,6 +19,7 @@ export default function JourneyGuide({ally_code}) {
             .then((res) => {
                 
                 setGuides(res.data);
+                setActiveContent("jg_"+res.data[0].base_id)
             });
         
     }, []);
@@ -26,11 +27,12 @@ export default function JourneyGuide({ally_code}) {
     return (
         <div className="container p-0">
             <div className="row">
-                <div className="col-3">
+                <div className="col-2">
                     <div className="list-group">
                         {guides.map((guide, index) => {
                             return (
                                 <button type="button"
+                                    key={"jg_" + guide.base_id}
                                     id={"jg_" + guide.base_id}
                                     className={activeContent === "jg_"+guide.base_id ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
                                     onClick={swapContent}
@@ -41,11 +43,13 @@ export default function JourneyGuide({ally_code}) {
                         })}
                     </div>
                 </div>
-                <div className="col-9">
+                <div className="col-10">
                     {guides.map((guide, index) => {
                         return (
-                            <div id={"jg_" + guide.base_id + "content"} className={activeContent === "jg_"+guide.base_id ? "d-show" : "d-none"}>
-                                {guide.guide}
+                            <div key={"jg_" + guide.base_id + "content"} 
+                                id={"jg_" + guide.base_id + "content"} 
+                                className={activeContent === "jg_"+guide.base_id ? "d-show" : "d-none"}
+                                dangerouslySetInnerHTML={{__html: guide.guide}}>
                             </div>
                         );
                     })}

@@ -50,7 +50,7 @@ export default function ModTools({ally_code}) {
     return (
         <div className="container p-0">
             <div className="row">
-                <div className="col-3">
+                <div className="col-2">
                     <div className="list-group">
                         <button type="button"
                             id="modtools_primary"
@@ -73,7 +73,7 @@ export default function ModTools({ally_code}) {
                         </button>
                     </div>
                 </div>
-                <div className="col-9">
+                <div className="col-10">
                     <div id="modtools_primary_content" className={activeTool === 'modtools_primary' ? "d-show" : "d-none"}>
                         <ModToolsPrimary ally_code={ally_code} dates={dates}></ModToolsPrimary>
                     </div>

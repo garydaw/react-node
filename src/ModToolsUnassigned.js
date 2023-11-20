@@ -10,11 +10,16 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
 
     let searchUnassigned = async () => {
       try {
-          showLoading("Checking mis-match primaries.")
+          showLoading("Searching for unassigned Mod slots.")
           const date = document.getElementById("modTools_unassigned_date").value;
+          const slot = document.getElementById("modTools_unassigned_slot").value;
+          const group_set = document.getElementById("modTools_unassigned_group_sets").value;
+          const primary = document.getElementById("modTools_unassigned_primaries").value;
+          const assigned = document.getElementById("modTools_unassigned_include_assigned").checked;
+
 
           //get data
-          const data = await (await fetch(apiUrl + "mod/searchUnassigned/" + ally_code + "/" + date + "?something=123&slot=4")).json();
+          const data = await (await fetch(apiUrl + "mod/searchUnassigned/" + ally_code + "/" + date + "?slot="+slot+"&group_set="+group_set+"&primary="+primary+"&assigned="+assigned)).json();
           hideLoading();
           setCharacters(data);
           
@@ -43,43 +48,51 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
     if(dates.length === 0)
       return "";
     return (
-      <div className="pt-3 pr-3">
-        <div className="row">
-          <div className="col-4">
+      <div className="pt-3">
+        <div className="row pb-2">
+          <label for="modTools_unassigned_date" className="col-1 col-form-label">Date</label>
+          <div className="col-3">
             <select id="modTools_unassigned_date" className="form-select" aria-label="Date">
-              <option>Please Select Date</option>
+              <option value="">Please Select a Date</option>
               {dates.map((date, index) => {
                 return <option value={date.date}>{date.formatted}</option>
               })}   
             </select>
           </div>
-          <div className="col-4">
+          <label for="modTools_unassigned_slot" className="col-1 col-form-label">Slot</label>
+          <div className="col-3">
             <select id="modTools_unassigned_slot" className="form-select" aria-label="Slot" onChange={setPrimary}>
-              <option>Please Select Slot</option>
+              <option value="">Please Select a Slot</option>
               {slots.map((slot, index) => {
                 return <option value={slot.slot_id}>{slot.slot_name} ({slot.slot_long_name})</option>
               })}   
             </select>
           </div>
+          <div className="col-3 form-check">
+            <input className="form-check-input" type="checkbox" id="modTools_unassigned_include_assigned"/>
+              Included Assigned
+          </div>
         </div>
         <div className="row">
-          <div className="col-4">
+          <label for="modTools_unassigned_group_sets" className="col-1 col-form-label">Set</label>
+          <div className="col-3">
             <select id="modTools_unassigned_group_sets" className="form-select" aria-label="Group Sets">
-              <option>Please Select Set</option>
+              <option value="">Please Select a Set</option>
               {group_sets.map((group_set, index) => {
                 return <option value={group_set.group_set_id}>{group_set.group_set_name}</option>
               })}   
             </select>
           </div>
-          <div className="col-4">
+          <label for="modTools_unassigned_primaries" className="col-1 col-form-label">Primary</label>
+          <div className="col-3">
             <select id="modTools_unassigned_primaries" className="form-select" aria-label="Primaries">
-              <option>Please Select Primary</option>
+              <option value="">Please Select a Primary</option>
               {primaries.map((primary, index) => {
                 return <option value={primary.primary_stat}>{primary.primary_stat}</option>
               })}   
             </select>
           </div>
-          <div className="col-4"><button className="form-control btn btn-primary" onClick={searchUnassigned}>Check</button></div>
+          <div className="col-2 offset-1"><button className="form-control btn btn-primary" onClick={searchUnassigned}>Check</button></div>
         </div>
 
         <table className="table table-striped table-hover">
@@ -87,17 +100,27 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
             <tr>
               <th scope="col">Character</th>
               <th scope="col">Slot</th>
+              <th scope="col">Best Set</th>
+              <th scope="col">Your Set</th>
               <th scope="col">Best Primary</th>
               <th scope="col">Your Primary</th>
             </tr>
           </thead>
           <tbody>
           {characters.map((row, index) => {
-              return <tr><th scope="row">{row.character_name}</th><td>{row.slot_long_name} ({row.slot_name})</td><td>{row.best_unassigned}</td><td>{row.mod_unassigned}</td></tr>
+              return (
+                      <tr>
+                        <th scope="row">{row.character_name}</th>
+                        <td>{row.slot_name} ({row.slot_long_name})</td>
+                        <td>{row.group_set_name}</td>
+                        <td>{row.u_group_set_name}</td>
+                        <td>{row.primary_stat}</td>
+                        <td>{row.u_primary_stat}</td>
+                      </tr>
+              );
           })} 
           </tbody>
         </table>
-        
       </div>
     )
 }

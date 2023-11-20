@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useEffect } from 'react';
 import Player from './Player'
 import { useLoading } from './LoadingContext';
 import { useError } from './ErrorContext';
@@ -14,6 +15,17 @@ export default function Main() {
     const { isError, showError, hideError } = useError();
     const helpText = "Search for you player using you ally code. This can be found by clicking on your name from the home screen.";
 
+    
+    //load ally code if been here before
+    useEffect(() => {
+
+        const this_ally_code = localStorage.getItem("ally_code");
+        if(this_ally_code !== null){
+          document.getElementById("allyCode").value = this_ally_code;
+          getPlayerInfo();
+        }
+    }, []);
+
     let getPlayerInfo = async () => {
         try {
     
@@ -24,6 +36,7 @@ export default function Main() {
             //get data
             const data = await (await fetch(apiUrl + "player/" + ally_code +'/')).json();
             hideLoading();
+            localStorage.setItem("ally_code", ally_code);
             setPlayerData(data);
             
         } catch (err) {

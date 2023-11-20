@@ -21,9 +21,9 @@ router.get('/searchUnassigned/:ally_code/:date', async (req, res) => {
     const date = req.params.date;
     const search = req.query;
     console.log(search);
-    //const incorrect_primaries = await mod.checkPrimary(ally_code, date);
+    const unassigned = await mod.searchUnassigned(ally_code, date, search);
     
-    res.status(200).json([]);
+    res.status(200).json(unassigned);
   
 });
 

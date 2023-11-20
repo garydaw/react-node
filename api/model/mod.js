@@ -28,6 +28,56 @@ mod.checkPrimary = async (ally_code, date) => {
 
 } 
 
+mod.searchUnassigned = async (ally_code, date, search) => {
+
+    let params = [];
+    params.push(date);
+    params.push(ally_code);
+    
+    let sql = "SELECT	u.character_name, ";
+    sql += "        s.slot_name, s.slot_long_name, gs.group_set_name, ud.primary_stat, ";
+    sql += "        gs2.group_set_name AS u_group_set, pm.primary_stat AS u_primary_stat ";
+    sql += "    FROM unit u ";
+    sql += "    INNER JOIN unit_mod ud ";
+    sql += "        ON	u.base_id = ud.base_id ";
+    sql += "    INNER JOIN slot s ";
+    sql += "        ON s.slot_id = ud.slot_id ";
+    sql += "    INNER JOIN group_set gs ";
+    sql += "        ON	gs.group_set_id = ud.group_set_id ";
+    sql += "    INNER JOIN player_unit pu ";
+    sql += "        ON	pu.base_id = ud.base_id ";
+    sql += "    LEFT OUTER JOIN player_mod pm  ";
+    sql += "        ON	pu.ally_code = pm.ally_code  ";
+    sql += "        AND	ud.base_id = pm.base_id  ";
+    sql += "        AND	ud.slot_id = pm.slot_id ";
+    sql += "    LEFT OUTER JOIN group_set gs2 ";
+    sql += "        ON	gs2.group_set_id = pm.group_set_id ";
+    sql += "    WHERE ud.date = ? ";
+    sql += "    AND	pu.ally_code = ? ";
+    if(search.slot !== ""){
+        sql += "AND	ud.slot_id = ? ";
+        params.push(search.slot);
+    }
+    /*
+    if(search.group_set !== ""){
+        sql += "AND 	ud.group_set_id = ? ";
+        params.push(search.group_set);
+    }*/
+    if(search.primary !== ""){
+        sql += "AND	ud.primary_stat = ? ";
+        params.push(search.primary);
+    }
+    if(search.assigned === "false"){
+        sql += "AND	pm.base_id IS NULL ";
+    }
+    sql += "ORDER BY pu.power DESC ";
+
+    const unassigned = await runSQL(sql, params);
+    
+    return unassigned;
+
+} 
+
 mod.getDates = async () => {
 
     const dates = await runSQL("SELECT DISTINCT date FROM unit_mod ORDER BY date DESC", []);

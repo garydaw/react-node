@@ -42,4 +42,18 @@ mod.getSlots = async () => {
     return slots;
 }
 
+mod.getGroupSets = async () => {
+
+    const group_sets = await runSQL("SELECT group_set_id, group_set_name FROM group_set ORDER BY group_set_name", []);
+    
+    return group_sets;
+}
+
+mod.getPrimaries = async () => {
+
+    const primaries = await runSQL("SELECT DISTINCT primary_stat FROM unit_mod ORDER BY primary_stat", []);
+    
+    return primaries;
+}
+
 module.exports = mod;

@@ -43,4 +43,20 @@ router.get('/slots/', async (req, res) => {
   
 });
 
+router.get('/group_sets/', async (req, res) => {
+    
+    const group_sets = await mod.getGroupSets();
+    
+    res.status(200).json(group_sets);
+  
+});
+
+router.get('/primaries/', async (req, res) => {
+    
+    const primaries = await mod.getPrimaries();
+    
+    res.status(200).json(primaries);
+  
+});
+
 module.exports = router;

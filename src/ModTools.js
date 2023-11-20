@@ -12,6 +12,8 @@ export default function ModTools({ally_code}) {
     const [activeTool, setActiveTool] = useState("modtools_primary");
     const [dates, setDates] = useState([]);
     const [slots, setSlots] = useState([]);
+    const [group_sets, setGroupSets] = useState([]);
+    const [primaries, setPrimaries] = useState([]);
     
     let swapModTools =  (event) => {
         setActiveTool(event.target.id);
@@ -41,6 +43,18 @@ export default function ModTools({ally_code}) {
             .get(apiUrl + "mod/slots/")
             .then((res) => {
                 setSlots(res.data);
+            });
+
+        axios
+            .get(apiUrl + "mod/group_sets/")
+            .then((res) => {
+                setGroupSets(res.data);
+            });
+
+        axios
+            .get(apiUrl + "mod/primaries/")
+            .then((res) => {
+                setPrimaries(res.data);
             });
         
     }, []);
@@ -81,7 +95,7 @@ export default function ModTools({ally_code}) {
                         Set
                     </div>
                     <div id="modtools_unassigned_content" className={activeTool === 'modtools_unassigned' ? "d-show" : "d-none"}>
-                        <ModToolsUnassigned ally_code={ally_code} dates={dates} slots={slots}></ModToolsUnassigned>
+                        <ModToolsUnassigned ally_code={ally_code} dates={dates} slots={slots} group_sets={group_sets} primaries={primaries}></ModToolsUnassigned>
                     </div>
                 </div>
             </div>

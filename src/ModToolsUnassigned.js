@@ -3,7 +3,7 @@ import { useLoading } from './LoadingContext';
 
 const apiUrl = 'http://localhost:5000/api/';
 
-export default function ModToolsUnassigned({ally_code, dates, slots}) {
+export default function ModToolsUnassigned({ally_code, dates, slots, group_sets, primaries}) {
 
     const [characters, setCharacters] = useState([]);
     const { isLoading, showLoading, hideLoading } = useLoading();
@@ -22,6 +22,23 @@ export default function ModToolsUnassigned({ally_code, dates, slots}) {
           console.log(err.message)
       }
     }
+
+    let setPrimary = (event) => {
+      let select = document.getElementById("modTools_unassigned_primaries");
+      //square
+      if(event.target.value === "1"){
+        //primary must be Offense
+        select.value = "Offense";
+        select.setAttribute("disabled", "disabled");
+        //diamond
+      } else if (event.target.value === "3"){
+        //primary must be defense
+        select.value = "Defense";
+        select.setAttribute("disabled", "disabled");
+      } else {
+        select.removeAttribute("disabled");
+      }
+    }
     
     if(dates.length === 0)
       return "";
@@ -30,25 +47,39 @@ export default function ModToolsUnassigned({ally_code, dates, slots}) {
         <div className="row">
           <div className="col-4">
             <select id="modTools_unassigned_date" className="form-select" aria-label="Date">
-              <option>Please Select</option>
+              <option>Please Select Date</option>
               {dates.map((date, index) => {
                 return <option value={date.date}>{date.formatted}</option>
               })}   
             </select>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-3">
-            <select id="modTools_unassigned_slot" className="form-select" aria-label="Slot">
-              <option>Please Select</option>
+          <div className="col-4">
+            <select id="modTools_unassigned_slot" className="form-select" aria-label="Slot" onChange={setPrimary}>
+              <option>Please Select Slot</option>
               {slots.map((slot, index) => {
                 return <option value={slot.slot_id}>{slot.slot_name} ({slot.slot_long_name})</option>
               })}   
             </select>
           </div>
-          <div className="col-3">Set</div>
-          <div className="col-3">Primary</div>
-          <div className="col-3"><button className="form-control btn btn-primary" onClick={searchUnassigned}>Check</button></div>
+        </div>
+        <div className="row">
+          <div className="col-4">
+            <select id="modTools_unassigned_group_sets" className="form-select" aria-label="Group Sets">
+              <option>Please Select Set</option>
+              {group_sets.map((group_set, index) => {
+                return <option value={group_set.group_set_id}>{group_set.group_set_name}</option>
+              })}   
+            </select>
+          </div>
+          <div className="col-4">
+            <select id="modTools_unassigned_primaries" className="form-select" aria-label="Primaries">
+              <option>Please Select Primary</option>
+              {primaries.map((primary, index) => {
+                return <option value={primary.primary_stat}>{primary.primary_stat}</option>
+              })}   
+            </select>
+          </div>
+          <div className="col-4"><button className="form-control btn btn-primary" onClick={searchUnassigned}>Check</button></div>
         </div>
 
         <table className="table table-striped table-hover">

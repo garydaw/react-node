@@ -24,6 +24,25 @@ export default function GAC({ally_code}) {
         
     }, []);
 
+    let offense = [];
+    let defense = [];
+
+    teams.forEach(team => {
+        const missing_members = team.team_count - team.player_team_count;
+        if(team.defense){
+            if (!defense[missing_members]) {
+                defense[missing_members] = [];
+              }
+            defense[missing_members].push(team);
+        }
+        if(team.offense){
+            if (!offense[missing_members]) {
+                offense[missing_members] = [];
+              }
+            offense[missing_members].push(team);
+        }
+    });
+
     return (
         <div className="container p-0">
             <div className="row">
@@ -47,20 +66,33 @@ export default function GAC({ally_code}) {
                 </div>
                 <div className="col-10">
                     <div id="gacDefenseContent" className={activeContent === "gacDefense" ? "d-show" : "d-none"}>
-                        {teams.map((team, index) => {
-                            if(team.defense)
-                                return (
-                                    <GACTeam team={team} key={"gac_defense_"+team.list_order}></GACTeam>
-                                );
-                        })}
+                    {Object.keys(defense).map(category => (
+                        <div key={category} className="card-body border">
+                            <h4 className="card-title">Missing {category} Unit(s)</h4>
+                            <div className="card-text">
+                                <ul className="p-0">
+                                    {defense[category].map(team => (
+                                        <GACTeam team={team} key={"gac_defense_"+team.list_order}></GACTeam>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    ))}
+
                     </div>
                     <div id="gacOffenseContent" className={activeContent === "gacOffense" ? "d-show" : "d-none"}>
-                        {teams.map((team, index) => {
-                            if(team.offense)
-                                return (
-                                    <GACTeam team={team} key={"gac_offense_"+team.list_order}></GACTeam>
-                                );
-                        })}
+                        {Object.keys(offense).map(category => (
+                            <div key={category} className="card-body border">
+                                <h4 className="card-title">Missing {category} Unit(s)</h4>
+                                <div className="card-text">
+                                    <ul className="p-0">
+                                        {offense[category].map(team => (
+                                            <GACTeam team={team} key={"gac_offense_"+team.list_order}></GACTeam>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

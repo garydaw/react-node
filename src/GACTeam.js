@@ -23,24 +23,8 @@ export default function GACTeam({team}) {
       }
     }
 
-    let background = "";
-    switch(active) {
-      case 5:
-        background = " bg-success";
-        break;
-      case 4:
-        background = " bg-success bg-opacity-75";
-        break;
-      case 3:
-        background = " bg-success bg-opacity-50";
-        break;
-      case 2:
-        background = " bg-success bg-opacity-25";
-        break;
-    }
-
     return (
-        <div className={"p-3" + background}>
+        <div className="p-3">
             <div className="row">
               {units.map((unit, index) => {
                   return (

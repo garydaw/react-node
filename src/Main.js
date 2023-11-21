@@ -85,7 +85,7 @@ export default function Main() {
 
     return (
            
-          <div className="container p-3">
+          <div className="container-full p-3">
             <div className="row">
               <div className="col-6 offset-2">
                 <div className="input-group">

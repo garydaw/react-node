@@ -1,7 +1,7 @@
 import './crawler.css';
 import logo from './img/sw.png'
 
-function Crawler(props) {
+export default function Crawler({clearIntro}) {
 
     return (
         <div className="bg">
@@ -22,9 +22,7 @@ function Crawler(props) {
                     I will find your lack of faith disturbing!</p>        
                 </div>  
             </div>
-            <button className="bottomRight" onClick={props.clearIntro}>Skip Intro</button>
+            <button className="bottomRight" onClick={clearIntro}>Skip Intro</button>
         </div>
     )
 }
-
-export default Crawler;

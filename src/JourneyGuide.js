@@ -25,7 +25,7 @@ export default function JourneyGuide({ally_code}) {
     }, []);
 
     return (
-        <div className="container p-0">
+        <div className="p-0">
             <div className="row">
                 <div className="col-2">
                     <div className="list-group">

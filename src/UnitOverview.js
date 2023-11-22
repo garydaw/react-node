@@ -31,7 +31,7 @@ export default function UnitOverview({unit}) {
                         <ul className="list-group list-group-flush">
                             <li className="list-group-item"><span className="fw-bold">Power</span> : {numFormatter.format(unit.power)}</li>
                             <li className="list-group-item"><span className="fw-bold">Level</span> : {unit.level}</li>
-                            {unit.combat_type === 1 &&
+                            {unit.combat_type === 1 && 
                                 <li className="list-group-item"><span className="fw-bold">Gear Level</span> : {unit.gear_level + gear_plus}</li>
                             }
                             {unit.combat_type === 1 &&

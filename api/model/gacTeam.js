@@ -56,6 +56,28 @@ gacTeam.getGACTeam = async (ally_code) => {
     const team = await runSQL(sql, [ally_code,ally_code,ally_code,ally_code,ally_code]);
     
     return team;
-} 
+}
+
+gacTeam.getUnits = async () => {
+
+    let sql = "SELECT base_id, character_name ";
+    sql += "FROM unit ";
+    sql += "WHERE combat_type = 1 ";
+    sql += "ORDER BY character_name";
+
+    const units = await runSQL(sql, []);
+    
+    return units;
+
+}
+
+gacTeam.addTeam = async (data) => {
+    console.log(data);
+    const gacTeamSql = "INSERT INTO gac_team (base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, list_order, defense, offense)" +
+                "SELECT ?, ?, ?, ?, ?, MAX(list_order) + 1, ?, ? FROM gac_team";
+        
+    await runSQL(gacTeamSql, [data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id, data.team[4].base_id, 
+            data.defense, data.offense]);
+}
 
 module.exports = gacTeam;

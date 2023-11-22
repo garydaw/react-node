@@ -28,7 +28,7 @@ export default function ModToolsPrimary({ally_code, dates}) {
     return (
       <div className="pt-3">
         <div className="row">
-        <label for="modTools_primary_date" class="col-1 col-form-label">Date</label>
+        <label htmlFor="modTools_primary_date" class="col-1 col-form-label">Date</label>
           <div className="col-3">
           <select id="modTools_primary_date" className="form-select" aria-label="Date">
             <option>Please Select a Date</option>

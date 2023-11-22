@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import GACTeam from './GACTeam';
+import GACTeamAdmin from './GACTeamAdmin';
 
 const apiUrl = 'http://localhost:5000/api/';
 
@@ -62,6 +63,13 @@ export default function GAC({ally_code}) {
                             aria-current="true">
                                 Offense
                         </button>
+                        <button type="button"
+                            id="gacAdmin"
+                            className={activeContent === "gacAdmin" ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
+                            onClick={swapContent}
+                            aria-current="true">
+                                Admin
+                        </button>
                     </div>
                 </div>
                 <div className="col-10">
@@ -93,6 +101,9 @@ export default function GAC({ally_code}) {
                                 </div>
                             </div>
                         ))}
+                    </div>
+                    <div id="gacAdminContent" className={activeContent === "gacAdmin" ? "d-show" : "d-none"}>
+                        <GACTeamAdmin key="gac_offense_admin"></GACTeamAdmin>
                     </div>
                 </div>
             </div>

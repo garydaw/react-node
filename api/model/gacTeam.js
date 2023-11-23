@@ -24,7 +24,8 @@ gacTeam.getGACTeam = async (ally_code) => {
     sql += "    CASE WHEN pu2.base_id IS NOT NULL THEN 1 ELSE 0 END + ";
     sql += "    CASE WHEN pu3.base_id IS NOT NULL THEN 1 ELSE 0 END + ";
     sql += "    CASE WHEN pu4.base_id IS NOT NULL THEN 1 ELSE 0 END + ";
-    sql += "    CASE WHEN pu5.base_id IS NOT NULL THEN 1 ELSE 0 END AS player_team_count ";
+    sql += "    CASE WHEN pu5.base_id IS NOT NULL THEN 1 ELSE 0 END AS player_team_count, ";
+    sql += "    CAST(IFNULL(pu1.`power`, 0) + IFNULL(pu2.`power`, 0) + IFNULL(pu3.`power`, 0) + IFNULL(pu4.`power`, 0) + IFNULL(pu5.`power`, 0) AS varchar(32)) AS team_power "
     sql += "FROM gac_team gt ";
     sql += "INNER JOIN unit u1 ";
     sql += "    ON gt.base_id_1 = u1.base_id ";
@@ -51,7 +52,7 @@ gacTeam.getGACTeam = async (ally_code) => {
     sql += "LEFT OUTER JOIN player_unit pu5 ";
     sql += "    ON gt.base_id_5 = pu5.base_id ";
     sql += "    AND pu5.ally_code = ? ";
-    sql += "ORDER BY team_count - player_team_count,  gt.list_order";
+    sql += "ORDER BY team_count - player_team_count,  team_power";
 
     const team = await runSQL(sql, [ally_code,ally_code,ally_code,ally_code,ally_code]);
     

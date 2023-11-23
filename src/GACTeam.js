@@ -25,7 +25,7 @@ export default function GACTeam({team}) {
 
     return (
         <div className="p-3">
-            <div className="row">
+            <div className="row d-flex">
               {units.map((unit, index) => {
                   return (
                       <GACUnitOverview key={"gacteam_"+team.list_order+"_"+index} className='col-2' unit={unit}></GACUnitOverview>

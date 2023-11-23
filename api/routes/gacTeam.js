@@ -23,7 +23,7 @@ router.get('/:ally_code', async (req, res) => {
     
     const ally_code = req.params.ally_code;
     const team = await gacTeam.getGACTeam(ally_code);
-    
+    console.log(team);
     res.status(200).json(team);
   
 });

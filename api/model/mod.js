@@ -35,34 +35,50 @@ mod.searchUnassigned = async (ally_code, date, search) => {
     params.push(ally_code);
     
     let sql = "SELECT	u.character_name, ";
-    sql += "        s.slot_name, s.slot_long_name, gs.group_set_name, ud.primary_stat, ";
-    sql += "        gs2.group_set_name AS u_group_set, pm.primary_stat AS u_primary_stat ";
-    sql += "    FROM unit u ";
-    sql += "    INNER JOIN unit_mod ud ";
-    sql += "        ON	u.base_id = ud.base_id ";
-    sql += "    INNER JOIN slot s ";
-    sql += "        ON s.slot_id = ud.slot_id ";
-    sql += "    INNER JOIN group_set gs ";
-    sql += "        ON	gs.group_set_id = ud.group_set_id ";
-    sql += "    INNER JOIN player_unit pu ";
-    sql += "        ON	pu.base_id = ud.base_id ";
-    sql += "    LEFT OUTER JOIN player_mod pm  ";
-    sql += "        ON	pu.ally_code = pm.ally_code  ";
-    sql += "        AND	ud.base_id = pm.base_id  ";
-    sql += "        AND	ud.slot_id = pm.slot_id ";
-    sql += "    LEFT OUTER JOIN group_set gs2 ";
-    sql += "        ON	gs2.group_set_id = pm.group_set_id ";
+    sql += "            s.slot_name, s.slot_long_name, ud.primary_stat, ";
+    sql += "            CONCAT(gs1.group_set_name, ', ', gs2.group_set_name, ', ', gs3.group_set_name) AS group_set_name, ";
+    sql += "            ugs.group_set_name AS u_group_set_name,  ";
+    sql += "            pm.primary_stat AS u_primary_stat ";
+    sql += "        FROM unit u ";
+    sql += "        INNER JOIN unit_mod ud ";
+    sql += "            ON	u.base_id = ud.base_id ";
+    sql += "        INNER JOIN unit_mod set_1 ";
+    sql += "            ON	ud.base_id = set_1.base_id ";
+    sql += "            AND set_1.slot_id = 1 ";
+    sql += "        INNER JOIN unit_mod set_2 ";
+    sql += "            ON	ud.base_id = set_2.base_id ";
+    sql += "            AND set_2.slot_id = 3 ";
+    sql += "        INNER JOIN unit_mod set_3 ";
+    sql += "            ON	ud.base_id = set_3.base_id ";
+    sql += "            AND set_3.slot_id = 5 ";
+    sql += "        INNER JOIN slot s ";
+    sql += "            ON s.slot_id = ud.slot_id ";
+    sql += "        INNER JOIN group_set gs1 ";
+    sql += "            ON	gs1.group_set_id = set_1.group_set_id ";
+    sql += "        INNER JOIN group_set gs2 ";
+    sql += "            ON	gs2.group_set_id = set_2.group_set_id ";
+    sql += "        INNER JOIN group_set gs3 ";
+    sql += "            ON	gs3.group_set_id = set_3.group_set_id ";
+    sql += "        INNER JOIN player_unit pu ";
+    sql += "            ON	pu.base_id = ud.base_id ";
+    sql += "        LEFT OUTER JOIN player_mod pm  ";
+    sql += "            ON	pu.ally_code = pm.ally_code  ";
+    sql += "            AND	ud.base_id = pm.base_id  ";
+    sql += "            AND	ud.slot_id = pm.slot_id ";
+    sql += "        LEFT OUTER JOIN group_set ugs ";
+    sql += "        ON	ugs.group_set_id = pm.group_set_id ";
     sql += "    WHERE ud.date = ? ";
     sql += "    AND	pu.ally_code = ? ";
     if(search.slot !== ""){
         sql += "AND	ud.slot_id = ? ";
         params.push(search.slot);
     }
-    /*
     if(search.group_set !== ""){
-        sql += "AND 	ud.group_set_id = ? ";
+        sql += "AND 	(set_1.group_set_id = ? OR set_2.group_set_id = ? OR set_3.group_set_id = ?) ";
         params.push(search.group_set);
-    }*/
+        params.push(search.group_set);
+        params.push(search.group_set);
+    }
     if(search.primary !== ""){
         sql += "AND	ud.primary_stat = ? ";
         params.push(search.primary);

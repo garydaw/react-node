@@ -3,7 +3,7 @@ export default function GACUnitOverview({unit}) {
     const numFormatter = new Intl.NumberFormat('en-US');
 
     //calculate background if GL or at relic level and are some of the gear slots filled
-    let background = "card";
+    let background = "card h-100";
     let gear_plus = "";
     if(unit.gear_level === 13){
         if(unit.is_galactic_legend){

@@ -1,4 +1,4 @@
-export default function UnitOverview({unit, openModal}) {
+export default function UnitDetails({unit}) {
     
     const numFormatter = new Intl.NumberFormat('en-US');
 
@@ -44,7 +44,6 @@ export default function UnitOverview({unit, openModal}) {
                                 <li className="list-group-item"><span className="fw-bold">Relic</span> : {unit.relic_tier - 2}</li>
                             }
                         </ul>
-                        <button className="btn btn-primary" onClick={() => openModal(unit)}>Details</button>
                     </div>
                 </div>
             </div>

@@ -33,6 +33,34 @@ player.get = async (ally_code) => {
 
     return player_details;
 
+}
+
+player.getUnit = async (ally_code, base_id) => {
+
+    let unit = {};
+
+    let sql = "";
+    sql += "SELECT u.base_id, u.combat_type, u.character_name, u.alignment, ";
+	sql += "	pu.gear_level, pu.gear_level_plus, pu.level, pu.power, pu.rarity, ";
+	sql += "	pu.zeta_abilities, pu.omicron_abilities, pu.relic_tier, pu.has_ultimate, pu.is_galactic_legend ";
+    sql += "FROM player_unit pu ";
+    sql += "INNER JOIN unit u ";
+    sql += "    ON pu.base_id = u.base_id ";
+    sql += "WHERE pu.ally_code = ? ";
+    sql += "AND     u.base_id = ? ";
+
+    unit.details = await runSQL(sql, [ally_code, base_id]);
+
+    sql = "SELECT * "
+    sql += "FROM player_mod pm "
+    sql += "WHERE pm.ally_code = ? ";
+    sql += "AND   pm.base_id = ? ";
+
+    
+    unit.mods = await runSQL(sql, [ally_code, base_id]);
+
+    return unit;
+
 } 
 
 module.exports = player;

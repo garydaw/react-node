@@ -1,12 +1,31 @@
 import { useState } from 'react';
 import UnitOverview from './UnitOverview'
+import UnitDetails from './UnitDetails'
 
-export default function Units({unitType, unitData}) {
+//to change to env vars
+const apiUrl = 'http://localhost:5000/api/';
+
+export default function Units({ally_code, unitType, unitData}) {
   const [searchTerm, setSearchTerm] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [unit, setUnit] = useState({});
+  const [unitDetails, setUnitDetail] = useState({});
   
   const filteredUnits = unitData.filter(unit =>
     unit.character_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+
+  const openModal = async (this_unit) => {
+    setUnit(this_unit);
+    setShowModal(true);
+    const data = await (await fetch(apiUrl + "player/" + ally_code + '/unit/' + this_unit.base_id)).json();
+    setUnitDetail(data);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+  };
 
   return (
       <div className="p-3">
@@ -23,7 +42,7 @@ export default function Units({unitType, unitData}) {
           <div className="row row-cols-4">
             {filteredUnits.map((unit, index) => {
               return (
-                  <UnitOverview unit={unit} key={unit.base_id}></UnitOverview>
+                  <UnitOverview unit={unit} key={unit.base_id} openModal={openModal}></UnitOverview>
               );
             })}
         </div>
@@ -41,6 +60,24 @@ export default function Units({unitType, unitData}) {
               <div className="modal-footer">
                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="button" className="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        
+        <div className="modal" style={{ display: showModal ? 'block' : 'none' }} id={"unitDetailModal" + unitType} tabIndex="-1" aria-labelledby={"unitDetailModal" + unitType + "Label"} aria-hidden="true">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id={"unitDetailModal" + unitType + "Label"}>{unit.character_name}</h5>
+                <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeModal}></button>
+              </div>
+              <div className="modal-body">
+                <UnitDetails unit={unit}></UnitDetails>
+              </div>
+              <div className="modal-footer">
+                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeModal}>Close</button>
               </div>
             </div>
           </div>

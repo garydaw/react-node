@@ -80,8 +80,8 @@ export default function Player({playerData, refreshPlayerData}) {
                         </ul>
 
                         <div className="tab-content">
-                            <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{playerData.units && <Units unitType="units" unitData={playerData.units}></Units>}</div>
-                            <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{playerData.ships && <Units unitType="ships" unitData={playerData.ships}></Units>}</div>
+                            <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{playerData.units && <Units ally_code={playerData.ally_code} unitType="units" unitData={playerData.units}></Units>}</div>
+                            <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{playerData.ships && <Units ally_code={playerData.ally_code} unitType="ships" unitData={playerData.ships}></Units>}</div>
                             <div className="tab-pane fade" id="modTools" role="tabpanel" aria-labelledby="modTools-tab">{playerData.units && <ModTools ally_code={playerData.ally_code}></ModTools>}</div>
                             <div className="tab-pane fade" id="journeyGuide" role="tabpanel" aria-labelledby="journeyGuide-tab"><JourneyGuide key="jg" ally_code={playerData.ally_code}></JourneyGuide></div>
                             <div className="tab-pane fade" id="gac" role="tabpanel" aria-labelledby="gac-tab"><GAC ally_code={playerData.ally_code}></GAC></div>

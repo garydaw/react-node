@@ -50,21 +50,21 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
     return (
       <div className="pt-3">
         <div className="row pb-2">
-          <label for="modTools_unassigned_date" className="col-1 col-form-label">Date</label>
+          <label htmlFor="modTools_unassigned_date" className="col-1 col-form-label">Date</label>
           <div className="col-3">
             <select id="modTools_unassigned_date" className="form-select" aria-label="Date">
               <option value="">Please Select a Date</option>
               {dates.map((date, index) => {
-                return <option value={date.date}>{date.formatted}</option>
+                return <option key={"modTools_unassigned_date" + index} value={date.date}>{date.formatted}</option>
               })}   
             </select>
           </div>
-          <label for="modTools_unassigned_slot" className="col-1 col-form-label">Slot</label>
+          <label htmlFor="modTools_unassigned_slot" className="col-1 col-form-label">Slot</label>
           <div className="col-3">
             <select id="modTools_unassigned_slot" className="form-select" aria-label="Slot" onChange={setPrimary}>
               <option value="">Please Select a Slot</option>
               {slots.map((slot, index) => {
-                return <option value={slot.slot_id}>{slot.slot_name} ({slot.slot_long_name})</option>
+                return <option key={"modTools_unassigned_slot" + index} value={slot.slot_id}>{slot.slot_name} ({slot.slot_long_name})</option>
               })}   
             </select>
           </div>
@@ -74,21 +74,21 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
           </div>
         </div>
         <div className="row">
-          <label for="modTools_unassigned_group_sets" className="col-1 col-form-label">Set</label>
+          <label htmlFor="modTools_unassigned_group_sets" className="col-1 col-form-label">Set</label>
           <div className="col-3">
             <select id="modTools_unassigned_group_sets" className="form-select" aria-label="Group Sets">
               <option value="">Please Select a Set</option>
               {group_sets.map((group_set, index) => {
-                return <option value={group_set.group_set_id}>{group_set.group_set_name}</option>
+                return <option key={"modTools_unassigned_group_sets" + index} value={group_set.group_set_id}>{group_set.group_set_name}</option>
               })}   
             </select>
           </div>
-          <label for="modTools_unassigned_primaries" className="col-1 col-form-label">Primary</label>
+          <label htmlFor="modTools_unassigned_primaries" className="col-1 col-form-label">Primary</label>
           <div className="col-3">
             <select id="modTools_unassigned_primaries" className="form-select" aria-label="Primaries">
               <option value="">Please Select a Primary</option>
               {primaries.map((primary, index) => {
-                return <option value={primary.primary_stat}>{primary.primary_stat}</option>
+                return <option key={"modTools_unassigned_primaries" + index} value={primary.primary_stat}>{primary.primary_stat}</option>
               })}   
             </select>
           </div>
@@ -109,7 +109,7 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
           <tbody>
           {characters.map((row, index) => {
               return (
-                      <tr>
+                      <tr key={"modTools_unassigned_table_"+index}>
                         <th scope="row">{row.character_name}</th>
                         <td>{row.slot_name} ({row.slot_long_name})</td>
                         <td>{row.group_set_name}</td>

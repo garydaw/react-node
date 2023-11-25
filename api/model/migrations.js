@@ -34,6 +34,8 @@ async function versionOne (){
         "character_name VARCHAR(128), "+
         "url VARCHAR(256), "+
         "alignment int, " +
+        "role VARCHAR(64), "+
+        "categories VARCHAR(128), "+
         "primary key(base_id));");
   
     console.log("creating slot");
@@ -71,6 +73,7 @@ async function versionOne (){
         "base_id VARCHAR(64) NOT NULL, "+
         "gear_level int, "+
         "gear_level_plus int, "+
+        "gear_level_flags int, "+
         "level int, "+
         "power int, "+
         "rarity int, "+

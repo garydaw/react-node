@@ -1,50 +1,67 @@
-export default function UnitDetails({unit}) {
-    
-    const numFormatter = new Intl.NumberFormat('en-US');
+import ModDetails from "./ModDetails"
 
-    //calculate background if GL or at relic level and are some of the gear slots filled
-    let background = "card";
-    let gear_plus = "";
-    if(unit.gear_level === 13){
-        if(unit.is_galactic_legend){
-            background += " bg-warning bg-opacity-25";
-        } else if (unit.alignment === 1){ //netural
-            background += " bg-info bg-opacity-25";
-        } else if (unit.alignment === 2){ //light
-            background += " bg-primary bg-opacity-25";
-        } else if (unit.alignment === 3){ //dark
-            background += " bg-danger bg-opacity-75";
-        }
-    } else {
-        if(unit.gear_level_plus !== 0){
-            gear_plus = " (+" + unit.gear_level_plus + ")";
-        }
+export default function UnitDetails({unitDetails, closeDetails}) {
+    
+    if(Object.keys(unitDetails).length === 0)
+        return "";
+
+    let modArray = new Array(7).fill(null)
+    for(var m = 0; m < unitDetails.mods.length; m++){
+        modArray[unitDetails.mods[m].slot_id] = unitDetails.mods[m];
     }
 
-
+    const categoryArray = unitDetails.details.categories.split(",");
+    const gear_level_flags = unitDetails.details.gear_level_flags.toString(2).split('');
+    for(var f = 0; f < gear_level_flags.length; f++){
+        if(gear_level_flags[f] === "1"){
+            gear_level_flags[f] = "&#10003";
+        } else {
+            gear_level_flags[f] = "X";
+        }
+    }
+    while(gear_level_flags.length < 6){
+        gear_level_flags.unshift("X");
+    }
+    console.log(gear_level_flags);
     return (
-        <div className="col pb-3">
-            <div className={background}>
-                <div className="card-body">
-                    <h5 className="card-title">{unit.character_name}</h5>
-                    <div className="card-text">
-                        <ul className="list-group list-group-flush">
-                            <li className="list-group-item"><span className="fw-bold">Power</span> : {numFormatter.format(unit.power)}</li>
-                            <li className="list-group-item"><span className="fw-bold">Level</span> : {unit.level}</li>
-                            {unit.combat_type === 1 && 
-                                <li className="list-group-item"><span className="fw-bold">Gear Level</span> : {unit.gear_level + gear_plus}</li>
-                            }
-                            {unit.combat_type === 1 &&
-                                <li className="list-group-item"><span className="fw-bold">Zetas</span> : {unit.zeta_abilities}</li>
-                            }
-                            {unit.combat_type === 1 &&
-                                <li className="list-group-item"><span className="fw-bold">Omicrons</span> : {unit.omicron_abilities}</li>
-                            }
-                            {unit.relic_tier > 2 &&
-                                <li className="list-group-item"><span className="fw-bold">Relic</span> : {unit.relic_tier - 2}</li>
-                            }
-                        </ul>
+        <div>
+            <div className="d-flex justify-content-between align-items-center pb-3">
+                <span>
+                    <h5>{unitDetails.details.character_name}</h5> 
+                    <span className="bg-secondary bg-opacity-25 text-success me-1 p-1">{unitDetails.details.role}</span>
+                    {categoryArray.map((category, index) => {
+                        return (
+                            <span key={"unitDetails_category_"+index} className="bg-secondary bg-opacity-25 me-1 p-1">{category}</span>
+                        );
+                    })}
+                </span>
+                <button type="button" className="btn-close" onClick={closeDetails}></button>
+            </div>
+            <div className="row pb-3">
+                <div className="col-4">
+                    <ModDetails mod={modArray[1]}></ModDetails>
+                    <ModDetails mod={modArray[3]}></ModDetails>
+                    <ModDetails mod={modArray[5]}></ModDetails>
+                </div>
+                <div className="col-4 ">
+                    <div className="bg-warning text-center">IMAGE<br></br>IMAGE<br></br>IMAGE<br></br>IMAGE<br></br>IMAGE</div>
+                    <div className="row d-flex justify-content-between align-items-center">
+                        <div className="col-1">
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[4]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
+                        </div>
+                        <div className="col-1 me-3">
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[1]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[0]}}></div>
+                        </div>
                     </div>
+                </div>
+                <div className="col-4">
+                    <ModDetails mod={modArray[2]}></ModDetails>
+                    <ModDetails mod={modArray[4]}></ModDetails>
+                    <ModDetails mod={modArray[6]}></ModDetails>
                 </div>
             </div>
         </div>

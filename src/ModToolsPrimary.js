@@ -28,12 +28,12 @@ export default function ModToolsPrimary({ally_code, dates}) {
     return (
       <div className="pt-3">
         <div className="row">
-        <label htmlFor="modTools_primary_date" class="col-1 col-form-label">Date</label>
+        <label htmlFor="modTools_primary_date" className="col-1 col-form-label">Date</label>
           <div className="col-3">
           <select id="modTools_primary_date" className="form-select" aria-label="Date">
             <option>Please Select a Date</option>
             {dates.map((date, index) => {
-              return <option value={date.date}>{date.formatted}</option>
+              return <option key={"modTools_primary_date_" + index} value={date.date}>{date.formatted}</option>
             })}   
           </select>
           </div>
@@ -51,7 +51,7 @@ export default function ModToolsPrimary({ally_code, dates}) {
           </thead>
           <tbody>
           {mismatches.map((row, index) => {
-              return <tr><th scope="row">{row.character_name}</th><td>{row.slot_name} ({row.slot_long_name})</td><td>{row.best_primary}</td><td>{row.mod_primary}</td></tr>
+              return <tr key={"modTools_primary_table_" + index}><th scope="row">{row.character_name}</th><td>{row.slot_name} ({row.slot_long_name})</td><td>{row.best_primary}</td><td>{row.mod_primary}</td></tr>
           })} 
           </tbody>
         </table>

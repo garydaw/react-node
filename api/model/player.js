@@ -16,6 +16,7 @@ player.get = async (ally_code) => {
     let sql2 = "";
     let sql = "";
     sql += "SELECT u.base_id, u.combat_type, u.character_name, u.alignment, ";
+    sql += "    u.role, u.categories, "
 	sql += "	pu.gear_level, pu.gear_level_plus, pu.level, pu.power, pu.rarity, ";
 	sql += "	pu.zeta_abilities, pu.omicron_abilities, pu.relic_tier, pu.has_ultimate, pu.is_galactic_legend ";
     sql += "FROM player_unit pu ";
@@ -40,8 +41,8 @@ player.getUnit = async (ally_code, base_id) => {
     let unit = {};
 
     let sql = "";
-    sql += "SELECT u.base_id, u.combat_type, u.character_name, u.alignment, ";
-	sql += "	pu.gear_level, pu.gear_level_plus, pu.level, pu.power, pu.rarity, ";
+    sql += "SELECT u.base_id, u.combat_type, u.character_name, u.alignment, u.role, u.categories, ";
+	sql += "	pu.gear_level, pu.gear_level_plus, pu.gear_level_flags, pu.level, pu.power, pu.rarity, ";
 	sql += "	pu.zeta_abilities, pu.omicron_abilities, pu.relic_tier, pu.has_ultimate, pu.is_galactic_legend ";
     sql += "FROM player_unit pu ";
     sql += "INNER JOIN unit u ";
@@ -49,12 +50,22 @@ player.getUnit = async (ally_code, base_id) => {
     sql += "WHERE pu.ally_code = ? ";
     sql += "AND     u.base_id = ? ";
 
-    unit.details = await runSQL(sql, [ally_code, base_id]);
+     const rows= await runSQL(sql, [ally_code, base_id]);
+     unit.details = rows[0];
 
-    sql = "SELECT * "
-    sql += "FROM player_mod pm "
-    sql += "WHERE pm.ally_code = ? ";
-    sql += "AND   pm.base_id = ? ";
+    sql = "SELECT s.slot_id, s.slot_name, s.slot_long_name, IFNULL(gs.group_set_name, '-') AS group_set_name, pm.level, IFNULL(pm.rarity, 0) AS rarity, IFNULL(pm.tier, 0) AS tier, ";
+	sql += "    IFNULL(pm.primary_stat, '-') AS primary_stat, IFNULL(pm.primary_stat_value, '-') AS primary_stat_value, ";
+	sql += "    IFNULL(pm.secondary_stat_1, '-') AS secondary_stat_1, IFNULL(pm.secondary_stat_1_value, '-') AS secondary_stat_1_value, ";
+    sql += "    IFNULL(pm.secondary_stat_2, '-') AS secondary_stat_2, IFNULL(pm.secondary_stat_2_value, '-') AS secondary_stat_2_value, ";
+    sql += "    IFNULL(pm.secondary_stat_3, '-') AS secondary_stat_3, IFNULL(pm.secondary_stat_3_value, '-') AS secondary_stat_3_value, ";
+    sql += "    IFNULL(pm.secondary_stat_4, '-') AS secondary_stat_4, IFNULL(pm.secondary_stat_4_value, '-') AS secondary_stat_4_value ";
+    sql += "    FROM slot s ";
+    sql += "    LEFT OUTER JOIN player_mod pm ";
+    sql += "    	ON s.slot_id = pm.slot_id ";
+    sql += "        AND pm.ally_code = ? "
+    sql += "        AND   pm.base_id = ? ";
+    sql += "    LEFT OUTER JOIN group_set gs ";
+    sql += "    	ON gs.group_set_id = pm.group_set_id ";
 
     
     unit.mods = await runSQL(sql, [ally_code, base_id]);

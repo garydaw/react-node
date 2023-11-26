@@ -9,23 +9,18 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
     const { isLoading, showLoading, hideLoading } = useLoading();
 
     let searchUnassigned = async () => {
-      try {
-          showLoading("Searching for unassigned Mod slots.")
-          const date = document.getElementById("modTools_unassigned_date").value;
-          const slot = document.getElementById("modTools_unassigned_slot").value;
-          const group_set = document.getElementById("modTools_unassigned_group_sets").value;
-          const primary = document.getElementById("modTools_unassigned_primaries").value;
-          const assigned = document.getElementById("modTools_unassigned_include_assigned").checked;
+      
+        showLoading("Searching for unassigned Mod slots.")
+        const date = document.getElementById("modTools_unassigned_date").value;
+        const slot = document.getElementById("modTools_unassigned_slot").value;
+        const group_set = document.getElementById("modTools_unassigned_group_sets").value;
+        const primary = document.getElementById("modTools_unassigned_primaries").value;
+        const assigned = document.getElementById("modTools_unassigned_include_assigned").checked;
 
-
-          //get data
-          const data = await (await fetch(apiUrl + "mod/searchUnassigned/" + ally_code + "/" + date + "?slot="+slot+"&group_set="+group_set+"&primary="+primary+"&assigned="+assigned)).json();
-          hideLoading();
-          setCharacters(data);
-          
-      } catch (err) {
-          console.log(err.message)
-      }
+        //get data
+        const data = await (await fetch(apiUrl + "mod/searchUnassigned/" + ally_code + "/" + date + "?slot="+slot+"&group_set="+group_set+"&primary="+primary+"&assigned="+assigned)).json();
+        hideLoading();
+        setCharacters(data);
     }
 
     let setPrimary = (event) => {

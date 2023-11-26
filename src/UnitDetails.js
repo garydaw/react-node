@@ -2,6 +2,8 @@ import ModDetails from "./ModDetails"
 
 export default function UnitDetails({unitDetails, closeDetails}) {
     
+    const numFormatter = new Intl.NumberFormat('en-US');
+    
     if(Object.keys(unitDetails).length === 0)
         return "";
 
@@ -10,7 +12,10 @@ export default function UnitDetails({unitDetails, closeDetails}) {
         modArray[unitDetails.mods[m].slot_id] = unitDetails.mods[m];
     }
 
-    const categoryArray = unitDetails.details.categories.split(",");
+    let categoryArray = [];
+    if(unitDetails.details.categories !== "")
+        categoryArray  =unitDetails.details.categories.split(",");
+    
     const gear_level_flags = unitDetails.details.gear_level_flags.toString(2).split('');
     for(var f = 0; f < gear_level_flags.length; f++){
         if(gear_level_flags[f] === "1"){
@@ -22,7 +27,7 @@ export default function UnitDetails({unitDetails, closeDetails}) {
     while(gear_level_flags.length < 6){
         gear_level_flags.unshift("X");
     }
-    console.log(gear_level_flags);
+    
     return (
         <div>
             <div className="d-flex justify-content-between align-items-center pb-3">
@@ -50,6 +55,24 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[4]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
+                        </div>
+                        <div className="col-8">
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item"><span className="fw-bold">Power</span> : {numFormatter.format(unitDetails.details.power)}</li>
+                                <li className="list-group-item"><span className="fw-bold">Level</span> : {unitDetails.details.level}</li>
+                                {unitDetails.details.combat_type === 1 && 
+                                    <li className="list-group-item"><span className="fw-bold">Gear Level</span> : {unitDetails.details.gear_level}</li>
+                                }
+                                {unitDetails.details.combat_type === 1 &&
+                                    <li className="list-group-item"><span className="fw-bold">Zetas</span> : {unitDetails.details.zeta_abilities}</li>
+                                }
+                                {unitDetails.details.combat_type === 1 &&
+                                    <li className="list-group-item"><span className="fw-bold">Omicrons</span> : {unitDetails.details.omicron_abilities}</li>
+                                }
+                                {unitDetails.details.relic_tier > 2 &&
+                                    <li className="list-group-item"><span className="fw-bold">Relic</span> : {unitDetails.details.relic_tier - 2}</li>
+                                }
+                            </ul>
                         </div>
                         <div className="col-1 me-3">
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>

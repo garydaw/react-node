@@ -6,21 +6,22 @@ swgoh.setUnits = async (units) => {
 
     //loop round units
     for(var u = 0; u < units.length; u++){
-
+        console.log(units[u].image);
         //insert or update
-        let sql = "INSERT INTO unit (base_id, combat_type, character_name, url, alignment, role, categories) ";
-        sql += "VALUES (?, ?, ?, ?, ?, ?, ?) ";
+        let sql = "INSERT INTO unit (base_id, combat_type, character_name, url, alignment, role, categories, unit_image) ";
+        sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
         sql += "ON DUPLICATE KEY UPDATE ";
         sql += "combat_type = ?, ";
         sql += "character_name = ?, ";
         sql += "url = ?, ";
         sql += "alignment = ?, ";
         sql += "role = ?, ";
-        sql += "categories = ?";
+        sql += "categories = ?, ";
+        sql += "unit_image = ?";
 
         await runSQL(sql, [units[u].base_id,
-                            units[u].combat_type, units[u].name, units[u].url, units[u].alignment, units[u].role, units[u].categories.toString(),
-                            units[u].combat_type, units[u].name, units[u].url, units[u].alignment, units[u].role, units[u].categories.toString()]);
+                            units[u].combat_type, units[u].name, units[u].url, units[u].alignment, units[u].role, units[u].categories.toString(), units[u].image.split("/").pop(),
+                            units[u].combat_type, units[u].name, units[u].url, units[u].alignment, units[u].role, units[u].categories.toString(), units[u].image.split("/").pop()]);
 
     }
 

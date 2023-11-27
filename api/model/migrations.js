@@ -36,6 +36,7 @@ async function versionOne (){
         "alignment int, " +
         "role VARCHAR(64), "+
         "categories VARCHAR(128), "+
+        "image VARCHAR(256), "+
         "primary key(base_id));");
   
     console.log("creating slot");

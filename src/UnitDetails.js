@@ -1,7 +1,7 @@
 import ModDetails from "./ModDetails"
 
 export default function UnitDetails({unitDetails, closeDetails}) {
-    
+
     const numFormatter = new Intl.NumberFormat('en-US');
     
     if(Object.keys(unitDetails).length === 0)
@@ -49,7 +49,9 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                     <ModDetails mod={modArray[5]}></ModDetails>
                 </div>
                 <div className="col-4 ">
-                    <div className="bg-warning text-center">IMAGE<br></br>IMAGE<br></br>IMAGE<br></br>IMAGE<br></br>IMAGE</div>
+                    <div className="text-center">
+                        <img src={`${process.env.PUBLIC_URL}/characters/`+unitDetails.details.unit_image} />
+                        </div>
                     <div className="row d-flex justify-content-between align-items-center">
                         <div className="col-1">
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>

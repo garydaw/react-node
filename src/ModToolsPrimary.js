@@ -9,18 +9,14 @@ export default function ModToolsPrimary({ally_code, dates}) {
     const { isLoading, showLoading, hideLoading } = useLoading();
 
     let getPrimaryMismatch = async () => {
-      try {
-          showLoading("Checking mis-match primaries.")
-          const date = document.getElementById("modTools_primary_date").value;
+      
+        showLoading("Checking mis-match primaries.")
+        const date = document.getElementById("modTools_primary_date").value;
 
-          //get data
-          const data = await (await fetch(apiUrl + "mod/checkprimary/" + ally_code + "/" + date)).json();
-          hideLoading();
-          setMismatches(data);
-          
-      } catch (err) {
-          console.log(err.message)
-      }
+        //get data
+        const data = await (await fetch(apiUrl + "mod/checkprimary/" + ally_code + "/" + date)).json();
+        hideLoading();
+        setMismatches(data);
     }
     
     if(dates.length === 0)

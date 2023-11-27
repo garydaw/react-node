@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import UnitOverview from './UnitOverview'
+import CharacterImage from './CharacterImage';
 
 const apiUrl = 'http://localhost:5000/api/';
 
@@ -70,10 +70,13 @@ return (
                   <div className="card-body">
                  
                       {unit !== null && 
+                        <>
                          <div className="d-flex justify-content-between align-items-center">
                             <h5>{unit.character_name}</h5>
                             <i class="bi bi-x-circle" onClick={() => removeFromTeam(index)}></i>
-                         </div>   
+                         </div>
+                         <CharacterImage unit_image={unit.unit_image} circle="100"></CharacterImage>
+                        </>
                       }
                   </div>
             </div>
@@ -108,6 +111,7 @@ return (
               <div key={"gacAdmin_"+unit.base_id} className="card col m-3" onClick={() => addToTeam(unit)}>
                   <div className="card-body">
                       <h5>{unit.character_name}</h5>
+                      <CharacterImage unit_image={unit.unit_image} circle="100"></CharacterImage>
                   </div>
             </div>
             );

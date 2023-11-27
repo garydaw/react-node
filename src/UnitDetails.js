@@ -1,4 +1,5 @@
 import ModDetails from "./ModDetails"
+import CharacterImage from './CharacterImage';
 
 export default function UnitDetails({unitDetails, closeDetails}) {
 
@@ -49,15 +50,23 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                     <ModDetails mod={modArray[5]}></ModDetails>
                 </div>
                 <div className="col-4 ">
-                    <div className="text-center">
-                        <img src={`${process.env.PUBLIC_URL}/characters/`+unitDetails.details.unit_image} />
-                        </div>
                     <div className="row d-flex justify-content-between align-items-center">
                         <div className="col-1">
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[4]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
                         </div>
+                        <div className="col-8 justify-content-center d-inline-flex">
+                            <CharacterImage unit_image={unitDetails.details.unit_image} circle="100"></CharacterImage>
+                        </div>
+                        <div className="col-1 me-3">
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[1]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[0]}}></div>
+                        </div>
+                    </div>
+                    <div className="row d-flex justify-content-between align-items-center">
+                        
                         <div className="col-8">
                             <ul className="list-group list-group-flush">
                                 <li className="list-group-item"><span className="fw-bold">Power</span> : {numFormatter.format(unitDetails.details.power)}</li>
@@ -76,11 +85,7 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                                 }
                             </ul>
                         </div>
-                        <div className="col-1 me-3">
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[1]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[0]}}></div>
-                        </div>
+                        
                     </div>
                 </div>
                 <div className="col-4">

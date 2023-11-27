@@ -5,7 +5,7 @@ let mod = {};
 mod.checkPrimary = async (ally_code, date) => {
 
 
-    let sql = "SELECT u.character_name, pm.primary_stat AS mod_primary, um.primary_stat AS best_primary, ";
+    let sql = "SELECT u.character_name, pm.primary_stat AS mod_primary, um.primary_stat AS best_primary, gs.group_set_name AS mod_set,";
     sql += "s.slot_id, s.slot_long_name, s.slot_name, pu.power ";
     sql += "FROM player_mod pm ";
     sql += "INNER JOIN unit u ";
@@ -17,6 +17,8 @@ mod.checkPrimary = async (ally_code, date) => {
     sql += "    AND pm.slot_id = um.slot_id ";
     sql += "LEFT OUTER JOIN slot s ";
     sql += "    ON um.slot_id = s.slot_id ";
+    sql += "LEFT OUTER JOIN group_set gs ";
+    sql += "    ON gs.group_set_id = pm.group_set_id ";
     sql += "WHERE pm.primary_stat <> um.primary_stat ";
     sql += "AND	 pm.ally_code =  ?";
     sql += "AND	 um.date = ? ";

@@ -41,13 +41,22 @@ export default function ModToolsPrimary({ally_code, dates}) {
             <tr>
               <th scope="col">Character</th>
               <th scope="col">Slot</th>
+              <th scope="col">Your Set</th>
               <th scope="col">Best Primary</th>
               <th scope="col">Your Primary</th>
             </tr>
           </thead>
           <tbody>
           {mismatches.map((row, index) => {
-              return <tr key={"modTools_primary_table_" + index}><th scope="row">{row.character_name}</th><td>{row.slot_name} ({row.slot_long_name})</td><td>{row.best_primary}</td><td>{row.mod_primary}</td></tr>
+              return (
+                      <tr key={"modTools_primary_table_" + index}>
+                          <th scope="row">{row.character_name}</th>
+                          <td>{row.slot_name} ({row.slot_long_name})</td>
+                          <td>{row.mod_set}</td>
+                          <td>{row.best_primary}</td>
+                          <td>{row.mod_primary}</td>
+                      </tr>
+              )
           })} 
           </tbody>
         </table>

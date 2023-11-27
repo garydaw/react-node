@@ -24,6 +24,9 @@ export default function ModDetails({mod}) {
                     <div className="col-6">{mod.secondary_stat_3_value} {mod.secondary_stat_3}</div>
                     <div className="col-6">{mod.secondary_stat_4_value} {mod.secondary_stat_4}</div>
                 </div>
+                <div className="row">
+                    <div className="col">Best Primary : {mod.best_primary_stat}</div>
+                </div>
             </div>
         </div>
     )

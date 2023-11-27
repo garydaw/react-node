@@ -61,7 +61,7 @@ gacTeam.getGACTeam = async (ally_code) => {
 
 gacTeam.getUnits = async () => {
 
-    let sql = "SELECT base_id, character_name ";
+    let sql = "SELECT base_id, character_name, unit_image ";
     sql += "FROM unit ";
     sql += "WHERE combat_type = 1 ";
     sql += "ORDER BY character_name";

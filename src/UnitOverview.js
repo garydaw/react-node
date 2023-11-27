@@ -44,7 +44,9 @@ export default function UnitOverview({unit, openDetails}) {
                                 <li className="list-group-item"><span className="fw-bold">Relic</span> : {unit.relic_tier - 2}</li>
                             }
                         </ul>
-                        <button className="btn btn-primary" onClick={() => openDetails(unit)}>Details</button>
+                        {unit.combat_type === 1 &&
+                            <button className="btn btn-primary" onClick={() => openDetails(unit)}>Details</button>
+                        }
                     </div>
                 </div>
             </div>

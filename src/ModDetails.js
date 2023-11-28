@@ -3,6 +3,15 @@ export default function ModDetails({mod}) {
     const rarityArray = ["-","MK I","MK II", "MK III", "MK IV", "MK V", "MK VI"];
     const tierArray = ["-","E","D","C","B","A"];
 
+    let primary_check = "text-success";
+    let set_check = "text-success";
+
+    if(mod.primary_stat !== mod.best_primary_stat)
+        primary_check = "text-danger";
+
+    if(!mod.best_sets.includes(mod.group_set_name))
+        set_check = "text-danger";
+
     return (
         <div className="card">
             <div className="card-body">
@@ -25,7 +34,8 @@ export default function ModDetails({mod}) {
                     <div className="col-6">{mod.secondary_stat_4_value} {mod.secondary_stat_4}</div>
                 </div>
                 <div className="row">
-                    <div className="col">Best Primary : {mod.best_primary_stat}</div>
+                    <div className="col">Best Primary : <span className={primary_check}>{mod.best_primary_stat}</span></div>
+                    <div className="col">Best Sets : <span className={set_check}>{mod.best_sets}</span></div>
                 </div>
             </div>
         </div>

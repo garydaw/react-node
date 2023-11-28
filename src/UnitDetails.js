@@ -10,6 +10,7 @@ export default function UnitDetails({unitDetails, closeDetails}) {
 
     let modArray = new Array(7).fill(null)
     for(var m = 0; m < unitDetails.mods.length; m++){
+        unitDetails.mods[m].best_sets = unitDetails.best_sets;
         modArray[unitDetails.mods[m].slot_id] = unitDetails.mods[m];
     }
 

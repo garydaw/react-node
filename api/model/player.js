@@ -53,7 +53,15 @@ player.getUnit = async (ally_code, base_id) => {
     const rows= await runSQL(sql, [ally_code, base_id]);
     unit.details = rows[0];
 
-    sql = "SELECT TOP 1 date FROM unit_mod ORDER BY date DESC";
+    sql = "SELECT  GROUP_CONCAT(DISTINCT gs.group_set_name SEPARATOR ',') AS group_set_names ";
+    sql += "FROM unit_mod um ";
+    sql += "INNER JOIN group_set gs ";
+    sql += "    ON um.group_set_id = gs.group_set_id ";
+    sql += "WHERE um.base_id = ? ";
+    sql += "AND   um.date = (SELECT date FROM unit_mod ORDER BY date DESC LIMIT 1)"
+
+    const best_sets = await runSQL(sql, [base_id]); 
+    unit.best_sets = best_sets[0].group_set_names;
 
     sql = "SELECT s.slot_id, s.slot_name, s.slot_long_name, IFNULL(gs.group_set_name, '-') AS group_set_name, pm.level, ";
     sql += "    um.primary_stat AS best_primary_stat, IFNULL(pm.rarity, 0) AS rarity, IFNULL(pm.tier, 0) AS tier, ";

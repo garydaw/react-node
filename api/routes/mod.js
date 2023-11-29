@@ -14,6 +14,17 @@ router.get('/checkprimary/:ally_code/:date', async (req, res) => {
   
 });
 
+//check mod set
+router.get('/checkset/:ally_code/:date', async (req, res) => {
+    
+    const ally_code = req.params.ally_code;
+    const date = req.params.date;
+    const incorrect_sets = await mod.checkSet(ally_code, date);
+    
+    res.status(200).json(incorrect_sets);
+  
+});
+
 //search for best unassigned option
 router.get('/searchUnassigned/:ally_code/:date', async (req, res) => {
     

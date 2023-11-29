@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import ModToolsPrimary from './ModToolsPrimary';
 import ModToolsUnassigned from './ModToolsUnassigned';
+import ModToolsSets from './ModToolsSets';
 
 const apiUrl = 'http://localhost:5000/api/';
 
@@ -92,7 +93,7 @@ export default function ModTools({ally_code}) {
                         <ModToolsPrimary ally_code={ally_code} dates={dates}></ModToolsPrimary>
                     </div>
                     <div id="modtools_set_content" className={activeTool === 'modtools_set' ? "d-show" : "d-none"}>
-                        Set
+                        <ModToolsSets ally_code={ally_code} dates={dates}></ModToolsSets>
                     </div>
                     <div id="modtools_unassigned_content" className={activeTool === 'modtools_unassigned' ? "d-show" : "d-none"}>
                         <ModToolsUnassigned ally_code={ally_code} dates={dates} slots={slots} group_sets={group_sets} primaries={primaries}></ModToolsUnassigned>

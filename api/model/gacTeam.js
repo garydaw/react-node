@@ -2,7 +2,7 @@ const runSQL = require('./database');
 
 let gacTeam = {};
 
-gacTeam.getGACTeam = async (ally_code) => {
+gacTeam.getGACTeam = async (ally_code, team_size) => {
 
     let sql = "SELECT gt.list_order, gt.defense, gt.offense, ";
     sql += "    u1.character_name AS character_name_1, u1.alignment AS alignment_1, ";
@@ -52,9 +52,10 @@ gacTeam.getGACTeam = async (ally_code) => {
     sql += "LEFT OUTER JOIN player_unit pu5 ";
     sql += "    ON gt.base_id_5 = pu5.base_id ";
     sql += "    AND pu5.ally_code = ? ";
+    sql += "WHERE gt.team_size = ? "
     sql += "ORDER BY team_count - player_team_count,  team_power";
 
-    const team = await runSQL(sql, [ally_code,ally_code,ally_code,ally_code,ally_code]);
+    const team = await runSQL(sql, [ally_code,ally_code,ally_code,ally_code,ally_code,team_size]);
     
     return team;
 }
@@ -73,12 +74,16 @@ gacTeam.getUnits = async () => {
 }
 
 gacTeam.addTeam = async (data) => {
-    console.log(data);
-    const gacTeamSql = "INSERT INTO gac_team (base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, list_order, defense, offense)" +
-                "SELECT ?, ?, ?, ?, ?, MAX(list_order) + 1, ?, ? FROM gac_team";
-        
+    
+    if(data.team_size === "3"){
+        data.team[3] = {base_id:null};
+        data.team[4] = {base_id:null};
+    }
+    const gacTeamSql = "INSERT INTO gac_team (base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, list_order, defense, offense, team_size)" +
+                "SELECT ?, ?, ?, ?, ?, MAX(list_order) + 1, ?, ?, ? FROM gac_team";
+    let params_array = [data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id];
     await runSQL(gacTeamSql, [data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id, data.team[4].base_id, 
-            data.defense, data.offense]);
+            data.defense, data.offense, data.team_size]);
 }
 
 module.exports = gacTeam;

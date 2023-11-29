@@ -5,17 +5,16 @@ import CharacterImage from './CharacterImage';
 
 const apiUrl = 'http://localhost:5000/api/';
 
-export default function GACTeamAdmin() {
+export default function GACTeamAdmin({team_size}) {
   const [unitData, setUnitData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [team, setTeamData] = useState(new Array(5).fill(null));
+  const [team, setTeamData] = useState(new Array(parseInt(team_size)).fill(null));
 
   useEffect(() => {
 
     axios
         .get(apiUrl + "gacTeam/units")
         .then((res) => {
-            
           setUnitData(res.data);
         });
     
@@ -54,11 +53,12 @@ export default function GACTeamAdmin() {
     let addTeam = () => {
       let postObj = {};
       postObj.team = team;
-      postObj.defense = document.getElementById("gacAdmin_defense").checked;
-      postObj.offense = document.getElementById("gacAdmin_offense").checked;
+      postObj.defense = document.getElementById("gacAdmin_defense_"+team_size).checked;
+      postObj.offense = document.getElementById("gacAdmin_offense_"+team_size).checked;
+      postObj.team_size = team_size;
 
       axios.post(apiUrl + "gacTeam", postObj)
-        .then(response => setTeamData(new Array(5).fill(null)));
+        .then(response => setTeamData(new Array(parseInt(team_size)).fill(null)));
     }
 
 return (
@@ -66,14 +66,14 @@ return (
        <div className="row row-cols-6">
           {team.map((unit, index) => {
             return (
-              <div key={"gacAdminTeam_"+index} className="card col m-3">
+              <div key={"gacAdminTeam_"+team_size+"_"+index} className="card col m-3">
                   <div className="card-body">
                  
                       {unit !== null && 
                         <>
                          <div className="d-flex justify-content-between align-items-center">
                             <h5>{unit.character_name}</h5>
-                            <i class="bi bi-x-circle" onClick={() => removeFromTeam(index)}></i>
+                            <i className="bi bi-x-circle" onClick={() => removeFromTeam(index)}></i>
                          </div>
                          <CharacterImage unit_image={unit.unit_image} circle="100"></CharacterImage>
                         </>
@@ -85,11 +85,11 @@ return (
       </div>
       <div className="row">
         <div className="col-3 form-check">
-          <input className="form-check-input" type="checkbox" id="gacAdmin_defense"/>
+          <input className="form-check-input" type="checkbox" id={"gacAdmin_defense_"+team_size}/>
             Defense
         </div>
         <div className="col-3 form-check">
-          <input className="form-check-input" type="checkbox" id="gacAdmin_offense"/>
+          <input className="form-check-input" type="checkbox" id={"gacAdmin_offense_"+team_size}/>
             Offense
         </div>
         <div className="col-3">
@@ -98,7 +98,7 @@ return (
       </div>
         <div className="d-flex justify-content-between align-items-center pb-3">
           <input type="text"
-                  id="gacAdminSearch"
+                  id={"gacAdminSearch_"+team_size}
                   className="form-control w-25"
                   placeholder="Search"
                   aria-label="Search"
@@ -108,7 +108,7 @@ return (
         <div className="row row-cols-6">
           {filteredUnits.map((unit, index) => {
             return (
-              <div key={"gacAdmin_"+unit.base_id} className="card col m-3" onClick={() => addToTeam(unit)}>
+              <div key={"gacAdmin_"+team_size+"_"+unit.base_id} className="card col m-3" onClick={() => addToTeam(unit)}>
                   <div className="card-body">
                       <h5>{unit.character_name}</h5>
                       <CharacterImage unit_image={unit.unit_image} circle="100"></CharacterImage>

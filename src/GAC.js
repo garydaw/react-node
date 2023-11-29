@@ -6,7 +6,7 @@ import GACTeamAdmin from './GACTeamAdmin';
 
 const apiUrl = 'http://localhost:5000/api/';
 
-export default function GAC({ally_code}) {
+export default function GAC({ally_code, team_size}) {
     const [activeContent, setActiveContent] = useState("gacDefense");
     const [teams, setTeams] = useState([]);
     
@@ -17,7 +17,7 @@ export default function GAC({ally_code}) {
     useEffect(() => {
 
         axios
-            .get(apiUrl + "gacTeam/" + ally_code)
+            .get(apiUrl + "gacTeam/" + team_size +"/" + ally_code)
             .then((res) => {
                 
                 setTeams(res.data);
@@ -50,22 +50,22 @@ export default function GAC({ally_code}) {
                 <div className="col-2">
                     <div className="list-group">
                         <button type="button"
-                            id="gacDefense"
-                            className={activeContent === "gacDefense" ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
+                            id={"gacDefense_"+team_size}
+                            className={activeContent === "gacDefense_"+team_size ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
                             onClick={swapContent}
                             aria-current="true">
                                 Defense
                         </button>
                         <button type="button"
-                            id="gacOffense"
-                            className={activeContent === "gacOffense" ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
+                            id={"gacOffense_"+team_size}
+                            className={activeContent === "gacOffense_"+team_size ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
                             onClick={swapContent}
                             aria-current="true">
                                 Offense
                         </button>
                         <button type="button"
-                            id="gacAdmin"
-                            className={activeContent === "gacAdmin" ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
+                            id={"gacAdmin_"+team_size}
+                            className={activeContent === "gacAdmin_"+team_size ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
                             onClick={swapContent}
                             aria-current="true">
                                 Admin
@@ -73,14 +73,14 @@ export default function GAC({ally_code}) {
                     </div>
                 </div>
                 <div className="col-10">
-                    <div id="gacDefenseContent" className={activeContent === "gacDefense" ? "d-show" : "d-none"}>
+                    <div id={"gacDefenseContent_"+team_size} className={activeContent === "gacDefense_"+team_size ? "d-show" : "d-none"}>
                     {Object.keys(defense).map(category => (
                         <div key={category} className="card-body border">
                             <h4 className="card-title">Missing {category} Unit(s)</h4>
                             <div className="card-text">
                                 <ul className="p-0">
                                     {defense[category].map(team => (
-                                        <GACTeam team={team} key={"gac_defense_"+team.list_order}></GACTeam>
+                                        <GACTeam team={team} key={"gac_defense_"+team_size+"_"+team.list_order}></GACTeam>
                                     ))}
                                 </ul>
                             </div>
@@ -88,22 +88,22 @@ export default function GAC({ally_code}) {
                     ))}
 
                     </div>
-                    <div id="gacOffenseContent" className={activeContent === "gacOffense" ? "d-show" : "d-none"}>
+                    <div id={"gacOffenseContent_"+team_size} className={activeContent === "gacOffense_"+team_size ? "d-show" : "d-none"}>
                         {Object.keys(offense).map(category => (
                             <div key={category} className="card-body border">
                                 <h4 className="card-title">Missing {category} Unit(s)</h4>
                                 <div className="card-text">
                                     <ul className="p-0">
                                         {offense[category].map(team => (
-                                            <GACTeam team={team} key={"gac_offense_"+team.list_order}></GACTeam>
+                                            <GACTeam team={team} key={"gac_offense_"+team_size+"_"+team.list_order}></GACTeam>
                                         ))}
                                     </ul>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <div id="gacAdminContent" className={activeContent === "gacAdmin" ? "d-show" : "d-none"}>
-                        <GACTeamAdmin key="gac_offense_admin"></GACTeamAdmin>
+                    <div id={"gacAdminContent_"+team_size} className={activeContent === "gacAdmin_"+team_size ? "d-show" : "d-none"}>
+                        <GACTeamAdmin key={"gac_offense_admin_"+team_size} team_size={team_size}></GACTeamAdmin>
                     </div>
                 </div>
             </div>

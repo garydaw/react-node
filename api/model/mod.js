@@ -22,13 +22,50 @@ mod.checkPrimary = async (ally_code, date) => {
     sql += "WHERE pm.primary_stat <> um.primary_stat ";
     sql += "AND	 pm.ally_code =  ?";
     sql += "AND	 um.date = ? ";
-    sql += "ORDER BY pu.power DESC, s.slot_id"
+    sql += "ORDER BY pu.power DESC, s.slot_id";
 
     const mismatches = await runSQL(sql, [ally_code, date]);
     
     return mismatches;
 
 } 
+
+mod.checkSet = async (ally_code, date) => {
+
+
+    let sql = "SELECT u.character_name, pm.primary_stat AS mod_primary, bs.best_group_sets AS best_set, gs.group_set_name AS mod_set, ";
+    sql += "s.slot_id, s.slot_long_name, s.slot_name, pu.power ";
+    sql += "FROM player_mod pm ";
+    sql += "INNER JOIN group_set gs ";
+    sql += "ON gs.group_set_id = pm.group_set_id ";
+    sql += "INNER JOIN unit u ";
+    sql += "ON u.base_id = pm.base_id ";
+    sql += "INNER JOIN player_unit pu ";
+    sql += "ON pu.base_id = u.base_id ";
+    sql += "INNER JOIN slot s ";
+    sql += "ON s.slot_id = pm.slot_id ";
+    sql += "INNER JOIN (SELECT  base_id, GROUP_CONCAT(DISTINCT group_set.group_set_name SEPARATOR ',') AS best_group_sets ";
+    sql += "FROM unit_mod ";
+    sql += "INNER JOIN group_set ";
+    sql += "ON unit_mod.group_set_id = group_set.group_set_id ";
+    sql += "AND unit_mod.date = ? ";
+    sql += "GROUP BY base_id) bs ";
+    sql += "ON	bs.base_id = pm.base_id ";
+    sql += "LEFT OUTER JOIN ( ";
+    sql += "SELECT DISTINCT base_id, group_set_id ";
+    sql += "FROM unit_mod ";
+    sql += "WHERE DATE = ?) um ";
+    sql += "ON		um.base_id = pm.base_id ";
+    sql += "AND 	um.group_set_id = pm.group_set_id ";
+    sql += "WHERE um.group_set_id IS NULL ";
+    sql += "AND 	pm.ally_code = ? ";
+    sql += "ORDER BY pu.power DESC, s.slot_id ";
+
+    const mismatches = await runSQL(sql, [date, date, ally_code]);
+    
+    return mismatches;
+
+}
 
 mod.searchUnassigned = async (ally_code, date, search) => {
 

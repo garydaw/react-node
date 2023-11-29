@@ -159,8 +159,8 @@ async function versionOne (){
         "ON DELETE CASCADE "+
         "ON UPDATE RESTRICT);");
 
-    await runSQL("INSERT INTO journey_guide (base_id, list_order, guide) SELECT 'DARTHMALAK', 1, 'Hints and tips to come.' WHERE 'DARTHMALAK' NOT IN (SELECT base_id FROM journey_guide)");
-    await runSQL("INSERT INTO journey_guide (base_id, list_order, guide) SELECT 'GENERALSKYWALKER', 2, 'Hints and tips to come.' WHERE 'GENERALSKYWALKER' NOT IN (SELECT base_id FROM journey_guide)");
+    await runSQL("INSERT INTO journey_guide (base_id, list_order, guide) SELECT 'DARTHMALAK', 1, 'Hints and tips to come, feel free to message me with content.' WHERE 'DARTHMALAK' NOT IN (SELECT base_id FROM journey_guide)");
+    await runSQL("INSERT INTO journey_guide (base_id, list_order, guide) SELECT 'GENERALSKYWALKER', 2, 'Hints and tips to come, feel free to message me with content.' WHERE 'GENERALSKYWALKER' NOT IN (SELECT base_id FROM journey_guide)");
 
     console.log("creating gac_team");
     await runSQL("CREATE TABLE IF NOT EXISTS gac_team ("+
@@ -173,6 +173,7 @@ async function versionOne (){
         "list_order int NOT NULL, "+
         "defense boolean NOT NULL, "+
         "offense boolean NOT NULL, "+
+        "team_size int NOT NULL, "+
         "primary key(gac_team_id), "+
         "CONSTRAINT fk_jgac_team__unit_1 "+
         "FOREIGN KEY (base_id_1) REFERENCES unit (base_id) "+
@@ -196,14 +197,14 @@ async function versionOne (){
         "ON UPDATE RESTRICT "+
         ");");
 
-        const gacTeamSql = "INSERT INTO gac_team (base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, list_order, defense, offense)" +
+        const gacTeamSql = "INSERT INTO gac_team (base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, list_order, defense, offense, team_size)" +
                 "SELECT ?, ?, ?, ?, ?, ?, ?, ? "+
                 "WHERE ? NOT IN (SELECT list_order FROM gac_team)";
         
-        await runSQL(gacTeamSql, ['JEDIMASTERKENOBI', 'COMMANDERAHSOKA', 'AHSOKATANO', 'GENERALKENOBI', 'PADMEAMIDALA', 1, 1, 1, 1]);
-        await runSQL(gacTeamSql, ['WAMPA', null, null, null, null, 25, 0, 1, 25]);
-        await runSQL(gacTeamSql, ['PADMEAMIDALA', 'COMMANDERAHSOKA', 'ANAKINKNIGHT', 'GENERALKENOBI', 'AHSOKATANO', 35, 1, 1, 35]);
-        await runSQL(gacTeamSql, ['BADBATCHHUNTER', 'BADBATCHECHO', 'BADBATCHTECH', 'BADBATCHOMEGA', 'BADBATCHWRECKER', 48, 0, 1, 48]);
+        await runSQL(gacTeamSql, ['JEDIMASTERKENOBI', 'COMMANDERAHSOKA', 'AHSOKATANO', 'GENERALKENOBI', 'PADMEAMIDALA', 1, 1, 1, 1, 5]);
+        await runSQL(gacTeamSql, ['WAMPA', null, null, null, null, 25, 0, 1, 25, 5]);
+        await runSQL(gacTeamSql, ['PADMEAMIDALA', 'COMMANDERAHSOKA', 'ANAKINKNIGHT', 'GENERALKENOBI', 'AHSOKATANO', 35, 1, 1, 35, 5]);
+        await runSQL(gacTeamSql, ['BADBATCHHUNTER', 'BADBATCHECHO', 'BADBATCHTECH', 'BADBATCHOMEGA', 'BADBATCHWRECKER', 48, 0, 1, 48, 5]);
 }
 
 module.exports = migrations;

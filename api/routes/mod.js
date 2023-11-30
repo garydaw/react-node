@@ -25,13 +25,23 @@ router.get('/checkset/:ally_code/:date', async (req, res) => {
   
 });
 
+//check mod set
+router.get('/checkspeed/:ally_code', async (req, res) => {
+    
+    const ally_code = req.params.ally_code;
+    const speed_mods = await mod.checkSpeed(ally_code);
+    
+    res.status(200).json(speed_mods);
+  
+});
+
 //search for best unassigned option
 router.get('/searchUnassigned/:ally_code/:date', async (req, res) => {
     
     const ally_code = req.params.ally_code;
     const date = req.params.date;
     const search = req.query;
-    console.log(search);
+    
     const unassigned = await mod.searchUnassigned(ally_code, date, search);
     
     res.status(200).json(unassigned);

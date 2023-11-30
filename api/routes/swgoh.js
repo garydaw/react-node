@@ -59,7 +59,7 @@ router.get('/bestmods', async (req, res) => {
       const response = await axios.get(
         'https:' + units[u].url + 'best-mods/', { headers }
       );
-      console.log(units[u].base_id);
+      
       await swgoh.setMods(units[u].base_id, units[u].character_name, response.data);
       
     }

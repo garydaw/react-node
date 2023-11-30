@@ -6,7 +6,7 @@ swgoh.setUnits = async (units) => {
 
     //loop round units
     for(var u = 0; u < units.length; u++){
-        console.log(units[u].image);
+        
         //insert or update
         let sql = "INSERT INTO unit (base_id, combat_type, character_name, url, alignment, role, categories, unit_image) ";
         sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ";
@@ -175,7 +175,6 @@ swgoh.setMods = async (base_id, character_name, html) => {
 
     //no mods found
     if(mod_start === mod_text.length - 1){
-        console.log("not Found");
         return;
     }
 

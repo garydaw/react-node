@@ -65,6 +65,34 @@ mod.checkSet = async (ally_code, date) => {
     
     return mismatches;
 
+} 
+
+mod.checkSpeed = async (ally_code) => {
+
+
+    let sql = "SELECT u.character_name, pm.primary_stat, gs.group_set_name, ";
+    sql += "s.slot_id, s.slot_long_name, s.slot_name, pu.power, ";
+    sql += "CASE WHEN primary_stat = 'Speed' THEN primary_stat_value ELSE 0 END + ";
+    sql += "CASE WHEN secondary_stat_1 = 'Speed' THEN secondary_stat_1_value ELSE 0 END + ";
+    sql += "CASE WHEN secondary_stat_2 = 'Speed' THEN secondary_stat_2_value ELSE 0 END + ";
+    sql += "CASE WHEN secondary_stat_3 = 'Speed' THEN secondary_stat_3_value ELSE 0 END + ";
+    sql += "CASE WHEN secondary_stat_4 = 'Speed' THEN secondary_stat_4_value ELSE 0 END AS speed ";
+    sql += "FROM player_mod pm ";
+    sql += "INNER JOIN group_set gs ";
+    sql += "ON gs.group_set_id = pm.group_set_id ";
+    sql += "INNER JOIN unit u ";
+    sql += "ON u.base_id = pm.base_id ";
+    sql += "INNER JOIN player_unit pu ";
+    sql += "ON pu.base_id = u.base_id ";
+    sql += "INNER JOIN slot s ";
+    sql += "ON s.slot_id = pm.slot_id ";
+    sql += "WHERE pm.ally_code = ? ";
+    sql += "ORDER BY speed, pu.power DESC, s.slot_id ";
+
+    const mismatches = await runSQL(sql, [ally_code]);
+    
+    return mismatches;
+
 }
 
 mod.searchUnassigned = async (ally_code, date, search) => {

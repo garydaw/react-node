@@ -24,7 +24,7 @@ router.get('/:team_size/:ally_code', async (req, res) => {
     const ally_code = req.params.ally_code;
     const team_size = req.params.team_size;
     const team = await gacTeam.getGACTeam(ally_code, team_size);
-    console.log(team);
+    
     res.status(200).json(team);
   
 });

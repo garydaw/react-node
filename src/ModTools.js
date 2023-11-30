@@ -4,6 +4,7 @@ import axios from 'axios';
 import ModToolsPrimary from './ModToolsPrimary';
 import ModToolsUnassigned from './ModToolsUnassigned';
 import ModToolsSets from './ModToolsSets';
+import ModToolsSpeed from './ModToolsSpeed';
 
 const apiUrl = 'http://localhost:5000/api/';
 
@@ -86,6 +87,12 @@ export default function ModTools({ally_code}) {
                             onClick={swapModTools}>
                                 Unassigned
                         </button>
+                        <button type="button"
+                            id="modtools_speed"
+                            className={activeTool === 'modtools_speed' ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
+                            onClick={swapModTools}>
+                                Speed
+                        </button>
                     </div>
                 </div>
                 <div className="col-10">
@@ -97,6 +104,9 @@ export default function ModTools({ally_code}) {
                     </div>
                     <div id="modtools_unassigned_content" className={activeTool === 'modtools_unassigned' ? "d-show" : "d-none"}>
                         <ModToolsUnassigned ally_code={ally_code} dates={dates} slots={slots} group_sets={group_sets} primaries={primaries}></ModToolsUnassigned>
+                    </div>
+                    <div id="modtools_speed_content" className={activeTool === 'modtools_speed' ? "d-show" : "d-none"}>
+                        <ModToolsSpeed ally_code={ally_code}></ModToolsSpeed>
                     </div>
                 </div>
             </div>

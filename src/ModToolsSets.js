@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLoading } from './LoadingContext';
+import Help from './Help';
 const apiUrl = 'http://localhost:5000/api/';
 
 
@@ -7,6 +8,7 @@ export default function ModToolsSets({ally_code, dates}) {
 
     const [mismatches, setMismatches] = useState([]);
     const { isLoading, showLoading, hideLoading } = useLoading();
+    const helpText = "Checks you mod sets against the 'Best Mod (GAC - Kyber)' from swgoh.gg."
 
     let getSetMismatch = async () => {
       
@@ -34,6 +36,7 @@ export default function ModToolsSets({ally_code, dates}) {
           </select>
           </div>
           <div className="col-4"><button className="form-control btn btn-primary w-25" onClick={getSetMismatch}>Check</button></div>
+          <div className="col-1 offset-3 float-end"><Help modal_id="modToolsSetsHelp" header="Mod Tools Sets" content={helpText} colour="black"></Help></div>
         </div>
 
         <table className="table table-striped table-hover">

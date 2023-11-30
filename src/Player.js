@@ -81,7 +81,6 @@ export default function Player({playerData, refreshPlayerData}) {
                                 <button className="nav-link" id="gac3-tab" data-bs-toggle="tab" data-bs-target="#gac3" type="button" role="tab" aria-controls="gac3" aria-selected="false">GAC 3v3</button>
                             </li>
                         </ul>
-
                         <div className="tab-content">
                             <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{playerData.units && <Units ally_code={playerData.ally_code} unitType="units" unitData={playerData.units}></Units>}</div>
                             <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{playerData.ships && <Units ally_code={playerData.ally_code} unitType="ships" unitData={playerData.ships}></Units>}</div>

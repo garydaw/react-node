@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLoading } from './LoadingContext';
+import Help from './Help';
 const apiUrl = 'http://localhost:5000/api/';
 
 
@@ -7,6 +8,7 @@ export default function ModToolsPrimary({ally_code, dates}) {
 
     const [mismatches, setMismatches] = useState([]);
     const { isLoading, showLoading, hideLoading } = useLoading();
+    const helpText = "Checks you primary stat against the 'Best Mod (GAC - Kyber)' from swgoh.gg."
 
     let getPrimaryMismatch = async () => {
       
@@ -24,16 +26,17 @@ export default function ModToolsPrimary({ally_code, dates}) {
     return (
       <div className="pt-3">
         <div className="row">
-        <label htmlFor="modTools_primary_date" className="col-1 col-form-label">Date</label>
-          <div className="col-3">
-          <select id="modTools_primary_date" className="form-select" aria-label="Date">
-            <option>Please Select a Date</option>
-            {dates.map((date, index) => {
-              return <option key={"modTools_primary_date_" + index} value={date.date}>{date.formatted}</option>
-            })}   
-          </select>
-          </div>
-          <div className="col-4"><button className="form-control btn btn-primary w-25" onClick={getPrimaryMismatch}>Check</button></div>
+            <label htmlFor="modTools_primary_date" className="col-1 col-form-label">Date</label>
+            <div className="col-3">
+              <select id="modTools_primary_date" className="form-select" aria-label="Date">
+                <option>Please Select a Date</option>
+                {dates.map((date, index) => {
+                  return <option key={"modTools_primary_date_" + index} value={date.date}>{date.formatted}</option>
+                })}   
+              </select>
+            </div>
+            <div className="col-4"><button className="form-control btn btn-primary w-25" onClick={getPrimaryMismatch}>Check</button></div>
+            <div className="col-1 offset-3 float-end"><Help modal_id="modToolsPrimaryHelp" header="Mod Tools Primary" content={helpText} colour="black"></Help></div>
         </div>
 
         <table className="table table-striped table-hover">

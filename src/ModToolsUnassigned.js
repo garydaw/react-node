@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLoading } from './LoadingContext';
+import Help from './Help';
 
 const apiUrl = 'http://localhost:5000/api/';
 
@@ -7,6 +8,7 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
 
     const [characters, setCharacters] = useState([]);
     const { isLoading, showLoading, hideLoading } = useLoading();
+    const helpText = "Helps you assign your unassigned mods to unit that matches 'Best Mod (GAC - Kyber)' from swgoh.gg."
 
     let searchUnassigned = async () => {
       
@@ -67,6 +69,7 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
             <input className="form-check-input" type="checkbox" id="modTools_unassigned_include_assigned"/>
               Included Assigned
           </div>
+          <div className="col-1"><Help modal_id="modToolsUnassignedHelp" header="Mod Tools Unassigned" content={helpText} colour="black"></Help></div>
         </div>
         <div className="row">
           <label htmlFor="modTools_unassigned_group_sets" className="col-1 col-form-label">Set</label>

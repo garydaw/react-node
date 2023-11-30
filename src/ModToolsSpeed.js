@@ -20,6 +20,7 @@ export default function ModToolsSpeed({ally_code}) {
 
     return (
       <div className="pt-3">
+        <p>List of all your assigned mods ordered by speed.</p>
         <table className="table table-striped table-hover">
           <thead>
             <tr>

@@ -5,7 +5,7 @@ import CharacterImage from './CharacterImage';
 
 const apiUrl = 'http://localhost:5000/api/';
 
-export default function GACTeamAdmin({team_size}) {
+export default function GACTeamAdmin({team_size, getTeams}) {
   const [unitData, setUnitData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [team, setTeamData] = useState(new Array(parseInt(team_size)).fill(null));
@@ -58,7 +58,10 @@ export default function GACTeamAdmin({team_size}) {
       postObj.team_size = team_size;
 
       axios.post(apiUrl + "gacTeam", postObj)
-        .then(response => setTeamData(new Array(parseInt(team_size)).fill(null)));
+        .then(response => {
+          setTeamData(new Array(parseInt(team_size)).fill(null));
+          getTeams();
+        });
     }
 
 return (

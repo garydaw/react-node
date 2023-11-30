@@ -7,7 +7,7 @@ import GACTeamAdmin from './GACTeamAdmin';
 const apiUrl = 'http://localhost:5000/api/';
 
 export default function GAC({ally_code, team_size}) {
-    const [activeContent, setActiveContent] = useState("gacDefense");
+    const [activeContent, setActiveContent] = useState("gacDefense_"+team_size);
     const [teams, setTeams] = useState([]);
     
     let swapContent =  (event) => {
@@ -16,14 +16,18 @@ export default function GAC({ally_code, team_size}) {
 
     useEffect(() => {
 
+        getTeams();
+        
+    }, []);
+
+    let getTeams = () => {
         axios
             .get(apiUrl + "gacTeam/" + team_size +"/" + ally_code)
             .then((res) => {
                 
                 setTeams(res.data);
             });
-        
-    }, []);
+    }
 
     let offense = [];
     let defense = [];
@@ -103,7 +107,7 @@ export default function GAC({ally_code, team_size}) {
                         ))}
                     </div>
                     <div id={"gacAdminContent_"+team_size} className={activeContent === "gacAdmin_"+team_size ? "d-show" : "d-none"}>
-                        <GACTeamAdmin key={"gac_offense_admin_"+team_size} team_size={team_size}></GACTeamAdmin>
+                        <GACTeamAdmin key={"gac_offense_admin_"+team_size} team_size={team_size} getTeams={getTeams}></GACTeamAdmin>
                     </div>
                 </div>
             </div>

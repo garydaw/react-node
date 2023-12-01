@@ -1,4 +1,4 @@
-export default function GACUnitOverview({unit}) {
+export default function TeamUnitOverview({team_type, unit}) {
     
     const numFormatter = new Intl.NumberFormat('en-US');
 

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const apiUrl = 'http://localhost:5000/api/';
 
-export default function JourneyGuide({ally_code}) {
+export default function JourneyGuide() {
     const [activeContent, setActiveContent] = useState("");
     const [guides, setGuides] = useState([]);
     
@@ -19,7 +19,8 @@ export default function JourneyGuide({ally_code}) {
             .then((res) => {
                 
                 setGuides(res.data);
-                setActiveContent("jg_"+res.data[0].base_id)
+                if(res.data.length > 0)
+                    setActiveContent("jg_"+res.data[0].base_id)
             });
         
     }, []);

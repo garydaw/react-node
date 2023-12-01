@@ -1,7 +1,7 @@
 import Units from './Units';
 import ModTools from './ModTools';
 import JourneyGuide from './JourneyGuide';
-import GAC from './GAC';
+import Teams from './Teams';
 import Help from './Help';
 
 export default function Player({playerData, refreshPlayerData}) {
@@ -80,14 +80,18 @@ export default function Player({playerData, refreshPlayerData}) {
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="gac3-tab" data-bs-toggle="tab" data-bs-target="#gac3" type="button" role="tab" aria-controls="gac3" aria-selected="false">GAC 3v3</button>
                             </li>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="tw-tab" data-bs-toggle="tab" data-bs-target="#tw" type="button" role="tab" aria-controls="tw" aria-selected="false">TW</button>
+                            </li>
                         </ul>
                         <div className="tab-content">
                             <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{playerData.units && <Units ally_code={playerData.ally_code} unitType="units" unitData={playerData.units}></Units>}</div>
-                            <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{playerData.ships && <Units ally_code={playerData.ally_code} unitType="ships" unitData={playerData.ships}></Units>}</div>
+                            <div className="tab-pane fade" id="ships" role="tabpanel" aria-labelledby="ships-tab">{playerData.ships && <Units ally_code={playerData.ally_code} unitType="ships" unitData={playerData.ships}></Units>}</div> 
                             <div className="tab-pane fade" id="modTools" role="tabpanel" aria-labelledby="modTools-tab">{playerData.units && <ModTools ally_code={playerData.ally_code}></ModTools>}</div>
-                            <div className="tab-pane fade" id="journeyGuide" role="tabpanel" aria-labelledby="journeyGuide-tab"><JourneyGuide key="jg" ally_code={playerData.ally_code}></JourneyGuide></div>
-                            <div className="tab-pane fade" id="gac5" role="tabpanel" aria-labelledby="gac5-tab"><GAC ally_code={playerData.ally_code} team_size="5"></GAC></div>
-                            <div className="tab-pane fade" id="gac3" role="tabpanel" aria-labelledby="gac3-tab"><GAC ally_code={playerData.ally_code} team_size="3"></GAC></div>
+                            <div className="tab-pane fade" id="journeyGuide" role="tabpanel" aria-labelledby="journeyGuide-tab"><JourneyGuide key="jg"></JourneyGuide></div>
+                            <div className="tab-pane fade" id="gac5" role="tabpanel" aria-labelledby="gac5-tab"><Teams team_type="gac" ally_code={playerData.ally_code} team_size="5"></Teams></div>
+                            <div className="tab-pane fade" id="gac3" role="tabpanel" aria-labelledby="gac3-tab"><Teams team_type="gac" ally_code={playerData.ally_code} team_size="3"></Teams></div>
+                            <div className="tab-pane fade" id="tw" role="tabpanel" aria-labelledby="tw-tab"><Teams team_type="tw" ally_code={playerData.ally_code} team_size="5"></Teams></div>
                         </div>
                     </div>
                 </div>

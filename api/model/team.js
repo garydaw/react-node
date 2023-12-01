@@ -1,15 +1,15 @@
 const runSQL = require('./database');
 
-let gacTeam = {};
+let team = {};
 
-gacTeam.getGACTeam = async (ally_code, team_size) => {
+team.getTeams = async (ally_code, team_size, team_type) => {
 
-    let sql = "SELECT gt.list_order, gt.defense, gt.offense, ";
-    sql += "    u1.character_name AS character_name_1, u1.alignment AS alignment_1, ";
-    sql += "    u2.character_name AS character_name_2, u2.alignment AS alignment_2, ";
-    sql += "    u3.character_name AS character_name_3, u3.alignment AS alignment_3, ";
-    sql += "    u4.character_name AS character_name_4, u4.alignment AS alignment_4, ";
-    sql += "    u5.character_name AS character_name_5, u5.alignment AS alignment_5, ";
+    let sql = "SELECT t.list_order, t.defense, t.offense, ";
+    sql += "    u1.base_id AS base_id_1, u1.character_name AS character_name_1, u1.alignment AS alignment_1, ";
+    sql += "    u2.base_id AS base_id_2, u2.character_name AS character_name_2, u2.alignment AS alignment_2, ";
+    sql += "    u3.base_id AS base_id_3, u3.character_name AS character_name_3, u3.alignment AS alignment_3, ";
+    sql += "    u4.base_id AS base_id_4, u4.character_name AS character_name_4, u4.alignment AS alignment_4, ";
+    sql += "    u5.base_id AS base_id_5, u5.character_name AS character_name_5, u5.alignment AS alignment_5, ";
     sql += "    pu1.gear_level AS gear_level_1, pu1.gear_level_plus AS gear_level_plus_1, pu1.`level` AS level_1, pu1.`power` AS power_1, pu1.zeta_abilities AS zeta_abilities_1, pu1.omicron_abilities AS omicron_abilities_1, pu1.relic_tier AS relic_tier_1, ";
     sql += "    pu2.gear_level AS gear_level_2, pu2.gear_level_plus AS gear_level_plus_2, pu2.`level` AS level_2, pu2.`power` AS power_2, pu2.zeta_abilities AS zeta_abilities_2, pu2.omicron_abilities AS omicron_abilities_2, pu2.relic_tier AS relic_tier_2, ";
     sql += "    pu3.gear_level AS gear_level_3, pu3.gear_level_plus AS gear_level_plus_3, pu3.`level` AS level_3, pu3.`power` AS power_3, pu3.zeta_abilities AS zeta_abilities_3, pu3.omicron_abilities AS omicron_abilities_3, pu3.relic_tier AS relic_tier_3, ";
@@ -26,41 +26,42 @@ gacTeam.getGACTeam = async (ally_code, team_size) => {
     sql += "    CASE WHEN pu4.base_id IS NOT NULL THEN 1 ELSE 0 END + ";
     sql += "    CASE WHEN pu5.base_id IS NOT NULL THEN 1 ELSE 0 END AS player_team_count, ";
     sql += "    CAST(IFNULL(pu1.`power`, 0) + IFNULL(pu2.`power`, 0) + IFNULL(pu3.`power`, 0) + IFNULL(pu4.`power`, 0) + IFNULL(pu5.`power`, 0) AS varchar(32)) AS team_power "
-    sql += "FROM gac_team gt ";
+    sql += "FROM team t ";
     sql += "INNER JOIN unit u1 ";
-    sql += "    ON gt.base_id_1 = u1.base_id ";
+    sql += "    ON t.base_id_1 = u1.base_id ";
     sql += "LEFT OUTER JOIN unit u2 ";
-    sql += "    ON gt.base_id_2 = u2.base_id ";
+    sql += "    ON t.base_id_2 = u2.base_id ";
     sql += "LEFT OUTER JOIN unit u3 ";
-    sql += "    ON gt.base_id_3 = u3.base_id ";
+    sql += "    ON t.base_id_3 = u3.base_id ";
     sql += "LEFT OUTER JOIN unit u4 ";
-    sql += "    ON gt.base_id_4 = u4.base_id ";
+    sql += "    ON t.base_id_4 = u4.base_id ";
     sql += "LEFT OUTER JOIN unit u5 ";
-    sql += "    ON gt.base_id_5 = u5.base_id ";
+    sql += "    ON t.base_id_5 = u5.base_id ";
     sql += "LEFT OUTER JOIN player_unit pu1 ";
-    sql += "    ON gt.base_id_1 = pu1.base_id ";
+    sql += "    ON t.base_id_1 = pu1.base_id ";
     sql += "    AND pu1.ally_code = ? ";
     sql += "LEFT OUTER JOIN player_unit pu2 ";
-    sql += "    ON gt.base_id_2 = pu2.base_id ";
+    sql += "    ON t.base_id_2 = pu2.base_id ";
     sql += "    AND pu2.ally_code = ? ";
     sql += "LEFT OUTER JOIN player_unit pu3 ";
-    sql += "    ON gt.base_id_3 = pu3.base_id ";
+    sql += "    ON t.base_id_3 = pu3.base_id ";
     sql += "    AND pu3.ally_code = ? ";
     sql += "LEFT OUTER JOIN player_unit pu4 ";
-    sql += "    ON gt.base_id_4 = pu4.base_id ";
+    sql += "    ON t.base_id_4 = pu4.base_id ";
     sql += "    AND pu4.ally_code = ? ";
     sql += "LEFT OUTER JOIN player_unit pu5 ";
-    sql += "    ON gt.base_id_5 = pu5.base_id ";
+    sql += "    ON t.base_id_5 = pu5.base_id ";
     sql += "    AND pu5.ally_code = ? ";
-    sql += "WHERE gt.team_size = ? "
+    sql += "WHERE t.team_size = ? ";
+    sql += "AND t.team_type = ? ";
     sql += "ORDER BY team_count - player_team_count,  team_power";
 
-    const team = await runSQL(sql, [ally_code,ally_code,ally_code,ally_code,ally_code,team_size]);
+    const teams = await runSQL(sql, [ally_code,ally_code,ally_code,ally_code,ally_code,team_size,team_type]);
     
-    return team;
+    return teams;
 }
 
-gacTeam.getUnits = async () => {
+team.getUnits = async () => {
 
     let sql = "SELECT base_id, character_name, unit_image ";
     sql += "FROM unit ";
@@ -73,17 +74,19 @@ gacTeam.getUnits = async () => {
 
 }
 
-gacTeam.addTeam = async (data) => {
+team.addTeam = async (data, team_type) => {
     
-    if(data.team_size === "3"){
-        data.team[3] = {base_id:null};
-        data.team[4] = {base_id:null};
+    for(var t = 1; t < 5; t++){
+        if (data.team[t] === null || data.team[t] === undefined || typeof data.team[t].base_id === undefined) {
+            data.team[t] = {base_id:null};
+        }
     }
-    const gacTeamSql = "INSERT INTO gac_team (base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, list_order, defense, offense, team_size)" +
-                "SELECT ?, ?, ?, ?, ?, MAX(list_order) + 1, ?, ?, ? FROM gac_team";
-    let params_array = [data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id];
-    await runSQL(gacTeamSql, [data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id, data.team[4].base_id, 
-            data.defense, data.offense, data.team_size]);
+    
+    const teamSql = "INSERT INTO team (base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, list_order, defense, offense, team_size, team_type)" +
+                "SELECT ?, ?, ?, ?, ?, IFNULL(MAX(list_order), 0) + 1, ?, ?, ?, ? FROM team";
+    
+    await runSQL(teamSql, [data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id, data.team[4].base_id, 
+            data.defense, data.offense, data.team_size, team_type]);
 }
 
-module.exports = gacTeam;
+module.exports = team;

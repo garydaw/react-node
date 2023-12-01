@@ -3,12 +3,16 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import GACTeam from './GACTeam';
 import GACTeamAdmin from './GACTeamAdmin';
+import Help from './Help';
 
 const apiUrl = 'http://localhost:5000/api/';
 
 export default function GAC({ally_code, team_size}) {
     const [activeContent, setActiveContent] = useState("gacDefense_"+team_size);
     const [teams, setTeams] = useState([]);
+
+    const helpText = "List of some of the best teams for GAC, this are broken down by the number of units you have/don't have."+
+                " The details shown for the unit are your details.";
     
     let swapContent =  (event) => {
         setActiveContent(event.target.id);
@@ -77,10 +81,15 @@ export default function GAC({ally_code, team_size}) {
                     </div>
                 </div>
                 <div className="col-10">
+                
+                    
                     <div id={"gacDefenseContent_"+team_size} className={activeContent === "gacDefense_"+team_size ? "d-show" : "d-none"}>
-                    {Object.keys(defense).map(category => (
+                    {Object.keys(defense).map((category, index) => (
                         <div key={category} className="card-body border">
-                            <h4 className="card-title">Missing {category} Unit(s)</h4>
+                            <div className="d-flex justify-content-between align-items-center pb-3">
+                                <h4 className="card-title">Missing {category} Unit(s)</h4>
+                                {index === 0 && <Help modal_id={"GACHelpDefense"+team_size} header="GAC" content={helpText} colour="black"></Help>}
+                            </div>
                             <div className="card-text">
                                 <ul className="p-0">
                                     {defense[category].map(team => (
@@ -93,9 +102,12 @@ export default function GAC({ally_code, team_size}) {
 
                     </div>
                     <div id={"gacOffenseContent_"+team_size} className={activeContent === "gacOffense_"+team_size ? "d-show" : "d-none"}>
-                        {Object.keys(offense).map(category => (
+                        {Object.keys(offense).map((category, index) => (
                             <div key={category} className="card-body border">
-                                <h4 className="card-title">Missing {category} Unit(s)</h4>
+                                <div className="d-flex justify-content-between align-items-center pb-3">
+                                    <h4 className="card-title">Missing {category} Unit(s)</h4>
+                                    {index === 0 && <Help modal_id={"GACHelpOffense"+team_size} header="GAC" content={helpText} colour="black"></Help>}
+                                </div>
                                 <div className="card-text">
                                     <ul className="p-0">
                                         {offense[category].map(team => (

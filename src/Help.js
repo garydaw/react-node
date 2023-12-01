@@ -2,7 +2,7 @@ export default function Help ({ modal_id, header, content, colour }) {
   
     return (
         <div>
-          <i className={"bi bi-question-circle text-"+colour} data-bs-toggle="modal" data-bs-target={"#" + modal_id}></i>
+          <i className={"bi bi-question-circle text-"+colour} role="button" data-bs-toggle="modal" data-bs-target={"#" + modal_id}></i>
           <div className="modal fade" id={modal_id} tabIndex="-1" aria-labelledby={modal_id + "Label"} aria-hidden="true">
             <div className="modal-dialog">
               <div className="modal-content">

@@ -38,7 +38,7 @@ export default function Player({playerData, refreshPlayerData}) {
                             </div>
                         </div>
                     </div>
-                    <div className="row">
+                    <div className="row d-none d-lg-flex">
                         <div className="col-4">
                             <ul className="list-group list-group-flush">
                                 <li className="list-group-item"><span className="fw-bold">Ally Code</span> : {playerData.ally_code}</li>
@@ -53,6 +53,34 @@ export default function Player({playerData, refreshPlayerData}) {
                         </div>
                         <div className="col-4">
                             <ul className="list-group list-group-flush">
+                                <li className="list-group-item"><span className="fw-bold">Character Power</span> : {numFormatter.format(playerData.character_galactic_power)}</li>
+                                <li className="list-group-item"><span className="fw-bold">Ship Power</span> : {numFormatter.format(playerData.ship_galactic_power)}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="row d-none d-md-flex d-lg-none">
+                        <div className="col-6">
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item"><span className="fw-bold">Ally Code</span> : {playerData.ally_code}</li>
+                                <li className="list-group-item"><span className="fw-bold">Name</span> : {playerData.ally_name}</li>
+                                <li className="list-group-item"><span className="fw-bold">Guild Name</span> : {playerData.guild_name}</li>
+                            </ul>
+                        </div>
+                        <div className="col-6">
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item"><span className="fw-bold">Galactic Power</span> : {numFormatter.format(playerData.character_galactic_power + playerData.ship_galactic_power)}</li>
+                                <li className="list-group-item"><span className="fw-bold">Character Power</span> : {numFormatter.format(playerData.character_galactic_power)}</li>
+                                <li className="list-group-item"><span className="fw-bold">Ship Power</span> : {numFormatter.format(playerData.ship_galactic_power)}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="row d-flex d-md-none">
+                        <div className="col-12">
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item"><span className="fw-bold">Ally Code</span> : {playerData.ally_code}</li>
+                                <li className="list-group-item"><span className="fw-bold">Name</span> : {playerData.ally_name}</li>
+                                <li className="list-group-item"><span className="fw-bold">Guild Name</span> : {playerData.guild_name}</li>
+                                <li className="list-group-item"><span className="fw-bold">Galactic Power</span> : {numFormatter.format(playerData.character_galactic_power + playerData.ship_galactic_power)}</li>
                                 <li className="list-group-item"><span className="fw-bold">Character Power</span> : {numFormatter.format(playerData.character_galactic_power)}</li>
                                 <li className="list-group-item"><span className="fw-bold">Ship Power</span> : {numFormatter.format(playerData.ship_galactic_power)}</li>
                             </ul>

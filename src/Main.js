@@ -87,27 +87,27 @@ export default function Main() {
            
           <div className="container-full p-3">
             <div className="row">
-              <div className="col-6 offset-2">
+              <div className="col-sm-6 col-md-5 offset-md-3">
                 <div className="input-group">
-                  <span className="input-group-text w-25">Ally Code</span>
+                  <span className="input-group-text">Ally Code</span>
                   <input type="text"  
-                    className="form-control w-50"
+                    className="form-control"
                     placeholder="Ally Code"
                     aria-label="Ally Code"
                     aria-describedby="Ally Code"
                     id="allyCode"></input>
             
-                  <button className="form-control btn btn-primary w-25" onClick={getPlayerInfo}>Search</button>
+                  <button className="btn btn-primary" onClick={getPlayerInfo}>Search</button>
                   
                 </div>
               </div>
               <div className="col-1">
                 <Help modal_id="mainHelp" header="Main" content={helpText} colour="white"></Help>
               </div>
-              <div className="col-2 offset-1 text-end">
+              <div className="col-sm-5 col-md-3 text-end">
                 <div className="row">
                   <div className="btn-group">
-                    <button type="button" className="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button type="button" className="btn btn-danger dropdown-toggle text-right" data-bs-toggle="dropdown" aria-expanded="false">
                       SWGOH Refresh
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
@@ -118,7 +118,9 @@ export default function Main() {
                 </div>
               </div>
             </div>
-            <Player playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
+            <div className="row">
+              <Player playerData={playerData} refreshPlayerData={refreshPlayerData}></Player>
+            </div>
           </div>
     
       );

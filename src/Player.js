@@ -47,7 +47,7 @@ export default function Player({playerData, refreshPlayerData}) {
                         </div>
                         <div className="col-4">
                             <ul className="list-group list-group-flush">
-                            <li className="list-group-item"><span className="fw-bold">Galactic Power</span> : {numFormatter.format(playerData.character_galactic_power + playerData.ship_galactic_power)}</li>
+                                <li className="list-group-item"><span className="fw-bold">Galactic Power</span> : {numFormatter.format(playerData.character_galactic_power + playerData.ship_galactic_power)}</li>
                                 <li className="list-group-item"><span className="fw-bold">Guild Name</span> : {playerData.guild_name}</li>
                             </ul>
                         </div>

@@ -29,6 +29,18 @@ export default function ModTools({ally_code}) {
         return day + '-' + month + '-' + year;
     }
 
+    const renderSelect = (data, id, label, value, name) => {
+
+      return (
+        <select id={id} className="form-select" aria-label={label}>
+            <option value="">Please Select</option>
+            {data.map((item, index) => {
+              return <option key={id + index} value={item[value]}>{item[name]}</option>
+            })}   
+        </select>
+      );
+    }
+
     useEffect(() => {
 
         axios
@@ -66,7 +78,7 @@ export default function ModTools({ally_code}) {
     return (
         <div className="p-0">
             <div className="row">
-                <div className="col-2">
+                <div className="col-4 col-md-3 col-lg-2">
                     <div className="list-group">
                         <button type="button"
                             id="modtools_primary"
@@ -95,15 +107,15 @@ export default function ModTools({ally_code}) {
                         </button>
                     </div>
                 </div>
-                <div className="col-10">
+                <div className="col-8 col-md-9 col-lg-10">
                     <div id="modtools_primary_content" className={activeTool === 'modtools_primary' ? "d-show" : "d-none"}>
-                        <ModToolsPrimary ally_code={ally_code} dates={dates}></ModToolsPrimary>
+                        <ModToolsPrimary ally_code={ally_code} dates={dates} renderSelect={renderSelect}></ModToolsPrimary>
                     </div>
                     <div id="modtools_set_content" className={activeTool === 'modtools_set' ? "d-show" : "d-none"}>
-                        <ModToolsSets ally_code={ally_code} dates={dates}></ModToolsSets>
+                        <ModToolsSets ally_code={ally_code} dates={dates} renderSelect={renderSelect}></ModToolsSets>
                     </div>
                     <div id="modtools_unassigned_content" className={activeTool === 'modtools_unassigned' ? "d-show" : "d-none"}>
-                        <ModToolsUnassigned ally_code={ally_code} dates={dates} slots={slots} group_sets={group_sets} primaries={primaries}></ModToolsUnassigned>
+                        <ModToolsUnassigned ally_code={ally_code} dates={dates} slots={slots} group_sets={group_sets} primaries={primaries} renderSelect={renderSelect}></ModToolsUnassigned>
                     </div>
                     <div id="modtools_speed_content" className={activeTool === 'modtools_speed' ? "d-show" : "d-none"}>
                         <ModToolsSpeed ally_code={ally_code}></ModToolsSpeed>

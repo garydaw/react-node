@@ -44,15 +44,15 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                 </span>
                 <button type="button" className="btn-close" onClick={closeDetails}></button>
             </div>
-            <div className="row pb-3">
+            <div className="row pb-3 d-none d-lg-flex">
                 <div className="col-4">
                     <ModDetails mod={modArray[1]}></ModDetails>
                     <ModDetails mod={modArray[3]}></ModDetails>
                     <ModDetails mod={modArray[5]}></ModDetails>
                 </div>
-                <div className="col-4 ">
+                <div className="col-4">
                     <div className="row d-flex justify-content-between align-items-center">
-                        <div className="col-1">
+                        <div className="col-2">
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[4]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
@@ -60,15 +60,15 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                         <div className="col-8 justify-content-center d-inline-flex">
                             <CharacterImage unit_image={unitDetails.details.unit_image} circle="100"></CharacterImage>
                         </div>
-                        <div className="col-1 me-3">
+                        <div className="col-2">
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[1]}}></div>
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[0]}}></div>
                         </div>
                     </div>
-                    <div className="row d-flex justify-content-between align-items-center">
+                    <div className="row">
                         
-                        <div className="col-8">
+                        <div className="col-12">
                             <ul className="list-group list-group-flush">
                                 <li className="list-group-item"><span className="fw-bold">Power</span> : {numFormatter.format(unitDetails.details.power)}</li>
                                 <li className="list-group-item"><span className="fw-bold">Level</span> : {unitDetails.details.level}</li>
@@ -90,6 +90,59 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                     </div>
                 </div>
                 <div className="col-4">
+                    <ModDetails mod={modArray[2]}></ModDetails>
+                    <ModDetails mod={modArray[4]}></ModDetails>
+                    <ModDetails mod={modArray[6]}></ModDetails>
+                </div>
+            </div>
+            
+            <div className="row pb-3 d-lg-none">
+                <div className="col-12">
+                    <div className="row d-flex justify-content-between align-items-center">
+                        <div className="col-2">
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[4]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
+                        </div>
+                        <div className="col-8 justify-content-center d-inline-flex">
+                            <CharacterImage unit_image={unitDetails.details.unit_image} circle="100"></CharacterImage>
+                        </div>
+                        <div className="col-2">
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[1]}}></div>
+                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[0]}}></div>
+                        </div>
+                    </div>
+                    <div className="row">
+                        
+                        <div className="col-12">
+                            <ul className="list-group list-group-flush">
+                                <li className="list-group-item"><span className="fw-bold">Power</span> : {numFormatter.format(unitDetails.details.power)}</li>
+                                <li className="list-group-item"><span className="fw-bold">Level</span> : {unitDetails.details.level}</li>
+                                {unitDetails.details.combat_type === 1 && 
+                                    <li className="list-group-item"><span className="fw-bold">Gear Level</span> : {unitDetails.details.gear_level}</li>
+                                }
+                                {unitDetails.details.combat_type === 1 &&
+                                    <li className="list-group-item"><span className="fw-bold">Zetas</span> : {unitDetails.details.zeta_abilities}</li>
+                                }
+                                {unitDetails.details.combat_type === 1 &&
+                                    <li className="list-group-item"><span className="fw-bold">Omicrons</span> : {unitDetails.details.omicron_abilities}</li>
+                                }
+                                {unitDetails.details.relic_tier > 2 &&
+                                    <li className="list-group-item"><span className="fw-bold">Relic</span> : {unitDetails.details.relic_tier - 2}</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row pb-3 d-lg-none">
+                <div className="col-12 col-md-6">
+                    <ModDetails mod={modArray[1]}></ModDetails>
+                    <ModDetails mod={modArray[3]}></ModDetails>
+                    <ModDetails mod={modArray[5]}></ModDetails>
+                </div>
+                <div className="col-12 col-md-6">
                     <ModDetails mod={modArray[2]}></ModDetails>
                     <ModDetails mod={modArray[4]}></ModDetails>
                     <ModDetails mod={modArray[6]}></ModDetails>

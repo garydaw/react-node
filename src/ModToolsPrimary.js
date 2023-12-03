@@ -4,7 +4,7 @@ import Help from './Help';
 const apiUrl = 'http://localhost:5000/api/';
 
 
-export default function ModToolsPrimary({ally_code, dates}) {
+export default function ModToolsPrimary({ally_code, dates, renderSelect}) {
 
     const [mismatches, setMismatches] = useState([]);
     const { isLoading, showLoading, hideLoading } = useLoading();
@@ -26,44 +26,41 @@ export default function ModToolsPrimary({ally_code, dates}) {
     return (
       <div className="pt-3">
         <div className="row">
-            <label htmlFor="modTools_primary_date" className="col-1 col-form-label">Date</label>
-            <div className="col-3">
-              <select id="modTools_primary_date" className="form-select" aria-label="Date">
-                <option>Please Select a Date</option>
-                {dates.map((date, index) => {
-                  return <option key={"modTools_primary_date_" + index} value={date.date}>{date.formatted}</option>
-                })}   
-              </select>
+          <div className='col-11 col-md-8 col-lg-5'>
+            <div className="input-group">
+              <span className="input-group-text">Date</span>
+              {renderSelect(dates, "modTools_primary_date", "Date", "date", "formatted")}
+              <button className="btn btn-primary" onClick={getPrimaryMismatch}>Check</button>
             </div>
-            <div className="col-4"><button className="form-control btn btn-primary w-25" onClick={getPrimaryMismatch}>Check</button></div>
-            <div className="col-1 offset-3 float-end"><Help modal_id="modToolsPrimaryHelp" header="Mod Tools Primary" content={helpText} colour="black"></Help></div>
+          </div>
+          <div className="col-1 offset-md-3 offset-lg-6 float-end"><Help modal_id="modToolsPrimaryHelp" header="Mod Tools Primary" content={helpText} colour="black"></Help></div>
         </div>
-
-        <table className="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Character</th>
-              <th scope="col">Slot</th>
-              <th scope="col">Your Set</th>
-              <th scope="col">Best Primary</th>
-              <th scope="col">Your Primary</th>
-            </tr>
-          </thead>
-          <tbody>
-          {mismatches.map((row, index) => {
-              return (
-                      <tr key={"modTools_primary_table_" + index}>
-                          <th scope="row">{row.character_name}</th>
-                          <td>{row.slot_name} ({row.slot_long_name})</td>
-                          <td>{row.mod_set}</td>
-                          <td>{row.best_primary}</td>
-                          <td>{row.mod_primary}</td>
-                      </tr>
-              )
-          })} 
-          </tbody>
-        </table>
-        
+        <div className="table-responsive">
+          <table className="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Character</th>
+                <th scope="col">Slot</th>
+                <th scope="col">Your Set</th>
+                <th scope="col">Best Primary</th>
+                <th scope="col">Your Primary</th>
+              </tr>
+            </thead>
+            <tbody>
+            {mismatches.map((row, index) => {
+                return (
+                        <tr key={"modTools_primary_table_" + index}>
+                            <th scope="row">{row.character_name}</th>
+                            <td>{row.slot_name} ({row.slot_long_name})</td>
+                            <td>{row.mod_set}</td>
+                            <td>{row.best_primary}</td>
+                            <td>{row.mod_primary}</td>
+                        </tr>
+                )
+            })} 
+            </tbody>
+          </table>
+        </div>
       </div>
     )
 }

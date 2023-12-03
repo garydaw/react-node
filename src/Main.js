@@ -107,7 +107,7 @@ export default function Main() {
               <div className="col-sm-5 col-md-3 text-end">
                 <div className="row">
                   <div className="btn-group">
-                    <button type="button" className="btn btn-danger dropdown-toggle text-right" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button type="button" className="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                       SWGOH Refresh
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">

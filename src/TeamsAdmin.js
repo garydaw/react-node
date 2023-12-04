@@ -78,7 +78,7 @@ return (
                             <h5>{unit.character_name}</h5>
                             <i className="bi bi-x-circle" onClick={() => removeFromTeam(index)}></i>
                          </div>
-                         <CharacterImage unit_image={unit.unit_image} circle="100"></CharacterImage>
+                         <CharacterImage unit_image={unit.unit_image}></CharacterImage>
                         </>
                       }
                   </div>
@@ -87,34 +87,43 @@ return (
           })}
       </div>
       <div className="row">
-        <div className="col-3 form-check">
+        <div className="col-4 col-md-3 form-check ms-3">
           <input className="form-check-input" type="checkbox" id={team_type + "Admin_defense_"+team_size}/>
             Defense
         </div>
-        <div className="col-3 form-check">
+        <div className="col-4 col-md-3 form-check">
           <input className="form-check-input" type="checkbox" id={team_type + "Admin_offense_"+team_size}/>
             Offense
         </div>
-        <div className="col-3">
+        <div className="d-none d-md-block col-4 col-md-3">
           <button type="button" className="btn btn-primary" onClick={addTeam}>Add</button>
         </div>
       </div>
-        <div className="d-flex justify-content-between align-items-center pb-3">
+      <div className="row d-md-none">
+        <div className="col-4 pb-3">
+          <button type="button" className="btn btn-primary" onClick={addTeam}>Add</button>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12 col-sm-6 col-md-3 pb-3">
           <input type="text"
                   id={team_type + "AdminSearch_"+team_size}
-                  className="form-control w-25"
+                  className="form-control"
                   placeholder="Search"
                   aria-label="Search"
                   aria-describedby="Search"
                   value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
         </div>
-        <div className="row row-cols-6">
+      </div>
+        <div className="row">
           {filteredUnits.map((unit, index) => {
             return (
-              <div key={team_type + "Admin_"+team_size+"_"+unit.base_id} className="card col m-3" onClick={() => addToTeam(unit)}>
-                  <div className="card-body">
+              <div key={team_type + "Admin_"+team_size+"_"+unit.base_id} className="col-6 col-sm-4 col-md-3 col-lg-2 ps-3 pb-3" onClick={() => addToTeam(unit)}>
+                <div className="card">
+                  <div className="card-body text-centre">
                       <h5>{unit.character_name}</h5>
-                      <CharacterImage unit_image={unit.unit_image} circle="100"></CharacterImage>
+                      <CharacterImage unit_image={unit.unit_image}></CharacterImage>
+                  </div>
                   </div>
             </div>
             );

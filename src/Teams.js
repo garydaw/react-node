@@ -57,7 +57,7 @@ export default function Teams({team_type, ally_code, team_size}) {
     return (
         <div className="p-0">
             <div className="row">
-                <div className="col-2">
+                <div className="col-4 col-md-3 col-lg-2">
                     <div className="list-group">
                         <button type="button"
                             id={team_type+"Defense_"+team_size}
@@ -82,9 +82,9 @@ export default function Teams({team_type, ally_code, team_size}) {
                         </button>
                     </div>
                 </div>
-                <div className="col-10">
+
+                <div className="col-8 col-md-9 col-lg-10">
                 
-                    
                     <div id={team_type+"DefenseContent_"+team_size} className={activeContent === team_type+"Defense_"+team_size ? "d-show" : "d-none"}>
                     {Object.keys(defense).map((category, index) => (
                         <div key={category} className="card-body border">

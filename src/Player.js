@@ -3,6 +3,7 @@ import ModTools from './ModTools';
 import JourneyGuide from './JourneyGuide';
 import Teams from './Teams';
 import Help from './Help';
+import Tips from './Tips';
 
 export default function Player({playerData, refreshPlayerData}) {
 
@@ -111,6 +112,9 @@ export default function Player({playerData, refreshPlayerData}) {
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="tw-tab" data-bs-toggle="tab" data-bs-target="#tw" type="button" role="tab" aria-controls="tw" aria-selected="false">TW</button>
                             </li>
+                            <li className="nav-item" role="presentation">
+                                <button className="nav-link" id="tips-tab" data-bs-toggle="tab" data-bs-target="#tips" type="button" role="tab" aria-controls="tips" aria-selected="false">Tips</button>
+                            </li>
                         </ul>
                         <div className="tab-content">
                             <div className="tab-pane fade show active" id="units" role="tabpanel" aria-labelledby="units-tab">{playerData.units && <Units ally_code={playerData.ally_code} unitType="units" unitData={playerData.units}></Units>}</div>
@@ -120,6 +124,7 @@ export default function Player({playerData, refreshPlayerData}) {
                             <div className="tab-pane fade" id="gac5" role="tabpanel" aria-labelledby="gac5-tab"><Teams team_type="gac" ally_code={playerData.ally_code} team_size="5"></Teams></div>
                             <div className="tab-pane fade" id="gac3" role="tabpanel" aria-labelledby="gac3-tab"><Teams team_type="gac" ally_code={playerData.ally_code} team_size="3"></Teams></div>
                             <div className="tab-pane fade" id="tw" role="tabpanel" aria-labelledby="tw-tab"><Teams team_type="tw" ally_code={playerData.ally_code} team_size="5"></Teams></div>
+                            <div className="tab-pane fade" id="tips" role="tabpanel" aria-labelledby="tips-tab"><Tips></Tips></div>
                         </div>
                     </div>
                 </div>

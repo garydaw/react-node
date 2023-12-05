@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import CharacterImage from './CharacterImage';
-
+import { Alert } from 'react-bootstrap';
 const apiUrl = 'http://localhost:5000/api/';
 
 export default function TeamsAdmin({team_type, team_size, getTeams}) {
@@ -10,6 +10,7 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [team, setTeamData] = useState(new Array(parseInt(team_size)).fill(null));
 
+  const [alertMessage, setAlertMessage] = useState("");
   useEffect(() => {
 
     axios
@@ -35,12 +36,12 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
           
         } else if(this_team[t].base_id === unit.base_id){
           found = true;
-          alert("Can not add the same unit.");
+          setAlertMessage("Can not add the same unit.");
         }
          
       }
       if(!found){
-        alert("Team is full.")
+        setAlertMessage("Team is full.");
       }
     }
 
@@ -51,12 +52,19 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
     }
 
     let addTeam = () => {
+      if(team[0]===null){
+        setAlertMessage("The team must have at least one character.");
+        return;
+      }
       let postObj = {};
       postObj.team = team;
       postObj.defense = document.getElementById(team_type + "Admin_defense_"+team_size).checked;
       postObj.offense = document.getElementById(team_type + "Admin_offense_"+team_size).checked;
       postObj.team_size = team_size;
-
+      if(!postObj.defense && !postObj.offense){
+        setAlertMessage("The team must have at least one of Defense or Offense selected.");
+        return;
+      }
       axios.post(apiUrl + "team/" + team_type, postObj)
         .then(response => {
           setTeamData(new Array(parseInt(team_size)).fill(null));
@@ -66,22 +74,29 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
 
 return (
     <div className="p-3">
+      {alertMessage !== "" && (
+        <Alert variant="danger" onClose={() => setAlertMessage("")} dismissible>
+          {alertMessage}
+        </Alert>
+      )}
        <div className="row row-cols-6">
           {team.map((unit, index) => {
             return (
-              <div key={team_type + "AdminTeam_"+team_size+"_"+index} className="card col m-3">
+              <div key={team_type + "AdminTeam_"+team_size+"_"+index} className="col-6 col-md-4 col-lg-2 pe-3 pb-3">
+                <div className="card">
                   <div className="card-body">
                  
                       {unit !== null && 
                         <>
                          <div className="d-flex justify-content-between align-items-center">
                             <h5>{unit.character_name}</h5>
-                            <i className="bi bi-x-circle" onClick={() => removeFromTeam(index)}></i>
+                            <i className="bi bi-x-circle" role="button" onClick={() => removeFromTeam(index)}></i>
                          </div>
                          <CharacterImage unit_image={unit.unit_image}></CharacterImage>
                         </>
                       }
                   </div>
+                </div>
             </div>
             );
           })}
@@ -115,21 +130,21 @@ return (
                   value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
         </div>
       </div>
-        <div className="row">
-          {filteredUnits.map((unit, index) => {
-            return (
-              <div key={team_type + "Admin_"+team_size+"_"+unit.base_id} className="col-6 col-sm-4 col-md-3 col-lg-2 ps-3 pb-3" onClick={() => addToTeam(unit)}>
-                <div className="card">
-                  <div className="card-body text-centre">
-                      <h5>{unit.character_name}</h5>
-                      <CharacterImage unit_image={unit.unit_image}></CharacterImage>
-                  </div>
-                  </div>
-            </div>
-            );
-          })}
-      </div>
 
+      <div className="row">
+        {filteredUnits.map((unit, index) => {
+          return (
+            <div key={team_type + "Admin_"+team_size+"_"+unit.base_id} className="col-6 col-sm-4 col-md-3 col-lg-2 ps-3 pb-3" onClick={() => addToTeam(unit)}>
+              <div className="card">
+                <div className="card-body text-centre">
+                    <h5>{unit.character_name}</h5>
+                    <CharacterImage unit_image={unit.unit_image}></CharacterImage>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

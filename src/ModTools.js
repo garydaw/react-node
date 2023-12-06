@@ -6,10 +6,6 @@ import ModToolsUnassigned from './ModToolsUnassigned';
 import ModToolsSets from './ModToolsSets';
 import ModToolsSpeed from './ModToolsSpeed';
 
-const apiUrl = 'http://localhost:5000/api/';
-
-
-
 export default function ModTools({ally_code}) {
     const [activeTool, setActiveTool] = useState("modtools_primary");
     const [dates, setDates] = useState([]);
@@ -44,7 +40,7 @@ export default function ModTools({ally_code}) {
     useEffect(() => {
 
         axios
-            .get(apiUrl + "mod/dates/")
+            .get(process.env.REACT_APP_API_URL + "mod/dates/")
             .then((res) => {
                 let new_dates = [];
                 for(var d = 0; d < res.data.length; d++){
@@ -54,19 +50,19 @@ export default function ModTools({ally_code}) {
             });
 
         axios
-            .get(apiUrl + "mod/slots/")
+            .get(process.env.REACT_APP_API_URL + "mod/slots/")
             .then((res) => {
                 setSlots(res.data);
             });
 
         axios
-            .get(apiUrl + "mod/group_sets/")
+            .get(process.env.REACT_APP_API_URL + "mod/group_sets/")
             .then((res) => {
                 setGroupSets(res.data);
             });
 
         axios
-            .get(apiUrl + "mod/primaries/")
+            .get(process.env.REACT_APP_API_URL + "mod/primaries/")
             .then((res) => {
                 setPrimaries(res.data);
             });

@@ -6,7 +6,7 @@ const ErrorContext = createContext();
 export const ErrorProvider = ({ children }) => {
   const [isError, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const { isLoading, showLoading, hideLoading } = useLoading();
+  const {hideLoading } = useLoading();
 
   const showError = (message) => {
     hideLoading();

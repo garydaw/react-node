@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
-import { useLoading } from './LoadingContext';
-const apiUrl = 'http://localhost:5000/api/';
 
 
 export default function ModToolsSpeed({ally_code}) {
@@ -12,11 +10,11 @@ export default function ModToolsSpeed({ally_code}) {
     useEffect(() => {
 
         axios
-            .get(apiUrl + "mod/checkspeed/"+ally_code)
+            .get(process.env.REACT_APP_API_URL + "mod/checkspeed/"+ally_code)
             .then((res) => {
               setMods(res.data);
             });
-    }, []);
+    }, [ally_code]);
 
     return (
       <div className="pt-3">

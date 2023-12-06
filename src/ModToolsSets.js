@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import { useLoading } from './LoadingContext';
 import Help from './Help';
-const apiUrl = 'http://localhost:5000/api/';
-
 
 export default function ModToolsSets({ally_code, dates, renderSelect}) {
 
     const [mismatches, setMismatches] = useState([]);
-    const { isLoading, showLoading, hideLoading } = useLoading();
+    const { showLoading, hideLoading } = useLoading();
     const helpText = "Checks you mod sets against the 'Best Mod (GAC - Kyber)' from swgoh.gg."
 
     let getSetMismatch = async () => {
@@ -16,7 +14,7 @@ export default function ModToolsSets({ally_code, dates, renderSelect}) {
         const date = document.getElementById("modTools_set_date").value;
 
         //get data
-        const data = await (await fetch(apiUrl + "mod/checkset/" + ally_code + "/" + date)).json();
+        const data = await (await fetch(process.env.REACT_APP_API_URL + "mod/checkset/" + ally_code + "/" + date)).json();
         hideLoading();
         setMismatches(data);
     }

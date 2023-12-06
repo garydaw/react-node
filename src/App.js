@@ -25,6 +25,7 @@ function App() {
   function clearIntro() {
     setShowIntro(false);
   }
+  
   return (
     <div className="bg">
       <LoadingProvider>

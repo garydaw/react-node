@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 
-const apiUrl = 'http://localhost:5000/api/';
-
 export default function JourneyGuide() {
     const [activeContent, setActiveContent] = useState("");
     const [guides, setGuides] = useState([]);
@@ -15,7 +13,7 @@ export default function JourneyGuide() {
     useEffect(() => {
 
         axios
-            .get(apiUrl + "journeyGuide/")
+            .get(process.env.REACT_APP_API_URL + "journeyGuide/")
             .then((res) => {
                 
                 setGuides(res.data);

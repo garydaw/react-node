@@ -6,13 +6,12 @@ import { useError } from './ErrorContext';
 import Help from './Help';
 
 //to change to env vars
-const apiUrl = 'http://localhost:5000/api/';
 
 export default function Main() {
 
     const [playerData, setPlayerData] = useState({});
-    const { isLoading, showLoading, hideLoading } = useLoading();
-    const { isError, showError, hideError } = useError();
+    const { showLoading, hideLoading } = useLoading();
+    const { showError } = useError();
     const helpText = "Search for you player using you ally code. This can be found by clicking on your name from the home screen.";
 
     
@@ -34,7 +33,7 @@ export default function Main() {
             const ally_code = document.getElementById("allyCode").value;
       
             //get data
-            const data = await (await fetch(apiUrl + "player/" + ally_code +'/')).json();
+            const data = await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code +'/')).json();
             hideLoading();
             localStorage.setItem("ally_code", ally_code);
             setPlayerData(data);
@@ -48,7 +47,7 @@ export default function Main() {
         try {
             //get data
             showLoading("Getting Units.");
-            await (await fetch(apiUrl + "swgoh/units/")).json();
+            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/units/")).json();
             hideLoading();
             
         } catch (err) {
@@ -60,7 +59,7 @@ export default function Main() {
         try {
             //get data
             showLoading("Getting Best Mods.");
-            await (await fetch(apiUrl + "swgoh/bestmods/")).json();
+            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/bestmods/")).json();
             hideLoading();
             
         } catch (err) {
@@ -72,7 +71,7 @@ export default function Main() {
         try {
             showLoading("Getting data from SWGOH.");
             //get data
-            const data = await (await fetch(apiUrl + "swgoh/player/" + playerData.ally_code +'/')).json();
+            const data = await (await fetch(process.env.REACT_APP_API_URL + "swgoh/player/" + playerData.ally_code +'/')).json();
             if(data.length !== 0){
               hideLoading();
               setPlayerData(data);
@@ -111,8 +110,8 @@ export default function Main() {
                       SWGOH Refresh
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
-                      <li><a className="dropdown-item" onClick={getUnits}>Units</a></li>
-                      <li><a className="dropdown-item" onClick={getBestMods}>Mods</a></li>
+                      <li><a className="dropdown-item" href="#" onClick={getUnits}>Units</a></li>
+                      <li><a className="dropdown-item" href="#" onClick={getBestMods}>Mods</a></li>
                     </ul>
                   </div>
                 </div>

@@ -3,9 +3,6 @@ import UnitOverview from './UnitOverview'
 import UnitDetails from './UnitDetails'
 import Help from './Help';
 
-//to change to env vars
-const apiUrl = 'http://localhost:5000/api/';
-
 export default function Units({ally_code, unitType, unitData}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDetails, setDetailsToggle] = useState(false);
@@ -22,7 +19,7 @@ export default function Units({ally_code, unitType, unitData}) {
 
   const openDetails = async (this_unit) => {
     setDetailsToggle(true);
-    const data = await (await fetch(apiUrl + "player/" + ally_code + '/unit/' + this_unit.base_id)).json();
+    const data = await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code + '/unit/' + this_unit.base_id)).json();
     setUnitDetail(data);
   };
 

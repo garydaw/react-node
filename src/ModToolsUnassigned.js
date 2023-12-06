@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { useLoading } from './LoadingContext';
 import Help from './Help';
 
-const apiUrl = 'http://localhost:5000/api/';
-
 export default function ModToolsUnassigned({ally_code, dates, slots, group_sets, primaries, renderSelect}) {
 
     const [characters, setCharacters] = useState([]);
-    const { isLoading, showLoading, hideLoading } = useLoading();
+    const { showLoading, hideLoading } = useLoading();
     const helpText = "Helps you assign your unassigned mods to unit that matches 'Best Mod (GAC - Kyber)' from swgoh.gg."
 
     const searchUnassigned = async () => {
@@ -20,7 +18,7 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
         const assigned = document.getElementById("modTools_unassigned_include_assigned").checked;
 
         //get data
-        const data = await (await fetch(apiUrl + "mod/searchUnassigned/" + ally_code + "/" + date + "?slot="+slot+"&group_set="+group_set+"&primary="+primary+"&assigned="+assigned)).json();
+        const data = await (await fetch(process.env.REACT_APP_API_URL + "mod/searchUnassigned/" + ally_code + "/" + date + "?slot="+slot+"&group_set="+group_set+"&primary="+primary+"&assigned="+assigned)).json();
         hideLoading();
         setCharacters(data);
     }

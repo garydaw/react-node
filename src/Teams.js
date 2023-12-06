@@ -5,8 +5,6 @@ import Team from './Team';
 import TeamsAdmin from './TeamsAdmin';
 import Help from './Help';
 
-const apiUrl = 'http://localhost:5000/api/';
-
 export default function Teams({team_type, ally_code, team_size}) {
     const [activeContent, setActiveContent] = useState(team_type+"Defense_"+team_size);
     const [teams, setTeams] = useState([]);
@@ -21,7 +19,7 @@ export default function Teams({team_type, ally_code, team_size}) {
     
     let getTeams = () => {
         axios
-            .get(apiUrl + "team/" + team_type + "/" + team_size +"/" + ally_code)
+            .get(process.env.REACT_APP_API_URL + "team/" + team_type + "/" + team_size +"/" + ally_code)
             .then((res) => {
                 
                 setTeams(res.data);

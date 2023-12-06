@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import CharacterImage from './CharacterImage';
 import { Alert } from 'react-bootstrap';
-const apiUrl = 'http://localhost:5000/api/';
 
 export default function TeamsAdmin({team_type, team_size, getTeams}) {
   const [unitData, setUnitData] = useState([]);
@@ -14,7 +13,7 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
   useEffect(() => {
 
     axios
-        .get(apiUrl + "team/units")
+        .get(process.env.REACT_APP_API_URL + "team/units")
         .then((res) => {
           setUnitData(res.data);
         });
@@ -65,7 +64,7 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
         setAlertMessage("The team must have at least one of Defense or Offense selected.");
         return;
       }
-      axios.post(apiUrl + "team/" + team_type, postObj)
+      axios.post(process.env.REACT_APP_API_URL + "team/" + team_type, postObj)
         .then(response => {
           setTeamData(new Array(parseInt(team_size)).fill(null));
           getTeams();
@@ -92,7 +91,7 @@ return (
                             <h5>{unit.character_name}</h5>
                             <i className="bi bi-x-circle" role="button" onClick={() => removeFromTeam(index)}></i>
                          </div>
-                         <CharacterImage unit_image={unit.unit_image}></CharacterImage>
+                         <CharacterImage unit_image={unit.unit_image} unit_name={unit.character_name}></CharacterImage>
                         </>
                       }
                   </div>
@@ -138,7 +137,7 @@ return (
               <div className="card">
                 <div className="card-body text-centre">
                     <h5>{unit.character_name}</h5>
-                    <CharacterImage unit_image={unit.unit_image}></CharacterImage>
+                    <CharacterImage unit_image={unit.unit_image} unit_name={unit.character_name}></CharacterImage>
                 </div>
               </div>
             </div>

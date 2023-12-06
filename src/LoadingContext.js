@@ -17,7 +17,7 @@ export const LoadingProvider = ({ children }) => {
   };
 
   return (
-    <LoadingContext.Provider value={{ isLoading, showLoading, hideLoading }}>
+    <LoadingContext.Provider value={{showLoading, hideLoading }}>
         <div className={isLoading ? "loading-container d-show" : "loading-container d-none"}>
             <div className="loading">
                 {loadingMessage}

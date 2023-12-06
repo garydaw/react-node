@@ -58,7 +58,7 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
                         </div>
                         <div className="col-8 justify-content-center d-inline-flex">
-                            <CharacterImage unit_image={unitDetails.details.unit_image} circle="100"></CharacterImage>
+                            <CharacterImage unit_image={unitDetails.details.unit_image} unit_name={unitDetails.details.character_name}></CharacterImage>
                         </div>
                         <div className="col-2">
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
@@ -105,7 +105,7 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
                         </div>
                         <div className="col-8 justify-content-center d-inline-flex">
-                            <CharacterImage unit_image={unitDetails.details.unit_image} circle="100"></CharacterImage>
+                            <CharacterImage unit_image={unitDetails.details.unit_image} unit_name={unitDetails.details.character_name}></CharacterImage>
                         </div>
                         <div className="col-2">
                             <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>

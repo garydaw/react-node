@@ -6,8 +6,8 @@ import 'bootstrap/dist/js/bootstrap.min.js';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { LoadingProvider } from './LoadingContext';
 import { ErrorProvider } from './ErrorContext';
+import { Login } from './Login';
 import Crawler from './Crawler';
-import Main from './Main';
 
 function App() {
 
@@ -33,7 +33,8 @@ function App() {
           {showIntro ? (
             <Crawler clearIntro={clearIntro}></Crawler>
           ) : (
-            <Main></Main>
+            <Login></Login>
+            
           )}
         </ErrorProvider>
       </LoadingProvider>

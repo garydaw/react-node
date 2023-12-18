@@ -2,6 +2,17 @@ const runSQL = require('./database');
 
 let player = {};
 
+player.login = async (username) => {
+
+    let sql = "SELECT ally_code, password ";
+    sql += "FROM player ";
+    sql += "WHERE ally_code = ?"
+
+    const this_user = await runSQL(sql, [username]);
+    
+    return this_user;
+} 
+
 player.get = async (ally_code) => {
 
     let player_details = {};

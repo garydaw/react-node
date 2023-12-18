@@ -1,4 +1,4 @@
-const express =require('express');
+const express = require('express');
 const apiRouter = express.Router();
 
 const databaseRouter = require("../api/routes/database");

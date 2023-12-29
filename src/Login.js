@@ -3,9 +3,10 @@ import Main from './Main';
 
 export const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const loginHandler = async () => {
-
+    setLoginError("");
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
@@ -20,12 +21,13 @@ export const Login = () => {
     if (response.ok) {
       const data = await response.json();
       setIsLoggedIn(true);
+      localStorage.setItem('token', data.token);
       // Save the token and handle authentication on the client side
       console.log('Token:', data.token);
     } else {
       // Handle login failure
       const errorData = await response.json();
-      console.error('Login failed:', errorData.message);
+      setLoginError(errorData.message);
     }
   };
 
@@ -41,6 +43,9 @@ export const Login = () => {
                   <div className="mb-3">
                       <label htmlFor="password" className="form-label">Password</label>
                       <input type="password" className="form-control" id="password" placeholder="Enter your password" required></input>
+                  </div>
+                  <div className={loginError === "" ? "d-none" : "d-show pb-3 text-danger"}>
+                    {loginError}
                   </div>
                   <button type="submit" onClick={loginHandler} className="btn btn-primary btn-block">Login</button>
               </div>

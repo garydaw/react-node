@@ -33,7 +33,15 @@ export default function Main() {
             const ally_code = document.getElementById("allyCode").value;
       
             //get data
-            const data = await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code +'/')).json();
+            const token = localStorage.getItem('token');
+            const data = await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code +'/', 
+                                            {
+                                              method: 'GET',
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': 'Bearer ' + token,
+                                              },
+                                            })).json();
             hideLoading();
             localStorage.setItem("ally_code", ally_code);
             setPlayerData(data);

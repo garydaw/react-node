@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
     }
   
     // Create a JWT token for authentication
-    const token = jwt.sign({ username: this_user[0].username }, 'wehave0bananasToday!', { expiresIn: '1h' });
+    const token = jwt.sign({ username: this_user[0].ally_code }, 'wehave0bananasToday!', { expiresIn: '1h' });
   
     res.json({ token });
   });
@@ -31,6 +31,7 @@ router.post('/login', async (req, res) => {
 //get player details
 router.get('/:ally_code', async (req, res) => {
     
+  console.log("token " + req.headers.authorization);
     const ally_code = req.params.ally_code;
     const this_player = await player.get(ally_code);
     res.status(200).json(this_player);

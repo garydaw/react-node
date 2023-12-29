@@ -101,7 +101,7 @@ mod.searchUnassigned = async (ally_code, date, search) => {
     params.push(date);
     params.push(ally_code);
     
-    let sql = "SELECT	u.character_name, ";
+    let sql = "SELECT	DISTINCT u.character_name, ";
     sql += "            s.slot_name, s.slot_long_name, ud.primary_stat, ";
     sql += "            CONCAT(gs1.group_set_name, ', ', gs2.group_set_name, ', ', gs3.group_set_name) AS group_set_name, ";
     sql += "            ugs.group_set_name AS u_group_set_name,  ";

@@ -112,6 +112,13 @@ swgoh.setPlayer = async (player) => {
     //loop round mods
     for(var m = 0; m < player.mods.length; m++){
 
+        if(!("secondary_stats" in player.mods[m])){
+            player.mods[m].secondary_stats = [];
+        }
+
+        while(player.mods[m].secondary_stats.length < 4)
+            player.mods[m].secondary_stats.push({"name":"","display_value":""});
+
         //insert or update
         let sql = "INSERT INTO player_mod (id, ";
         sql += "ally_code, base_id, level, tier, rarity, slot_id, group_set_id, ";

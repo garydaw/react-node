@@ -33,24 +33,27 @@ export const Login = () => {
 
   return (
         <div>
+            {isLoggedIn ? (
+              <Main></Main>
+          ) : (
             <div className="row">
-              <div className={isLoggedIn ? "d-none" : "col-4 offset-4 card d-show mt-5 pb-3"}>
-                <h2 className="text-center mb-4">Login</h2>
-                  <div className="mb-3">
-                      <label htmlFor="username" className="form-label">Username</label>
-                      <input type="text" className="form-control" id="username" placeholder="Enter your username" required></input>
-                  </div>
-                  <div className="mb-3">
-                      <label htmlFor="password" className="form-label">Password</label>
-                      <input type="password" className="form-control" id="password" placeholder="Enter your password" required></input>
-                  </div>
-                  <div className={loginError === "" ? "d-none" : "d-show pb-3 text-danger"}>
-                    {loginError}
-                  </div>
-                  <button type="submit" onClick={loginHandler} className="btn btn-primary btn-block">Login</button>
+                <div className="col-4 offset-4 card d-show mt-5 pb-3">
+                  <h2 className="text-center mb-4">Login</h2>
+                    <div className="mb-3">
+                        <label htmlFor="username" className="form-label">Username</label>
+                        <input type="text" className="form-control" id="username" placeholder="Enter your username" required></input>
+                    </div>
+                    <div className="mb-3">
+                        <label htmlFor="password" className="form-label">Password</label>
+                        <input type="password" className="form-control" id="password" placeholder="Enter your password" required></input>
+                    </div>
+                    <div className={loginError === "" ? "d-none" : "d-show pb-3 text-danger"}>
+                      {loginError}
+                    </div>
+                    <button type="submit" onClick={loginHandler} className="btn btn-primary btn-block">Login</button>
+                </div>
               </div>
-            </div>
-            <div className={isLoggedIn ? "d-show" : "d-none"}><Main></Main></div>
+          )}
         </div>
   );
 };

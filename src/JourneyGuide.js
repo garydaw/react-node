@@ -12,8 +12,13 @@ export default function JourneyGuide() {
 
     useEffect(() => {
 
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        };
         axios
-            .get(process.env.REACT_APP_API_URL + "journeyGuide/")
+            .get(process.env.REACT_APP_API_URL + "journeyGuide/", {headers})
             .then((res) => {
                 
                 setGuides(res.data);

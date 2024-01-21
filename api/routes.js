@@ -16,22 +16,19 @@ const myMiddleware = (req, res, next) => {
     }
   
     const token = req.headers.authorization;
-console.log("token "+token);
+    
     if (!token) {
       return res.status(403).json({ message: 'Token not provided' });
     }
   
     jwt.verify(token.replace('Bearer ', ''), 'wehave0bananasToday!', (err, decoded) => {
       if (err) {
-        console.log(err);
         return res.status(401).json({ message: 'Failed to authenticate token' });
       }
   
       req.user = decoded.user;
-      console.log(decoded);
-      next();
+      return next();
     });
-    next();
   };
 
 apiRouter.use(myMiddleware);

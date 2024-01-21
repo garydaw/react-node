@@ -12,8 +12,13 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
   const [alertMessage, setAlertMessage] = useState("");
   useEffect(() => {
 
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+    };
     axios
-        .get(process.env.REACT_APP_API_URL + "team/units")
+        .get(process.env.REACT_APP_API_URL + "team/units", {headers})
         .then((res) => {
           setUnitData(res.data);
         });
@@ -55,7 +60,11 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
         setAlertMessage("The team must have at least one character.");
         return;
       }
-      let postObj = {};
+      const token = localStorage.getItem('token');
+      let postObj = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+      };
       postObj.team = team;
       postObj.defense = document.getElementById(team_type + "Admin_defense_"+team_size).checked;
       postObj.offense = document.getElementById(team_type + "Admin_offense_"+team_size).checked;

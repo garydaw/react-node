@@ -22,8 +22,6 @@ export const Login = () => {
       const data = await response.json();
       setIsLoggedIn(true);
       localStorage.setItem('token', data.token);
-      // Save the token and handle authentication on the client side
-      console.log('Token:', data.token);
     } else {
       // Handle login failure
       const errorData = await response.json();

@@ -31,10 +31,9 @@ router.post('/login', async (req, res) => {
 //get player details
 router.get('/:ally_code', async (req, res) => {
     
-  console.log("token " + req.headers.authorization);
     const ally_code = req.params.ally_code;
     const this_player = await player.get(ally_code);
-    res.status(200).json(this_player);
+    res.json(this_player);
   
 });
 

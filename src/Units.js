@@ -19,7 +19,15 @@ export default function Units({ally_code, unitType, unitData}) {
 
   const openDetails = async (this_unit) => {
     setDetailsToggle(true);
-    const data = await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code + '/unit/' + this_unit.base_id)).json();
+    const token = localStorage.getItem('token');
+    const data =  await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code + '/unit/' + this_unit.base_id, 
+                                    {
+                                      method: 'GET',
+                                      headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': 'Bearer ' + token,
+                                      },
+                                    })).json();
     setUnitDetail(data);
   };
 

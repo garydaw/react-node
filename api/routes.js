@@ -25,7 +25,9 @@ const myMiddleware = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: 'Failed to authenticate token' });
       }
-  
+      if (decoded.exp < Math.floor(Date.now() / 1000)) {
+        return res.status(401).json({ message: 'Session Expired' });
+      }
       req.user = decoded.user;
       return next();
     });

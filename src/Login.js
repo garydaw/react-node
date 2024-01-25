@@ -1,9 +1,29 @@
 import React, { useState } from 'react';
 import Main from './Main';
+import axios from 'axios';
+import { useEffect } from 'react';
 
 export const Login = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+    };
+    axios
+        .get(process.env.REACT_APP_API_URL + "player/token/check",  {headers})
+        .then((res) => {
+            if(res.data === "true"){
+              setIsLoggedIn(true);
+            };
+        }).catch((error) => {
+          console.log(error.message)
+        });
+  }, []);
 
   const loginHandler = async () => {
     setLoginError("");

@@ -46,4 +46,12 @@ router.get('/:ally_code/unit/:base_id', async (req, res) => {
   
 });
 
+router.get('/token/check', async (req, res) => {
+    
+  res.status(200).json("true");
+
+});
+
+
+
 module.exports = router;

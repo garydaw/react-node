@@ -61,10 +61,11 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
         return;
       }
       const token = localStorage.getItem('token');
-      let postObj = {
+      const headers = {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token,
       };
+      let postObj = {};
       postObj.team = team;
       postObj.defense = document.getElementById(team_type + "Admin_defense_"+team_size).checked;
       postObj.offense = document.getElementById(team_type + "Admin_offense_"+team_size).checked;
@@ -73,7 +74,7 @@ export default function TeamsAdmin({team_type, team_size, getTeams}) {
         setAlertMessage("The team must have at least one of Defense or Offense selected.");
         return;
       }
-      axios.post(process.env.REACT_APP_API_URL + "team/" + team_type, postObj)
+      axios.post(process.env.REACT_APP_API_URL + "team/" + team_type, postObj, {headers})
         .then(response => {
           setTeamData(new Array(parseInt(team_size)).fill(null));
           getTeams();

@@ -39,8 +39,13 @@ export default function ModTools({ally_code}) {
 
     useEffect(() => {
 
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        };
         axios
-            .get(process.env.REACT_APP_API_URL + "mod/dates/")
+            .get(process.env.REACT_APP_API_URL + "mod/dates/", {headers})
             .then((res) => {
                 let new_dates = [];
                 for(var d = 0; d < res.data.length; d++){
@@ -50,19 +55,19 @@ export default function ModTools({ally_code}) {
             });
 
         axios
-            .get(process.env.REACT_APP_API_URL + "mod/slots/")
+            .get(process.env.REACT_APP_API_URL + "mod/slots/", {headers})
             .then((res) => {
                 setSlots(res.data);
             });
 
         axios
-            .get(process.env.REACT_APP_API_URL + "mod/group_sets/")
+            .get(process.env.REACT_APP_API_URL + "mod/group_sets/", {headers})
             .then((res) => {
                 setGroupSets(res.data);
             });
 
         axios
-            .get(process.env.REACT_APP_API_URL + "mod/primaries/")
+            .get(process.env.REACT_APP_API_URL + "mod/primaries/", {headers})
             .then((res) => {
                 setPrimaries(res.data);
             });

@@ -18,7 +18,16 @@ export default function ModToolsUnassigned({ally_code, dates, slots, group_sets,
         const assigned = document.getElementById("modTools_unassigned_include_assigned").checked;
 
         //get data
-        const data = await (await fetch(process.env.REACT_APP_API_URL + "mod/searchUnassigned/" + ally_code + "/" + date + "?slot="+slot+"&group_set="+group_set+"&primary="+primary+"&assigned="+assigned)).json();
+        const token = localStorage.getItem('token');
+        const data =  await (await fetch(process.env.REACT_APP_API_URL + "mod/searchUnassigned/" + ally_code + "/" + date + "?slot="+slot+"&group_set="+group_set+"&primary="+primary+"&assigned="+assigned, 
+                                        {
+                                          method: 'GET',
+                                          headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Bearer ' + token,
+                                          },
+                                        })).json();
+
         hideLoading();
         setCharacters(data);
     }

@@ -12,8 +12,11 @@ const pool = mariadb.createPool({
 //connect to db, run query and return results
 var connectAndRun = async function sqlConnection(sql, values) {
   
+    //console.log(sql);
+    //console.log(values);
     const conn = await pool.getConnection();
     const rows = await conn.query(sql, values);
+    //console.log(rows);
     conn.release();
 
     return rows;

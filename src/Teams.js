@@ -18,8 +18,13 @@ export default function Teams({team_type, ally_code, team_size}) {
 
     
     let getTeams = () => {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        };
         axios
-            .get(process.env.REACT_APP_API_URL + "team/" + team_type + "/" + team_size +"/" + ally_code)
+            .get(process.env.REACT_APP_API_URL + "team/" + team_type + "/" + team_size +"/" + ally_code, {headers})
             .then((res) => {
                 
                 setTeams(res.data);

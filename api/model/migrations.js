@@ -20,6 +20,7 @@ async function versionOne (){
     console.log("creating player");
     await runSQL("CREATE TABLE IF NOT EXISTS player ("+
         "ally_code int NOT NULL, "+
+        "password varchar(64), "+
         "ally_name VARCHAR(64), "+
         "character_galactic_power int, "+
         "ship_galactic_power int, "+

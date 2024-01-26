@@ -14,7 +14,15 @@ export default function ModToolsSets({ally_code, dates, renderSelect}) {
         const date = document.getElementById("modTools_set_date").value;
 
         //get data
-        const data = await (await fetch(process.env.REACT_APP_API_URL + "mod/checkset/" + ally_code + "/" + date)).json();
+        const token = localStorage.getItem('token');
+        const data =  await (await fetch(process.env.REACT_APP_API_URL + "mod/checkset/" + ally_code + "/" + date, 
+                                        {
+                                          method: 'GET',
+                                          headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': 'Bearer ' + token,
+                                          },
+                                        })).json();
         hideLoading();
         setMismatches(data);
     }

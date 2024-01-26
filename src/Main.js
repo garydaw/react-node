@@ -33,7 +33,15 @@ export default function Main() {
             const ally_code = document.getElementById("allyCode").value;
       
             //get data
-            const data = await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code +'/')).json();
+            const token = localStorage.getItem('token');
+            const data = await (await fetch(process.env.REACT_APP_API_URL + "player/" + ally_code + "/", 
+                                            {
+                                              method: 'GET',
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': 'Bearer ' + token,
+                                              },
+                                            })).json();
             hideLoading();
             localStorage.setItem("ally_code", ally_code);
             setPlayerData(data);
@@ -47,7 +55,15 @@ export default function Main() {
         try {
             //get data
             showLoading("Getting Units.");
-            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/units/")).json();
+            const token = localStorage.getItem('token');
+            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/units/", 
+                                            {
+                                              method: 'GET',
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': 'Bearer ' + token,
+                                              },
+                                            })).json();
             hideLoading();
             
         } catch (err) {
@@ -59,7 +75,15 @@ export default function Main() {
         try {
             //get data
             showLoading("Getting Best Mods.");
-            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/bestmods/")).json();
+            const token = localStorage.getItem('token');
+            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/bestmods/", 
+                                            {
+                                              method: 'GET',
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': 'Bearer ' + token,
+                                              },
+                                            })).json();
             hideLoading();
             
         } catch (err) {
@@ -71,7 +95,15 @@ export default function Main() {
         try {
             showLoading("Getting data from SWGOH.");
             //get data
-            const data = await (await fetch(process.env.REACT_APP_API_URL + "swgoh/player/" + playerData.ally_code +'/')).json();
+            const token = localStorage.getItem('token');
+            const data =  await (await fetch(process.env.REACT_APP_API_URL + "swgoh/player/" + playerData.ally_code + "/", 
+                                            {
+                                              method: 'GET',
+                                              headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': 'Bearer ' + token,
+                                              },
+                                            })).json();
             if(data.length !== 0){
               hideLoading();
               setPlayerData(data);

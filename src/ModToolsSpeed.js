@@ -8,9 +8,13 @@ export default function ModToolsSpeed({ally_code}) {
     const [mods, setMods] = useState([]);
     
     useEffect(() => {
-
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        };
         axios
-            .get(process.env.REACT_APP_API_URL + "mod/checkspeed/"+ally_code)
+            .get(process.env.REACT_APP_API_URL + "mod/checkspeed/"+ally_code, {headers})
             .then((res) => {
               setMods(res.data);
             });

@@ -21,13 +21,13 @@ export default function UnitDetails({unitDetails, closeDetails}) {
     const gear_level_flags = unitDetails.details.gear_level_flags.toString(2).split('');
     for(var f = 0; f < gear_level_flags.length; f++){
         if(gear_level_flags[f] === "1"){
-            gear_level_flags[f] = "&#10003";
+            gear_level_flags[f] = "bi bi-gear-fill";
         } else {
-            gear_level_flags[f] = "X";
+            gear_level_flags[f] = "bi bi-gear";
         }
     }
     while(gear_level_flags.length < 6){
-        gear_level_flags.unshift("X");
+        gear_level_flags.unshift("bi bi-gear");
     }
     
     return (
@@ -53,17 +53,17 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                 <div className="col-4">
                     <div className="row d-flex justify-content-between align-items-center">
                         <div className="col-2">
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[4]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[5]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[4]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[3]}></i></div>
                         </div>
                         <div className="col-8 justify-content-center d-inline-flex">
                             <CharacterImage unit_image={unitDetails.details.unit_image} unit_name={unitDetails.details.character_name}></CharacterImage>
                         </div>
                         <div className="col-2">
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[1]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[0]}}></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[2]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[1]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[0]}></i></div>
                         </div>
                     </div>
                     <div className="row">
@@ -100,17 +100,17 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                 <div className="col-12">
                     <div className="row d-flex justify-content-between align-items-center">
                         <div className="col-2">
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[5]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[4]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[3]}}></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[5]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[4]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[3]}></i></div>
                         </div>
                         <div className="col-8 justify-content-center d-inline-flex">
                             <CharacterImage unit_image={unitDetails.details.unit_image} unit_name={unitDetails.details.character_name}></CharacterImage>
                         </div>
                         <div className="col-2">
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[2]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[1]}}></div>
-                            <div className="p-3 pe-4 my-3 border" dangerouslySetInnerHTML={{__html: gear_level_flags[0]}}></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[2]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[1]}></i></div>
+                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[0]}></i></div>
                         </div>
                     </div>
                     <div className="row">

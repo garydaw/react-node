@@ -47,7 +47,7 @@ export default function JourneyGuide() {
                         })}
                     </div>
                 </div>
-                <div className="col-10">
+                <div className="col-10 card-body border">
                     {guides.map((guide, index) => {
                         return (
                             <div key={"jg_" + guide.base_id + "content"} 

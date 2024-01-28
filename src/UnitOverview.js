@@ -1,4 +1,7 @@
-export default function UnitOverview({unit, openDetails}) {
+
+import CharacterImage from './CharacterImage';
+
+export default function UnitOverview({unit, openDetails, unitImage}) {
     
     const numFormatter = new Intl.NumberFormat('en-US');
 
@@ -21,13 +24,19 @@ export default function UnitOverview({unit, openDetails}) {
         }
     }
 
-
+    let columns = "col-12 col-sm-6 col-md-4 pb-3"
+    if(unitImage){
+        columns = "col-6 col-sm-4 col-md-2 pb-3";
+    }
     return (
-        <div className="col-12 col-sm-6 col-md-4 pb-3">
+        <div className={columns}>
             <div className={background}>
                 <div className="card-body">
                     <h5 className="card-title">{unit.character_name}</h5>
                     <div className="card-text">
+                        {unitImage ? (
+                            <CharacterImage unit_image={unit.unit_image} unit_name={unit.character_name}></CharacterImage>
+                        ) : (
                         <ul className="list-group list-group-flush">
                             <li className="list-group-item"><span className="fw-bold">Power</span> : {numFormatter.format(unit.power)}</li>
                             <li className="list-group-item"><span className="fw-bold">Level</span> : {unit.level}</li>
@@ -44,6 +53,7 @@ export default function UnitOverview({unit, openDetails}) {
                                 <li className="list-group-item"><span className="fw-bold">Relic</span> : {unit.relic_tier - 2}</li>
                             }
                         </ul>
+                        )}
                         {unit.combat_type === 1 &&
                             <button className="btn btn-primary" onClick={() => openDetails(unit)}>Details</button>
                         }

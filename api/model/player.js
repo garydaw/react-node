@@ -27,7 +27,7 @@ player.get = async (ally_code) => {
     let sql2 = "";
     let sql = "";
     sql += "SELECT u.base_id, u.combat_type, u.character_name, u.alignment, ";
-    sql += "    u.role, u.categories, "
+    sql += "    u.role, u.categories, u.unit_image,"
 	sql += "	pu.gear_level, pu.gear_level_plus, pu.level, pu.power, pu.rarity, ";
 	sql += "	pu.zeta_abilities, pu.omicron_abilities, pu.relic_tier, pu.has_ultimate, pu.is_galactic_legend ";
     sql += "FROM player_unit pu ";

@@ -23,7 +23,7 @@ router.post('/login', async (req, res) => {
     }
   
     // Create a JWT token for authentication
-    const token = jwt.sign({ username: this_user[0].ally_code }, 'wehave0bananasToday!', { expiresIn: '1h' });
+    const token = jwt.sign({ username: this_user[0].ally_code }, 'wehave0bananasToday!', { expiresIn: '168h' });
   
     res.json({ token });
   });

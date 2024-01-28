@@ -7,6 +7,7 @@ export default function Units({ally_code, unitType, unitData}) {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDetails, setDetailsToggle] = useState(false);
   const [unitDetails, setUnitDetail] = useState({});
+  const [unitImage, setUnitImage] = useState(false);
   const helpText = "Search for "+unitType+" based on name, role or category, click on details for more information."
   
   const filteredUnits = unitData.filter(unit =>
@@ -35,6 +36,10 @@ export default function Units({ally_code, unitType, unitData}) {
     setDetailsToggle(false);
   };
 
+  const changeUnitImage = () => {
+    setUnitImage(!unitImage);
+  }
+
   return (
       <div className="p-3">
         <div className={showDetails ? 'd-none' : 'd-block' }>
@@ -46,12 +51,16 @@ export default function Units({ally_code, unitType, unitData}) {
                     aria-label="Search"
                     aria-describedby="Search"
                     value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
+            <div className="ms-3">
+              <input className="form-check-input" type="checkbox" id="unit_details_checkbox" onChange={(e) => changeUnitImage()}/>
+              Image/Stats
+            </div>
             <Help modal_id={unitType+"Help"} header={unitType} content={helpText} colour="black"></Help>
           </div>
           <div className="row">
             {filteredUnits.map((unit, index) => {
               return (
-                  <UnitOverview unit={unit} key={unit.base_id} openDetails={openDetails}></UnitOverview>
+                  <UnitOverview unit={unit} key={unit.base_id} openDetails={openDetails} unitImage={unitImage}></UnitOverview>
               );
             })}
           </div>

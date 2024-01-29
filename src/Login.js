@@ -21,7 +21,7 @@ export const Login = () => {
               setIsLoggedIn(true);
             };
         }).catch((error) => {
-          console.log(error.message)
+          console.log(error.message);
         });
   }, []);
 

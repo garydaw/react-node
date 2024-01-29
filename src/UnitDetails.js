@@ -29,6 +29,11 @@ export default function UnitDetails({unitDetails, closeDetails}) {
     while(gear_level_flags.length < 6){
         gear_level_flags.unshift("bi bi-gear");
     }
+
+    let hide_gear = false;
+    if(unitDetails.details.gear_level === 13){
+        hide_gear = true;
+    }
     
     return (
         <div>
@@ -52,19 +57,23 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                 </div>
                 <div className="col-4">
                     <div className="row d-flex justify-content-between align-items-center">
-                        <div className="col-2">
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[5]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[4]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[3]}></i></div>
-                        </div>
+                        {hide_gear === false ? (
+                            <div className="col-2">
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[5]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[4]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[3]}></i></div>
+                            </div>
+                        ) : (<div className="col-2"></div>)}
                         <div className="col-8 justify-content-center d-inline-flex">
                             <CharacterImage unit_image={unitDetails.details.unit_image} unit_name={unitDetails.details.character_name}></CharacterImage>
                         </div>
-                        <div className="col-2">
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[2]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[1]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[0]}></i></div>
-                        </div>
+                        {hide_gear === false ? (
+                            <div className="col-2">
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[2]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[1]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[0]}></i></div>
+                            </div>
+                        ) : (<div className="col-2"></div>)}
                     </div>
                     <div className="row">
                         
@@ -99,19 +108,23 @@ export default function UnitDetails({unitDetails, closeDetails}) {
             <div className="row pb-3 d-lg-none">
                 <div className="col-12">
                     <div className="row d-flex justify-content-between align-items-center">
-                        <div className="col-2">
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[5]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[4]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[3]}></i></div>
-                        </div>
+                        {hide_gear === false ? (
+                            <div className="col-2">
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[5]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[4]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[3]}></i></div>
+                            </div>
+                        ) : (<div className="col-2"></div>)}
                         <div className="col-8 justify-content-center d-inline-flex">
                             <CharacterImage unit_image={unitDetails.details.unit_image} unit_name={unitDetails.details.character_name}></CharacterImage>
                         </div>
-                        <div className="col-2">
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[2]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[1]}></i></div>
-                            <div className="p-3 my-3 border text-center"><i className={gear_level_flags[0]}></i></div>
-                        </div>
+                        {hide_gear === false ? (
+                            <div className="col-2">
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[2]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[1]}></i></div>
+                                <div className="p-3 my-3 border text-center"><i className={gear_level_flags[0]}></i></div>
+                            </div>
+                        ) : (<div className="col-2"></div>)}
                     </div>
                     <div className="row">
                         

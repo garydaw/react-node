@@ -7,14 +7,16 @@ import Help from './Help';
 
 //to change to env vars
 
-export default function Main() {
+export default function Main({logoutHandler}) {
 
     const [playerData, setPlayerData] = useState({});
     const { showLoading, hideLoading } = useLoading();
     const { showError } = useError();
     const helpText = "Search for you player using you ally code. This can be found by clicking on your name from the home screen.";
 
-    
+    //does user have access to admin
+    const access = localStorage.getItem("access");
+
     //load ally code if been here before
     useEffect(() => {
 
@@ -139,11 +141,13 @@ export default function Main() {
                 <div className="row">
                   <div className="btn-group">
                     <button type="button" className="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                      SWGOH Refresh
+                      Admin
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
-                      <li><a className="dropdown-item" href="#" onClick={getUnits}>Units</a></li>
-                      <li><a className="dropdown-item" href="#" onClick={getBestMods}>Mods</a></li>
+                      {access === "1" && <li><a className="dropdown-item" href="#" onClick={getUnits}>Refresh Units</a></li>}
+                      {access === "1" && <li><a className="dropdown-item" href="#" onClick={getBestMods}>Refresh Mods</a></li>}
+                      <li><a className="dropdown-item" href="#">Change Password</a></li>
+                      <li><a className="dropdown-item" href="#" onClick={logoutHandler}>Logout</a></li>
                     </ul>
                   </div>
                 </div>

@@ -4,7 +4,7 @@ let player = {};
 
 player.login = async (username) => {
 
-    let sql = "SELECT ally_code, password ";
+    let sql = "SELECT ally_code, password, access ";
     sql += "FROM player ";
     sql += "WHERE ally_code = ?"
 

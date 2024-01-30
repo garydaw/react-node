@@ -25,7 +25,7 @@ router.post('/login', async (req, res) => {
     // Create a JWT token for authentication
     const token = jwt.sign({ username: this_user[0].ally_code }, 'wehave0bananasToday!', { expiresIn: '168h' });
   
-    res.json({ token });
+    res.json({ token, user:{ally_code: this_user[0].ally_code, access: this_user[0].access}});
   });
 
 //get player details

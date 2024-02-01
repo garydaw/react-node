@@ -58,16 +58,21 @@ export default function Main({logoutHandler}) {
             //get data
             showLoading("Getting Units.");
             const token = localStorage.getItem('token');
-            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/units/", 
+            const response = await (await fetch(process.env.REACT_APP_API_URL + "swgoh/units", 
                                             {
                                               method: 'GET',
                                               headers: {
                                                 'Content-Type': 'application/json',
                                                 'Authorization': 'Bearer ' + token,
                                               },
-                                            })).json();
+                                            }));
             hideLoading();
-            
+            if (response.ok) {
+              console.log(response);
+            } else {
+
+              showError(response.statusText);
+            }
         } catch (err) {
             showError(err.message)
         }
@@ -78,7 +83,7 @@ export default function Main({logoutHandler}) {
             //get data
             showLoading("Getting Best Mods.");
             const token = localStorage.getItem('token');
-            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/bestmods/", 
+            await (await fetch(process.env.REACT_APP_API_URL + "swgoh/bestmods", 
                                             {
                                               method: 'GET',
                                               headers: {
@@ -139,7 +144,7 @@ export default function Main({logoutHandler}) {
               </div>
               <div className="col-sm-5 col-md-3 text-end">
                 <div className="row">
-                  <div className="btn-group">
+                  <div className="btn-group offset-8 col-1">
                     <button type="button" className="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                       Admin
                     </button>

@@ -46,8 +46,8 @@ swgoh.setPlayer = async (player) => {
     const ally_code = player.data.ally_code;
 
      //insert or update
-     let sql = "INSERT INTO player (ally_code, ally_name, character_galactic_power, ship_galactic_power, guild_id, guild_name) ";
-     sql += "VALUES (?, ?, ?, ?, ?, ?) ";
+     let sql = "INSERT INTO player (ally_code, ally_name, character_galactic_power, ship_galactic_power, guild_id, guild_name, access) ";
+     sql += "VALUES (?, ?, ?, ?, ?, ?, 0) ";
      sql += "ON DUPLICATE KEY UPDATE ";
      sql += "ally_name = ?, ";
      sql += "character_galactic_power = ?, ";

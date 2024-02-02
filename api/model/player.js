@@ -11,7 +11,18 @@ player.login = async (username) => {
     const this_user = await runSQL(sql, [username]);
     
     return this_user;
-} 
+}
+
+player.setPassword = async (username, password) => {
+
+    let sql = "UPDATE player ";
+    sql += "SET password = ? "
+    sql += "WHERE ally_code = ?"
+
+    const this_user = await runSQL(sql, [password, username]);
+    
+    return this_user;
+}
 
 player.get = async (ally_code) => {
 

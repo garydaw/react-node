@@ -28,6 +28,32 @@ router.post('/login', async (req, res) => {
     res.json({ token, user:{ally_code: this_user[0].ally_code, access: this_user[0].access}});
   });
 
+  router.post('/password', async (req, res) => {
+    const { username, current_password, password1, password2 } = req.body;
+  
+    if(password1 === ""){
+      return res.status(401).json({ message: 'Passwords cannot be blank'});
+    }
+    if(password1 !== password2){
+      return res.status(401).json({ message: 'New Passwords do not match!'});
+    }
+
+    const this_user = await player.login(username);
+
+    // Compare the entered password with the stored hashed password
+    const passwordMatch = await bcrypt.compare(current_password, this_user[0].password);
+  
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Incorrect current' });
+    }
+    
+    
+    const hash = await bcrypt.hash(password1, 10);
+    await player.setPassword(username, hash)
+  
+    res.json("Password updated");
+  });
+
 //get player details
 router.get('/:ally_code', async (req, res) => {
     

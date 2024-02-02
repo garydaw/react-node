@@ -138,26 +138,24 @@ export default function Main({logoutHandler}) {
           setPasswordError("New Passwords do not match!");
           return;
         }
-        /*
-        const response = await fetch(process.env.REACT_APP_API_URL + '/player/login', {
+        const token = localStorage.getItem('token');
+        const response = await fetch(process.env.REACT_APP_API_URL + '/player/password', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
           },
-          body: JSON.stringify({ username, password }),
+          body: JSON.stringify({ username, current_password, password1, password2 }),
         });
       
         if (response.ok) {
           const data = await response.json();
-          setIsLoggedIn(true);
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('access', data.user.access);
-          localStorage.setItem('ally_code', data.user.ally_code);
+          setPasswordError(data);
         } else {
           // Handle login failure
           const errorData = await response.json();
           setPasswordError(errorData.message);
-    }*/
+        }
       }
 
     return (

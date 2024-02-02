@@ -65,7 +65,7 @@ router.get('/bestmods', async (req, res) => {
     }
   }
   
-  res.json("Updated " + units[0].num_of_units + " units.");
+  res.status(200).json("Updated " + units[0].num_of_units + " units.");
 });
 
 

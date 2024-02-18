@@ -8,6 +8,7 @@ const playerRouter = require("../api/routes/player");
 const modRouter = require("../api/routes/mod");
 const jgRouter = require("../api/routes/journeyGuide");
 const teamRouter = require("../api/routes/team");
+const usersRouter = require("../api/routes/users");
 
 const myMiddleware = (req, res, next) => {
     // Check if the current route should be excluded
@@ -34,6 +35,7 @@ const myMiddleware = (req, res, next) => {
           || req.path === '/swgoh/bestmods'
           || (req.method === "DELETE" && req.path.slice(0, 6) === '/team/')
           || (req.method === "POST" && req.path.slice(0, 6) === '/team/')
+          || req.path.slice(0, 7) === '/users/' 
           
         ) {
         if (decoded.access === 0) {
@@ -54,5 +56,6 @@ apiRouter.use("/player", playerRouter);
 apiRouter.use("/mod", modRouter);
 apiRouter.use("/journeyGuide", jgRouter);
 apiRouter.use("/team", teamRouter);
+apiRouter.use("/users", usersRouter);
 
 module.exports = apiRouter;

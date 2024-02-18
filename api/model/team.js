@@ -4,7 +4,7 @@ let team = {};
 
 team.getTeams = async (ally_code, team_size, team_type) => {
 
-    let sql = "SELECT t.list_order, t.defense, t.offense, ";
+    let sql = "SELECT t.list_order, t.defense, t.offense, t.team_id, ";
     sql += "    u1.base_id AS base_id_1, u1.character_name AS character_name_1, u1.alignment AS alignment_1, ";
     sql += "    u2.base_id AS base_id_2, u2.character_name AS character_name_2, u2.alignment AS alignment_2, ";
     sql += "    u3.base_id AS base_id_3, u3.character_name AS character_name_3, u3.alignment AS alignment_3, ";
@@ -87,6 +87,23 @@ team.addTeam = async (data, team_type) => {
     
     await runSQL(teamSql, [data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id, data.team[4].base_id, 
             data.defense, data.offense, data.team_size, team_type]);
+}
+
+team.deleteTeam = async (team_id, offense) => {
+    
+    let teamSql = "";
+
+    if(offense === "true"){
+        teamSql = "UPDATE team SET offense = 0 WHERE team_id = ?";
+    } else {
+        teamSql = "UPDATE team SET defense = 0 WHERE team_id = ?";
+    }
+    
+    await runSQL(teamSql, [team_id]);
+
+    teamSql = "DELETE FROM team WHERE offense = 0 AND defense = 0 AND team_id = ?";
+
+    await runSQL(teamSql, [team_id]);
 }
 
 module.exports = team;

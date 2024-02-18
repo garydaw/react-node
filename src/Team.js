@@ -1,6 +1,6 @@
 import TeamUnitOverview from "./TeamUnitOverview";
 
-export default function Team({team_type, team, offense}) {
+export default function Team({team_type, team, offense,  deleteTeam}) {
     let units = [];
     let url_param = "";
     let param_count = 0;
@@ -28,6 +28,14 @@ export default function Team({team_type, team, offense}) {
         }
       }
     }
+
+    let style = "btn btn-danger";
+    if(offense === "true" && team_type === "gac"){
+      style += " ms-3"
+    }
+
+    //does user have access to admin
+    const access = localStorage.getItem("access");
     
     return (
         <div className="p-3">
@@ -39,6 +47,9 @@ export default function Team({team_type, team, offense}) {
                 })}
           </div>
           {offense === "true" && team_type === "gac" && <a href={"https://swgoh.gg/gac/who-to-attack/"+url_param} target="_blank" rel="noreferrer">Who to attack?</a>}
+          {access === "1" && 
+            <button type="button" className={style} onClick={() => deleteTeam(team.team_id, offense)}>Delete</button>
+          }
         </div>
       );
 }

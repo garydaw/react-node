@@ -31,4 +31,14 @@ router.get('/:team_type/:team_size/:ally_code', async (req, res) => {
   
 });
 
+router.delete('/:team_id/:offense', async (req, res) => {
+    
+    const team_id = req.params.team_id;
+    const offense = req.params.offense;
+    await team.deleteTeam(team_id, offense);
+    
+    res.status(200).json([]);
+  
+});
+
 module.exports = router;

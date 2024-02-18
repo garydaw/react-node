@@ -26,6 +26,7 @@ async function versionOne (){
         "ship_galactic_power int, "+
         "guild_id varchar(32), "+
         "guild_name varchar(256), "+
+        "access int NOT NULL DEFAULT 0, "+
         "primary key(ally_code));");
   
     console.log("creating unit");

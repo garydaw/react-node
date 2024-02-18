@@ -28,7 +28,19 @@ const myMiddleware = (req, res, next) => {
       if (decoded.exp < Math.floor(Date.now() / 1000)) {
         return res.status(401).json({ message: 'Session Expired' });
       }
-      req.user = decoded.user;
+      //must have access
+      if (
+          req.path === '/swgoh/units' 
+          || req.path === '/swgoh/bestmods'
+          || (req.method === "DELETE" && req.path.slice(0, 6) === '/team/')
+          || (req.method === "POST" && req.path.slice(0, 6) === '/team/')
+          
+        ) {
+        if (decoded.access === 0) {
+          return res.status(401).json({ message: 'Insuffient access' });
+        }
+      }
+
       return next();
     });
   };

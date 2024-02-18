@@ -16,7 +16,9 @@ export default function Teams({team_type, ally_code, team_size}) {
         setActiveContent(event.target.id);
       }
 
-    
+    //does user have access to admin
+    const access = localStorage.getItem("access");
+
     let getTeams = () => {
         const token = localStorage.getItem('token');
         const headers = {
@@ -28,6 +30,20 @@ export default function Teams({team_type, ally_code, team_size}) {
             .then((res) => {
                 
                 setTeams(res.data);
+            });
+    }
+
+    let deleteTeam = (team_id, offense) => {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        };
+        axios
+            .delete(process.env.REACT_APP_API_URL + "team/" + team_id + "/" + offense, {headers})
+            .then((res) => {
+                
+                getTeams();
             });
     }
 
@@ -76,13 +92,15 @@ export default function Teams({team_type, ally_code, team_size}) {
                             aria-current="true">
                                 Offense
                         </button>
-                        <button type="button"
-                            id={team_type+"Admin_"+team_size}
-                            className={activeContent === team_type+"Admin_"+team_size ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
-                            onClick={swapContent}
-                            aria-current="true">
-                                Admin
-                        </button>
+                        {access === "1" && 
+                            <button type="button"
+                                id={team_type+"Admin_"+team_size}
+                                className={activeContent === team_type+"Admin_"+team_size ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
+                                onClick={swapContent}
+                                aria-current="true">
+                                    Admin
+                            </button>
+                        }
                     </div>
                 </div>
 
@@ -98,7 +116,7 @@ export default function Teams({team_type, ally_code, team_size}) {
                             <div className="card-text">
                                 <ul className="p-0">
                                     {defense[category].map(team => (
-                                        <Team team_type={team_type} team={team} offense="false" key={team_type+"_defense_"+team_size+"_"+team.list_order}></Team>
+                                        <Team team_type={team_type} team={team} offense="false" key={team_type+"_defense_"+team_size+"_"+team.list_order} deleteTeam={deleteTeam}></Team>
                                     ))}
                                 </ul>
                             </div>
@@ -116,7 +134,7 @@ export default function Teams({team_type, ally_code, team_size}) {
                                 <div className="card-text">
                                     <ul className="p-0">
                                         {offense[category].map(team => (
-                                            <Team team_type={team_type} team={team} offense="true" key={team_type+"_offense_"+team_size+"_"+team.list_order}></Team>
+                                            <Team team_type={team_type} team={team} offense="true" key={team_type+"_offense_"+team_size+"_"+team.list_order} deleteTeam={deleteTeam}></Team>
                                         ))}
                                     </ul>
                                 </div>

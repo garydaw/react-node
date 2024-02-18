@@ -4,14 +4,25 @@ let player = {};
 
 player.login = async (username) => {
 
-    let sql = "SELECT ally_code, password ";
+    let sql = "SELECT ally_code, password, access ";
     sql += "FROM player ";
     sql += "WHERE ally_code = ?"
 
     const this_user = await runSQL(sql, [username]);
     
     return this_user;
-} 
+}
+
+player.setPassword = async (username, password) => {
+
+    let sql = "UPDATE player ";
+    sql += "SET password = ? "
+    sql += "WHERE ally_code = ?"
+
+    const this_user = await runSQL(sql, [password, username]);
+    
+    return this_user;
+}
 
 player.get = async (ally_code) => {
 

@@ -25,6 +25,14 @@ export const Login = () => {
         });
   }, []);
 
+  const logoutHandler = () => {
+
+    localStorage.removeItem('token');
+    localStorage.removeItem('access');
+    localStorage.removeItem('ally_code');
+    setIsLoggedIn(false);
+  }
+
   const loginHandler = async () => {
     setLoginError("");
     const username = document.getElementById("username").value;
@@ -42,6 +50,8 @@ export const Login = () => {
       const data = await response.json();
       setIsLoggedIn(true);
       localStorage.setItem('token', data.token);
+      localStorage.setItem('access', data.user.access);
+      localStorage.setItem('ally_code', data.user.ally_code);
     } else {
       // Handle login failure
       const errorData = await response.json();
@@ -52,7 +62,7 @@ export const Login = () => {
   return (
         <div>
             {isLoggedIn ? (
-              <Main></Main>
+              <Main logoutHandler={logoutHandler}></Main>
           ) : (
             <div className="row">
                 <div className="col-4 offset-4 card d-show mt-5 pb-3">

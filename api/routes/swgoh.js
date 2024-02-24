@@ -26,9 +26,7 @@ router.get('/units', async (req, res) => {
 //get refresh player units and mods
 router.get('/player/:ally_code', async (req, res) => {
   
-  console.log(req.query.refresh);
   if(req.query.refresh === "true"){
-    console.log("getting units from swgoh")
     const response = await axios.get(
       siteRoot + 'api/units', { headers }
     );
@@ -39,7 +37,7 @@ router.get('/player/:ally_code', async (req, res) => {
   //get parameters
   const ally_code = req.params.ally_code;
   let response;
-  console.log(siteRoot + 'api/player/'+ally_code);
+  
   try {
     response = await axios.get(
       siteRoot + 'api/player/'+ally_code, { headers }

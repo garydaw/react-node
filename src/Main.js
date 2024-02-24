@@ -101,10 +101,10 @@ export default function Main({logoutHandler}) {
 
       let refreshPlayerData = async () => {
         try {
-            showLoading("Getting data from SWGOH.");
+            showLoading("Getting data from SWGOH, this takes a while please be patient.");
             //get data
             const token = localStorage.getItem('token');
-            const data =  await (await fetch(process.env.REACT_APP_API_URL + "swgoh/player/" + playerData.ally_code + "/", 
+            const data =  await (await fetch(process.env.REACT_APP_API_URL + "swgoh/player/" + playerData.ally_code + "?refresh=true", 
                                             {
                                               method: 'GET',
                                               headers: {

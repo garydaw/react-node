@@ -111,4 +111,22 @@ player.getUnit = async (ally_code, base_id) => {
 
 } 
 
+
+player.getUnits = async (ally_code) => {
+
+    let sql = "";
+    sql += "SELECT u.base_id, u.character_name ";
+    sql += "FROM player_unit pu ";
+    sql += "INNER JOIN unit u ";
+    sql += "    ON pu.base_id = u.base_id ";
+    sql += "WHERE pu.ally_code = ? ";
+    sql += "AND u.combat_type = 1 ";
+    sql += "ORDER BY u.character_name ";
+
+    const rows= await runSQL(sql, [ally_code]);
+
+    return rows;
+
+} 
+
 module.exports = player;

@@ -80,4 +80,27 @@ router.get('/primaries/', async (req, res) => {
   
 });
 
+router.get('/ally/unit/:ally_code/:base_id', async (req, res) => {
+    
+    const ally_code = req.params.ally_code;
+    const base_id = req.params.base_id;
+    
+    const allies = await mod.getAlliesWithUnit(ally_code, base_id);
+    
+    res.status(200).json(allies);
+  
+});
+
+router.get('/compare/:ally_code/:base_id/:their_ally_code', async (req, res) => {
+    
+    const ally_code = req.params.ally_code;
+    const base_id = req.params.base_id;
+    const their_ally_code = req.params.their_ally_code;
+    
+    const allies = await mod.getComparison(ally_code, base_id, their_ally_code);
+    
+    res.status(200).json(allies);
+  
+});
+
 module.exports = router;

@@ -45,7 +45,7 @@ export default function JourneyGuide({guides, getGuides}) {
 
     const addJourneyGuide = () => {
         const base_id = document.getElementById("jg_admin_new").value;
-        for(var i = 0; i < guides.length; i++){
+        for(var i = 0; i < nonGuideUnits.length; i++){
             if(nonGuideUnits[i].base_id === base_id){
                 setCurrentBaseID(nonGuideUnits[i].base_id);
                 setCurrentCharacterName(nonGuideUnits[i].character_name);
@@ -106,7 +106,7 @@ export default function JourneyGuide({guides, getGuides}) {
                     </div>
                 </div>
             </div>
-            {currentBaseID != "" &&
+            {currentBaseID !== "" &&
                 <div>
                     <h4>{currentCharacterName}</h4>
                     <ReactQuill theme="snow" value={currentGuide} onChange={setCurrentGuide}/>

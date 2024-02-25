@@ -21,7 +21,6 @@ router.get('/nonGuideUnits/', async (req, res) => {
 
 router.post('/', async (req, res) => {
     
-    console.log(req.body);
     await journeyGuide.setJourneyGuide(req.body);
     
     res.status(200).json([]);

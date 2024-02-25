@@ -46,7 +46,7 @@ export default function Main({logoutHandler}) {
                                               },
                                             })).json();
             hideLoading();
-            localStorage.setItem("ally_code", ally_code);
+            //localStorage.setItem("ally_code", ally_code);
             setPlayerData(data);
             
         } catch (err) {

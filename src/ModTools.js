@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
+import ModToolsCompare from './ModToolsCompare';
 import ModToolsPrimary from './ModToolsPrimary';
 import ModToolsUnassigned from './ModToolsUnassigned';
 import ModToolsSets from './ModToolsSets';
 import ModToolsSpeed from './ModToolsSpeed';
 
 export default function ModTools({ally_code}) {
-    const [activeTool, setActiveTool] = useState("modtools_primary");
+    const [activeTool, setActiveTool] = useState("modtools_compare");
     const [dates, setDates] = useState([]);
     const [slots, setSlots] = useState([]);
     const [group_sets, setGroupSets] = useState([]);
@@ -82,6 +83,13 @@ export default function ModTools({ally_code}) {
                 <div className="col-4 col-md-3 col-lg-2">
                     <div className="list-group">
                         <button type="button"
+                            id="modtools_compare"
+                            className={activeTool === 'modtools_compare' ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
+                            onClick={swapModTools}
+                            aria-current="true">
+                                Unit Comparison
+                        </button>
+                        <button type="button"
                             id="modtools_primary"
                             className={activeTool === 'modtools_primary' ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action"}
                             onClick={swapModTools}
@@ -109,6 +117,9 @@ export default function ModTools({ally_code}) {
                     </div>
                 </div>
                 <div className="col-8 col-md-9 col-lg-10">
+                    <div id="modtools_compare_content" className={activeTool === 'modtools_compare' ? "d-show" : "d-none"}>
+                        <ModToolsCompare ally_code={ally_code}></ModToolsCompare>
+                    </div>
                     <div id="modtools_primary_content" className={activeTool === 'modtools_primary' ? "d-show" : "d-none"}>
                         <ModToolsPrimary ally_code={ally_code} dates={dates} renderSelect={renderSelect}></ModToolsPrimary>
                     </div>

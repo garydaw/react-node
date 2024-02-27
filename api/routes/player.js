@@ -72,6 +72,14 @@ router.get('/:ally_code/unit/:base_id', async (req, res) => {
   
 });
 
+router.get('/:ally_code/unit/', async (req, res) => {
+    
+    const ally_code = req.params.ally_code;
+    const unit = await player.getUnits(ally_code);
+    res.status(200).json(unit);
+  
+});
+
 router.get('/token/check', async (req, res) => {
     
   res.status(200).json("true");

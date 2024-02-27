@@ -120,9 +120,21 @@ export default function UserAdmin() {
     return (
         <div className="p-3">
             <h3>User Admin</h3>
-            <div>
-                <input id="user_admin_add_user" type="text"></input><button className="btn btn-primary" onClick={addUser}>Add User</button>
+            <div className="row">
+              <div className="col-sm-6 col-md-5 offset-md-3">
+            <div className="input-group">
+                <span className="input-group-text">Ally Code</span>
+                <input type="text"  
+                className="form-control"
+                placeholder="Ally Code"
+                aria-label="Ally Code"
+                aria-describedby="Ally Code"
+                id="user_admin_add_user"></input>
+        
+                <button className="btn btn-primary" onClick={addUser}>Add User</button>
+                </div></div>
             </div>
+
             <div className="table-responsive">
                 <table className="table table-striped table-hover">
                     <thead>
@@ -144,7 +156,7 @@ export default function UserAdmin() {
                                     <th><button data-allycode={row.ally_code} id={"user_admin_refresh_" + index}  className="btn btn-primary" onClick={refreshPlayerData}>Refresh Data</button></th>
                                     <td>{row.access === 0 ? <button data-allycode={row.ally_code} data-admin="1" id={"user_admin_promote_" + index} className="btn btn-primary" onClick={swapAdmin}>Make Admin</button> : "-"}</td>
                                     <td>{row.access === 1 ? <button data-allycode={row.ally_code} data-admin="0"  id={"user_admin_demote_" + index} className="btn btn-primary" onClick={swapAdmin}>Remove Admin</button>: "-"}</td>
-                                    <td><button data-allycode={row.ally_code} id={"user_admin_r_" + index} className="btn btn-primary" onClick={removeUser}>Remove User</button></td>
+                                    <td><button data-allycode={row.ally_code} id={"user_admin_r_" + index} className="btn btn-danger" onClick={removeUser}>Remove User</button></td>
                                 </tr>
                         )
                     })} 

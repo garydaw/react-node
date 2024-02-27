@@ -81,7 +81,7 @@ export default function ModToolsCompare({ally_code}) {
             <div className="input-group">
               <span className="input-group-text">Ally</span>
               <select id="modTools_compare_ally" className="form-select" aria-label="Ally" disabled={base_id === ""}>
-                  <option value="">Whole Guild</option>
+                  <option value="guild">Whole Guild</option>
                   {allies.map((item, index) => {
                     return <option key={"modTools_compare_ally" + index} value={item.ally_code}>{item.ally_name}</option>
                   })}   

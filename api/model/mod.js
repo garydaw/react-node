@@ -209,28 +209,73 @@ mod.getAlliesWithUnit = async (ally_code, base_id) => {
 
 mod.getComparison = async (ally_code, base_id, their_ally_code) => {
 
-    let sql = "SELECT u.base_id, u.character_name, s.slot_name, s.slot_long_name, ";
-    sql += "            pgs.group_set_name AS your_mod_set, pm.primary_stat AS your_mod_primary, ";
-    sql += "            ags.group_set_name AS their_mod_set, am.primary_stat AS their_mod_primary ";
-    sql += "FROM slot s ";
-    sql += "CROSS JOIN unit u ";
-    sql += "LEFT OUTER JOIN player_mod pm ";
-    sql += "    ON		s.slot_id = pm.slot_id ";
-    sql += "    AND	u.base_id = pm.base_id ";
-    sql += "    AND	pm.ally_code = ? ";
-    sql += "LEFT OUTER JOIN group_set pgs ";
-    sql += "    ON	pgs.group_set_id = pm.group_set_id ";
-    sql += "LEFT OUTER JOIN player_mod am ";
-    sql += "    ON		s.slot_id = am.slot_id ";
-    sql += "    AND	u.base_id = am.base_id ";
-    sql += "    AND	am.ally_code = ? ";
-    sql += "LEFT OUTER JOIN group_set ags ";
-    sql += "    ON	ags.group_set_id = am.group_set_id ";
-    sql += "WHERE u.base_id = ?";
+    let sql = "";
 
-    const allies = await runSQL(sql, [ally_code, their_ally_code, base_id]);
+    if(their_ally_code !== "guild"){
+        sql = "SELECT u.base_id, u.character_name, s.slot_name, s.slot_long_name, ";
+        sql += "            pgs.group_set_name AS your_mod_set, pm.primary_stat AS your_mod_primary, ";
+        sql += "            ags.group_set_name AS their_mod_set, am.primary_stat AS their_mod_primary ";
+        sql += "FROM slot s ";
+        sql += "CROSS JOIN unit u ";
+        sql += "LEFT OUTER JOIN player_mod pm ";
+        sql += "    ON		s.slot_id = pm.slot_id ";
+        sql += "    AND	u.base_id = pm.base_id ";
+        sql += "    AND	pm.ally_code = ? ";
+        sql += "LEFT OUTER JOIN group_set pgs ";
+        sql += "    ON	pgs.group_set_id = pm.group_set_id ";
+        sql += "LEFT OUTER JOIN player_mod am ";
+        sql += "    ON		s.slot_id = am.slot_id ";
+        sql += "    AND	u.base_id = am.base_id ";
+        sql += "    AND	am.ally_code = ? ";
+        sql += "LEFT OUTER JOIN group_set ags ";
+        sql += "    ON	ags.group_set_id = am.group_set_id ";
+        sql += "WHERE u.base_id = ?";
+
+        return await runSQL(sql, [ally_code, their_ally_code, base_id]);
+    } else {
     
-    return allies;
+        sql = "SELECT guild_id FROM player WHERE ally_code = ?";
+
+        const guild = await runSQL(sql, [ally_code]);
+
+        sql = "SELECT   u.base_id, u.character_name, s.slot_name, s.slot_long_name, ";
+        sql += "        pgs.group_set_name AS your_mod_set, pm.primary_stat AS your_mod_primary, ";
+        sql += "            (SELECT gm.primary_stat ";
+        sql += "            FROM	player_mod gm ";
+        sql += "            INNER JOIN	player gp ";
+        sql += "                ON  gp.ally_code = gm.ally_code ";
+        sql += "                AND gp.guild_id = ? "
+        sql += "                AND gp.ally_code <> ? "
+        sql += "            WHERE	gm.base_id = u.base_id ";
+        sql += "            AND	    gm.slot_id = s.slot_id ";
+        sql += "            GROUP BY gm.primary_stat ";
+        sql += "            ORDER BY COUNT(*) DESC ";
+        sql += "            LIMIT 1) AS their_mod_primary, ";
+        sql += "            (SELECT ggs.group_set_name ";
+        sql += "            FROM	player_mod gm ";
+        sql += "            INNER JOIN	player gp ";
+        sql += "                ON  gp.ally_code = gm.ally_code ";
+        sql += "                AND gp.guild_id = ? "
+        sql += "                AND gp.ally_code <> ? "
+        sql += "            INNER JOIN group_set ggs ";
+        sql += "                ON	gm.group_set_id = ggs.group_set_id ";
+        sql += "            WHERE	gm.base_id = u.base_id ";
+        sql += "            AND	gm.slot_id = s.slot_id ";
+        sql += "            GROUP BY ggs.group_set_name ";
+        sql += "            ORDER BY COUNT(*) DESC ";
+        sql += "            LIMIT 1) AS their_mod_set ";
+        sql += "       FROM slot s ";
+        sql += "       CROSS JOIN unit u ";
+        sql += "       LEFT OUTER JOIN player_mod pm ";
+        sql += "           ON	u.base_id = pm.base_id ";
+        sql += "           AND s.slot_id = pm.slot_id ";
+        sql += "           AND pm.ally_code = ? ";
+        sql += "       LEFT OUTER JOIN group_set pgs ";
+        sql += "           ON pm.group_set_id = pgs.group_set_id ";
+        sql += "       WHERE u.base_id = ? ";
+        
+        return await runSQL(sql, [guild[0].guild_id, ally_code, guild[0].guild_id, ally_code, ally_code, base_id]);
+    }
 }
 
 module.exports = mod;

@@ -1,6 +1,7 @@
 {
   "name": "react-node",
   "version": "0.1.0",
+  "homepage": "/swgoh",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",

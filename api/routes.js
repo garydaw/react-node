@@ -15,7 +15,7 @@ const myMiddleware = (req, res, next) => {
     // Check if the current route should be excluded
     if (
           req.path === '/player/login'
-          || req.path === '/database/migrate' 
+          || req.path.slice(0, 18) === '/database/migrate/' 
           || req.path === '/test'
         ) {
       return next(); // Skip middleware for excluded routes

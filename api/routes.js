@@ -12,7 +12,10 @@ const usersRouter = require("../api/routes/users");
 
 const myMiddleware = (req, res, next) => {
     // Check if the current route should be excluded
-    if (req.path === '/player/login' ) {
+    if (
+          req.path === '/player/login'
+          || req.apth === '/database/migrate' 
+        ) {
       return next(); // Skip middleware for excluded routes
     }
   

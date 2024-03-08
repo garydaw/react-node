@@ -9,12 +9,14 @@ const modRouter = require("../api/routes/mod");
 const jgRouter = require("../api/routes/journeyGuide");
 const teamRouter = require("../api/routes/team");
 const usersRouter = require("../api/routes/users");
+const testRouter = require("../api/routes/test");
 
 const myMiddleware = (req, res, next) => {
     // Check if the current route should be excluded
     if (
           req.path === '/player/login'
-          || req.apth === '/database/migrate' 
+          || req.path === '/database/migrate' 
+          || req.path === '/test'
         ) {
       return next(); // Skip middleware for excluded routes
     }
@@ -61,5 +63,6 @@ apiRouter.use("/mod", modRouter);
 apiRouter.use("/journeyGuide", jgRouter);
 apiRouter.use("/team", teamRouter);
 apiRouter.use("/users", usersRouter);
+apiRouter.use("/test", testRouter);
 
 module.exports = apiRouter;

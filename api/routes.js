@@ -9,6 +9,7 @@ const modRouter = require("../api/routes/mod");
 const jgRouter = require("../api/routes/journeyGuide");
 const teamRouter = require("../api/routes/team");
 const usersRouter = require("../api/routes/users");
+const roteRouter = require("../api/routes/rote");
 const testRouter = require("../api/routes/test");
 
 const myMiddleware = (req, res, next) => {
@@ -63,6 +64,7 @@ apiRouter.use("/mod", modRouter);
 apiRouter.use("/journeyGuide", jgRouter);
 apiRouter.use("/team", teamRouter);
 apiRouter.use("/users", usersRouter);
+apiRouter.use("/rote", roteRouter);
 apiRouter.use("/test", testRouter);
 
 module.exports = apiRouter;

@@ -13,7 +13,7 @@ export default function Main({logoutHandler}) {
     const { showLoading, hideLoading } = useLoading();
     const { showError } = useError();
     const [passwordError, setPasswordError] = useState("");
-    const helpText = "Search for you player using you ally code. This can be found by clicking on your name from the home screen.";
+    const helpText = "Search for a player in the guild using their ally code.";
 
     //does user have access to admin
     const access = localStorage.getItem("access");
@@ -28,7 +28,7 @@ export default function Main({logoutHandler}) {
         }
     }, []);
 
-    let getPlayerInfo = async () => {
+    const getPlayerInfo = async () => {
         try {
     
             //set loading
@@ -186,10 +186,10 @@ export default function Main({logoutHandler}) {
                       Admin
                     </button>
                     <ul className="dropdown-menu dropdown-menu-end">
-                      {access === "1" && <li><a className="dropdown-item" href="#" onClick={getUnits}>Refresh Units</a></li>}
-                      {access === "1" && <li><a className="dropdown-item" href="#" onClick={getBestMods}>Refresh Mods</a></li>}
-                      <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#password_modal">Change Password</a></li>
-                      <li><a className="dropdown-item" href="#" onClick={logoutHandler}>Logout</a></li>
+                      {access === "1" && <li><a className="dropdown-item" href="/#" onClick={getUnits}>Refresh Units</a></li>}
+                      {access === "1" && <li><a className="dropdown-item" href="/#" onClick={getBestMods}>Refresh Mods</a></li>}
+                      <li><a className="dropdown-item" href="/#" data-bs-toggle="modal" data-bs-target="#password_modal">Change Password</a></li>
+                      <li><a className="dropdown-item" href="/#" onClick={logoutHandler}>Logout</a></li>
                     </ul>
                   </div>
                 </div>

@@ -47,4 +47,12 @@ users.delete = async (ally_code) => {
     await runSQL(sql, [ally_code]);
 }
 
+users.getNotIn = async (guild_id, ally_codes) => {
+
+    const rows = await runSQL("SELECT * FROM player WHERE guild_id = ? AND ally_code NOT IN (?)", [guild_id, ally_codes]);
+
+    return rows;
+
+}
+
 module.exports = users;

@@ -13,11 +13,13 @@ const roteRouter = require("../api/routes/rote");
 const testRouter = require("../api/routes/test");
 
 const myMiddleware = (req, res, next) => {
+  
     // Check if the current route should be excluded
     if (
           req.path === '/player/login'
           || req.path.slice(0, 18) === '/database/migrate/' 
           || req.path === '/test'
+          || req.path.slice(0, 13) === '/swgoh/guild/' 
         ) {
       return next(); // Skip middleware for excluded routes
     }

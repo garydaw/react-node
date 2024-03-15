@@ -10,7 +10,10 @@ export default function UnitOverview({unit, openDetails, unitImage}) {
     let gear_plus = "";
     if(unit.gear_level === 13){
         if(unit.is_galactic_legend){
-            background += " bg-warning bg-opacity-25";
+            if(unit.has_ultimate)
+                background += " bg-warning";
+            else
+                background += " bg-warning bg-opacity-50";  
         } else if (unit.alignment === 1){ //netural
             background += " bg-info bg-opacity-25";
         } else if (unit.alignment === 2){ //light

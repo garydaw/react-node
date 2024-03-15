@@ -54,7 +54,7 @@ team.getTeams = async (ally_code, team_size, team_type) => {
     sql += "    AND pu5.ally_code = ? ";
     sql += "WHERE t.team_size = ? ";
     sql += "AND t.team_type = ? ";
-    sql += "ORDER BY team_count - player_team_count,  team_power";
+    sql += "ORDER BY team_count - player_team_count,  CAST(team_power AS int) DESC";
 
     const teams = await runSQL(sql, [ally_code,ally_code,ally_code,ally_code,ally_code,team_size,team_type]);
     

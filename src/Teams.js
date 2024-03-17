@@ -7,12 +7,15 @@ import Help from './Help';
 
 export default function Teams({team_type, ally_code, team_size}) {
     const [activeContent, setActiveContent] = useState(team_type+"Defense_"+team_size);
+    const [previousContent, setPreviousContent] = useState(team_type+"Defense_"+team_size);
     const [teams, setTeams] = useState([]);
+    const [guildTeams, setGuildTeams] = useState([]);
 
     const helpText = "List of some of the best teams for "+team_type.toUpperCase()+", this are broken down by the number of units you have/don't have."+
                 " The details shown for the unit are your details.";
     
     let swapContent =  (event) => {
+        setPreviousContent(activeContent);
         setActiveContent(event.target.id);
       }
 
@@ -45,6 +48,26 @@ export default function Teams({team_type, ally_code, team_size}) {
                 
                 getTeams();
             });
+    }
+
+    let showGuildTeams = (team_id) => {
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        };
+        axios
+            .get(process.env.REACT_APP_API_URL + "team/guild/" + team_id, {headers})
+            .then((res) => {
+                setPreviousContent(activeContent);
+                setActiveContent("guildTeams");
+                setGuildTeams(res.data);
+            });
+    }
+
+    const closeGuildTeam = () => {
+        setActiveContent(previousContent);
+        setPreviousContent("guildTeams");
     }
 
     useEffect(() => {
@@ -116,7 +139,7 @@ export default function Teams({team_type, ally_code, team_size}) {
                             <div className="card-text">
                                 <ul className="p-0">
                                     {defense[category].map(team => (
-                                        <Team team_type={team_type} team={team} offense="false" key={team_type+"_defense_"+team_size+"_"+team.list_order} deleteTeam={deleteTeam}></Team>
+                                        <Team team_type={team_type} team={team} offense="false" key={team_type+"_defense_"+team_size+"_"+team.list_order} deleteTeam={deleteTeam} showGuildTeams={showGuildTeams}></Team>
                                     ))}
                                 </ul>
                             </div>
@@ -134,7 +157,7 @@ export default function Teams({team_type, ally_code, team_size}) {
                                 <div className="card-text">
                                     <ul className="p-0">
                                         {offense[category].map(team => (
-                                            <Team team_type={team_type} team={team} offense="true" key={team_type+"_offense_"+team_size+"_"+team.list_order} deleteTeam={deleteTeam}></Team>
+                                            <Team team_type={team_type} team={team} offense="true" key={team_type+"_offense_"+team_size+"_"+team.list_order} deleteTeam={deleteTeam} showGuildTeams={showGuildTeams}></Team>
                                         ))}
                                     </ul>
                                 </div>
@@ -143,6 +166,24 @@ export default function Teams({team_type, ally_code, team_size}) {
                     </div>
                     <div id={team_type+"AdminContent_"+team_size} className={activeContent === team_type+"Admin_"+team_size ? "d-show" : "d-none"}>
                         <TeamsAdmin key={team_type+"_offense_admin_"+team_size} team_type={team_type} team_size={team_size} getTeams={getTeams}></TeamsAdmin>
+                    </div>
+
+                    <div id="guildTeams" className={activeContent === "guildTeams" ? "d-show" : "d-none"}>
+                        
+                        <div className="card-body border">
+                            <div className="d-flex justify-content-between align-items-center pb-3">
+                                <h4 className="card-title">Guild Teams ({guildTeams.length})</h4>
+                                <button type="button" className="btn-close" onClick={closeGuildTeam}></button>
+                            </div>
+                            <div className="card-text">
+                                <ul className="p-0">
+                                    {guildTeams.map((team, index) => (
+                                        <Team team_type="guild" team={team} offense="true" key={"guild_team_"+index} deleteTeam={deleteTeam} showGuildTeams={showGuildTeams}></Team>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                      
                     </div>
                 </div>
             </div>

@@ -118,7 +118,7 @@ export default function Player({playerData, refreshPlayerData}) {
                                 <button className="nav-link" id="tw-tab" data-bs-toggle="tab" data-bs-target="#tw" type="button" role="tab" aria-controls="tw" aria-selected="false">TW</button>
                             </li>
                             <li className="nav-item" role="presentation">
-                                <button className="nav-link" id="rote-tab" data-bs-toggle="tab" data-bs-target="#rote" type="button" role="tab" aria-controls="rote" aria-selected="false">Rote</button>
+                                <button className="nav-link" id="rote-tab" data-bs-toggle="tab" data-bs-target="#rote" type="button" role="tab" aria-controls="rote" aria-selected="false">RotE</button>
                             </li>
                             <li className="nav-item" role="presentation">
                                 <button className="nav-link" id="tips-tab" data-bs-toggle="tab" data-bs-target="#tips" type="button" role="tab" aria-controls="tips" aria-selected="false">Tips</button>

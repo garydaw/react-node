@@ -41,4 +41,13 @@ router.delete('/:team_id/:offense', async (req, res) => {
   
 });
 
+router.get('/guild/:team_id', async (req, res) => {
+    
+    const team_id = req.params.team_id;
+    const teams = await team.getGuildTeams(team_id);
+    
+    res.status(200).json(teams);
+  
+});
+
 module.exports = router;

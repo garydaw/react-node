@@ -4,7 +4,7 @@ let team = {};
 
 team.getTeams = async (ally_code, team_size, team_type) => {
 
-    let sql = "SELECT t.list_order, t.defense, t.offense, t.team_id, u1.character_name AS team_name, ";
+    let sql = "SELECT t.list_order, t.defense, t.offense, t.team_id, CONCAT(u1.character_name, ' Team') AS team_name, ";
     sql += "    u1.base_id AS base_id_1, u1.character_name AS character_name_1, u1.alignment AS alignment_1, ";
     sql += "    u2.base_id AS base_id_2, u2.character_name AS character_name_2, u2.alignment AS alignment_2, ";
     sql += "    u3.base_id AS base_id_3, u3.character_name AS character_name_3, u3.alignment AS alignment_3, ";
@@ -97,7 +97,8 @@ team.getGuildTeams = async (team_id) => {
     sql += "    CASE WHEN pu3.base_id IS NOT NULL THEN 1 ELSE 0 END + ";
     sql += "    CASE WHEN pu4.base_id IS NOT NULL THEN 1 ELSE 0 END + ";
     sql += "    CASE WHEN pu5.base_id IS NOT NULL THEN 1 ELSE 0 END AS player_team_count, ";
-    sql += "    CAST(IFNULL(pu1.`power`, 0) + IFNULL(pu2.`power`, 0) + IFNULL(pu3.`power`, 0) + IFNULL(pu4.`power`, 0) + IFNULL(pu5.`power`, 0) AS varchar(32)) AS team_power "
+    sql += "    CAST(IFNULL(pu1.`power`, 0) + IFNULL(pu2.`power`, 0) + IFNULL(pu3.`power`, 0) + IFNULL(pu4.`power`, 0) + IFNULL(pu5.`power`, 0) AS varchar(32)) AS team_power, "
+    sql += "    CASE WHEN pu1.relic_tier > 2 AND pu2.relic_tier > 2 AND pu3.relic_tier > 2 AND pu4.relic_tier > 2 AND pu5.relic_tier > 2 THEN 1 ELSE 0 END AS full_relic "
     sql += "FROM player p ";
     sql += "CROSS JOIN team t ";
     sql += "INNER JOIN unit u1 ";

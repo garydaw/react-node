@@ -10,6 +10,7 @@ export default function Teams({team_type, ally_code, team_size}) {
     const [previousContent, setPreviousContent] = useState(team_type+"Defense_"+team_size);
     const [teams, setTeams] = useState([]);
     const [guildTeams, setGuildTeams] = useState([]);
+    const [isTeamGuildFullRelic, setTeamGuildFullRelic] = useState(false)
 
     const helpText = "List of some of the best teams for "+team_type.toUpperCase()+", this are broken down by the number of units you have/don't have."+
                 " The details shown for the unit are your details.";
@@ -64,6 +65,14 @@ export default function Teams({team_type, ally_code, team_size}) {
                 setGuildTeams(res.data);
             });
     }
+
+    const checkTeamGuildFullRelicHandler = () => {
+        setTeamGuildFullRelic(!isTeamGuildFullRelic);
+      }
+
+    const filteredGuildTeams = guildTeams.filter(team =>
+        !isTeamGuildFullRelic || team.full_relic === 1 
+      );
 
     const closeGuildTeam = () => {
         setActiveContent(previousContent);
@@ -172,12 +181,18 @@ export default function Teams({team_type, ally_code, team_size}) {
                         
                         <div className="card-body border">
                             <div className="d-flex justify-content-between align-items-center pb-3">
-                                <h4 className="card-title">Guild Teams ({guildTeams.length})</h4>
+                                <h4 className="card-title">Guild Teams ({filteredGuildTeams.length})</h4>
                                 <button type="button" className="btn-close" onClick={closeGuildTeam}></button>
+                            </div>
+                            <div class="form-check">
+                                <input className="form-check-input" type="checkbox" id="teamGuildFullRelic" checked={isTeamGuildFullRelic} onChange={checkTeamGuildFullRelicHandler}/>
+                                <label className="form-check-label" for="teamGuildFullRelic">
+                                    Full Relic
+                                </label>
                             </div>
                             <div className="card-text">
                                 <ul className="p-0">
-                                    {guildTeams.map((team, index) => (
+                                    {filteredGuildTeams.map((team, index) => (
                                         <Team team_type="guild" team={team} offense="true" key={"guild_team_"+index} deleteTeam={deleteTeam} showGuildTeams={showGuildTeams}></Team>
                                     ))}
                                 </ul>

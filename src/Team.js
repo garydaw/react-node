@@ -1,6 +1,6 @@
 import TeamUnitOverview from "./TeamUnitOverview";
 
-export default function Team({team_type, team, offense,  deleteTeam}) {
+export default function Team({team_type, team, offense,  deleteTeam, showGuildTeams}) {
     let units = [];
     let url_param = "";
     let param_count = 0;
@@ -30,15 +30,18 @@ export default function Team({team_type, team, offense,  deleteTeam}) {
     }
 
     let style = "btn btn-danger";
-    if(offense === "true" && team_type === "gac"){
+    if((offense === "true" && team_type === "gac") || team_type === "tw"){
       style += " ms-3"
     }
 
     //does user have access to admin
     const access = localStorage.getItem("access");
+
+    const numFormatter = new Intl.NumberFormat('en-US');
     
     return (
         <div className="p-3">
+            <h4>{team.team_name} ({numFormatter.format(team.team_power)})</h4>
             <div className="row d-flex">
               {units.map((unit, index) => {
                   return (
@@ -46,8 +49,9 @@ export default function Team({team_type, team, offense,  deleteTeam}) {
                   );
                 })}
           </div>
+          {team_type === "tw" && <button type="button" className="btn btn-primary" onClick={() => showGuildTeams(team.team_id)}>Guild Teams</button>}
           {offense === "true" && team_type === "gac" && <a href={"https://swgoh.gg/gac/who-to-attack/"+url_param} target="_blank" rel="noreferrer">Who to attack?</a>}
-          {access === "1" && 
+          {access === "1" && team_type !== "guild" &&
             <button type="button" className={style} onClick={() => deleteTeam(team.team_id, offense)}>Delete</button>
           }
         </div>

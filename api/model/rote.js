@@ -4,7 +4,7 @@ let rote = {};
 
 rote.getUnits = async () => {
 
-    let sql = "SELECT base_id, character_name ";
+    let sql = "SELECT base_id, character_name, unit_image ";
     sql += "FROM unit ";
     sql += "ORDER BY character_name";
 

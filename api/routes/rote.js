@@ -20,4 +20,12 @@ router.get('/units/:base_id', async (req, res) => {
   
 });
 
+router.post('/operation', async (req, res) => {
+
+    const result = await rote.addOperation(req.body);
+    
+    res.status(200).json([result]);
+  
+});
+
 module.exports = router;

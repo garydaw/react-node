@@ -8,11 +8,102 @@ migrations.run = async (version) => {
         case "1":
             await versionOne();
             break;
+        case "2":
+            await versionTwo();
+            break;
         default:
             console.log("doh!");
     }
 
 } 
+
+async function versionTwo (){
+
+    console.log("starting version Two");
+    console.log("creating rote_operation");
+    await runSQL("CREATE TABLE IF NOT EXISTS rote_operation ("+
+        "path VARCHAR(64) NOT NULL, "+
+        "phase int NOT NULL, "+
+        "relic_level int NOT NULL, "+
+        "base_id_1 VARCHAR(64) NOT NULL, "+
+        "base_id_2 VARCHAR(64) NOT NULL, "+
+        "base_id_3 VARCHAR(64) NOT NULL, "+
+        "base_id_4 VARCHAR(64) NOT NULL, "+
+        "base_id_5 VARCHAR(64) NOT NULL, "+
+        "base_id_6 VARCHAR(64) NOT NULL, "+
+        "base_id_7 VARCHAR(64) NOT NULL, "+
+        "base_id_8 VARCHAR(64) NOT NULL, "+
+        "base_id_9 VARCHAR(64) NOT NULL, "+
+        "base_id_10 VARCHAR(64) NOT NULL, "+
+        "base_id_11 VARCHAR(64) NOT NULL, "+
+        "base_id_12 VARCHAR(64) NOT NULL, "+
+        "base_id_13 VARCHAR(64) NOT NULL, "+
+        "base_id_14 VARCHAR(64) NOT NULL, "+
+        "base_id_15 VARCHAR(64) NOT NULL, "+
+        "primary key(path, phase), "+
+        "CONSTRAINT fk_rote_operation__unit_1 "+
+        "FOREIGN KEY (base_id_1) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_2 "+
+        "FOREIGN KEY (base_id_2) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_3 "+
+        "FOREIGN KEY (base_id_3) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_4 "+
+        "FOREIGN KEY (base_id_4) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_5 "+
+        "FOREIGN KEY (base_id_5) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_6 "+
+        "FOREIGN KEY (base_id_6) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_7 "+
+        "FOREIGN KEY (base_id_7) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_8 "+
+        "FOREIGN KEY (base_id_8) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_9 "+
+        "FOREIGN KEY (base_id_9) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_10 "+
+        "FOREIGN KEY (base_id_10) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_11 "+
+        "FOREIGN KEY (base_id_11) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_12 "+
+        "FOREIGN KEY (base_id_12) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_13 "+
+        "FOREIGN KEY (base_id_13) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_14 "+
+        "FOREIGN KEY (base_id_14) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote_operation__unit_15 "+
+        "FOREIGN KEY (base_id_15) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT "+
+        ");");
+
+}
 
 async function versionOne (){
 

@@ -48,7 +48,6 @@ export default function ModToolsCompare({ally_code}) {
     const getComparison = async () => {
     
         const their_ally_code = document.getElementById("modTools_compare_ally").value;
-        console.log(their_ally_code);
         //get data
         const token = localStorage.getItem('token');
         const data =  await (await fetch(process.env.REACT_APP_API_URL + "mod/compare/" + ally_code + "/" + base_id + "/" + their_ally_code, 

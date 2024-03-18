@@ -36,24 +36,18 @@ rote.getGuildUnit = async (base_id) => {
 
 rote.addOperation = async (data) => {
 
-    const operation = await runSQL("SELECT * FROM rote_operation WHERE path = ? AND phase = ?", [data.path, data.phase]);
-    if(operation.length === 1){
-        return "Phase already added.";
+    const operation_sql = "SELECT * FROM rote_operation WHERE path = ? AND phase = ? AND operation = ? AND unit_index = ?";
+    const sql = "INSERT INTO rote_operation (path, phase, operation, unit_index, relic_level, base_id) VALUES (?, ?, ?, ?, ?, ?)";
+    for(let $i = 0; $i < 15; $i++){
+        
+        const operation = await runSQL(operation_sql, [data.path, data.phase, data.operation, $i]);
+        if(operation.length === 1){
+            return "Phase Operation already added.";
+        }
+        
+        await runSQL(sql, [data.path, data.phase, data.operation, $i, data.relic_level, data.team[$i].base_id]);
     }
 
-    let sql = "INSERT INTO rote_operation (path, phase, relic_level, ";
-    sql += "base_id_1, base_id_2, base_id_3, base_id_4, base_id_5, ";
-    sql += "base_id_6, base_id_7, base_id_8, base_id_9, base_id_10, ";
-    sql += "base_id_11, base_id_12, base_id_13, base_id_14, base_id_15) ";
-    sql += "VALUES (?, ?, ?, ";
-    sql += "?, ?, ?, ?, ?, ";
-    sql += "?, ?, ?, ?, ?, ";
-    sql += "?, ?, ?, ?, ?)";
-    
-    await runSQL(sql, [data.path, data.phase, data.relic_level,
-        data.team[0].base_id, data.team[1].base_id, data.team[2].base_id, data.team[3].base_id, data.team[4].base_id,
-        data.team[5].base_id, data.team[6].base_id, data.team[7].base_id, data.team[8].base_id, data.team[9].base_id,
-        data.team[10].base_id, data.team[11].base_id, data.team[12].base_id, data.team[13].base_id, data.team[14].base_id]);
     return "Operation added.";
 }
 

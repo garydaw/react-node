@@ -70,6 +70,7 @@ export default function RoteAdmin({unitData}) {
     postObj.team = team;
     postObj.path = document.getElementById("rote_path").value;
     postObj.phase = document.getElementById("rote_phase").value;
+    postObj.operation = document.getElementById("rote_operation").value;
     postObj.relic_level = document.getElementById("rote_relic_level").value;
     
     axios.post(process.env.REACT_APP_API_URL + "rote/operation", postObj, {headers})
@@ -144,6 +145,19 @@ export default function RoteAdmin({unitData}) {
           <div className="input-group">
             <span className="input-group-text">Phase</span>
             <select id="rote_phase" className="form-select" aria-label="Phase">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+            </select>
+          </div>
+        </div>
+        <div className="col-4 col-md-3">
+          <div className="input-group">
+            <span className="input-group-text">Operation</span>
+            <select id="rote_operation" className="form-select" aria-label="Operation">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>

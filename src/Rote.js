@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import axios from 'axios';
 import RoteUnitOverview from './RoteUnitOverview';
+import RoteOperations from './RoteOperations';
 import RoteAdmin from './RoteAdmin';
 
 export default function Rote() {
@@ -117,7 +118,7 @@ export default function Rote() {
                     </div>
 
                     <div id="rote_operations_content" className={activeContent === "rote_operations" ? "d-show" : "d-none"}>
-                    rote_operations
+                        <RoteOperations></RoteOperations>
                     </div>
 
                     <div id="rote_admin_content" className={activeContent === "rote_admin" ? "d-show" : "d-none"}>

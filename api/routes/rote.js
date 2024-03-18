@@ -28,4 +28,14 @@ router.post('/operation', async (req, res) => {
   
 });
 
+router.get('/operation/:path/:phase', async (req, res) => {
+
+    const path = req.params.path;
+    const phase = req.params.phase;
+    const result = await rote.getOperations(path, phase);
+    
+    res.status(200).json(result);
+  
+});
+
 module.exports = router;

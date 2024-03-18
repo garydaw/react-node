@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useEffect } from 'react';
 import axios from 'axios';
 import CharacterImage from './CharacterImage';
 import { Alert } from 'react-bootstrap';

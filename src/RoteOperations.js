@@ -20,8 +20,8 @@ export default function RoteOperations() {
   }
   
   const viewOperation = () => {
-    const path = document.getElementById("rote_path").value;
-    const phase = document.getElementById("rote_phase").value;
+    const path = document.getElementById("rote_operations_path").value;
+    const phase = document.getElementById("rote_operations_phase").value;
 
     const token = localStorage.getItem('token');
     const headers = {

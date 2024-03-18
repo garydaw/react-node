@@ -184,9 +184,9 @@ export default function Teams({team_type, ally_code, team_size}) {
                                 <h4 className="card-title">Guild Teams ({filteredGuildTeams.length})</h4>
                                 <button type="button" className="btn-close" onClick={closeGuildTeam}></button>
                             </div>
-                            <div class="form-check">
+                            <div className="form-check">
                                 <input className="form-check-input" type="checkbox" id="teamGuildFullRelic" checked={isTeamGuildFullRelic} onChange={checkTeamGuildFullRelicHandler}/>
-                                <label className="form-check-label" for="teamGuildFullRelic">
+                                <label className="form-check-label" htmlFor="teamGuildFullRelic">
                                     Full Relic
                                 </label>
                             </div>

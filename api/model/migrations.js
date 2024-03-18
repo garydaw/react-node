@@ -8,11 +8,39 @@ migrations.run = async (version) => {
         case "1":
             await versionOne();
             break;
+        case "2":
+            await versionTwo();
+            break;
         default:
             console.log("doh!");
     }
 
 } 
+
+async function versionTwo (){
+
+    console.log("starting version Two");
+    console.log("creating rote_operation");
+    await runSQL("CREATE TABLE IF NOT EXISTS rote_operation ("+
+        "path VARCHAR(64) NOT NULL, "+
+        "phase int NOT NULL, "+
+        "operation int NOT NULL, "+
+        "unit_index int NOT NULL, "+
+        "relic_level int NOT NULL, "+
+        "base_id VARCHAR(64) NOT NULL, "+
+        "ally_code int, "+
+        "primary key(path, phase, operation, unit_index), "+
+        "CONSTRAINT fk_rote_operation__base_id "+
+        "FOREIGN KEY (base_id) REFERENCES unit (base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_rote__player_unit "+
+        "FOREIGN KEY (ally_code, base_id) REFERENCES player_unit (ally_code, base_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT "+
+        ");");
+
+}
 
 async function versionOne (){
 

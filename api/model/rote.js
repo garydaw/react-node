@@ -4,7 +4,7 @@ let rote = {};
 
 rote.getUnits = async () => {
 
-    let sql = "SELECT base_id, character_name ";
+    let sql = "SELECT base_id, character_name, unit_image ";
     sql += "FROM unit ";
     sql += "ORDER BY character_name";
 
@@ -34,6 +34,45 @@ rote.getGuildUnit = async (base_id) => {
     return units;
 }
 
+rote.addOperation = async (data) => {
 
+    const operation_sql = "SELECT * FROM rote_operation WHERE path = ? AND phase = ? AND operation = ? AND unit_index = ?";
+    const sql = "INSERT INTO rote_operation (path, phase, operation, unit_index, relic_level, base_id) VALUES (?, ?, ?, ?, ?, ?)";
+    for(let $i = 0; $i < 15; $i++){
+        
+        const operation = await runSQL(operation_sql, [data.path, data.phase, data.operation, $i]);
+        if(operation.length === 1){
+            return "Phase Operation already added.";
+        }
+        
+        await runSQL(sql, [data.path, data.phase, data.operation, $i, data.relic_level, data.team[$i].base_id]);
+    }
+
+    return "Operation added.";
+}
+
+rote.getOperations = async (path, phase) => {
+
+    let operations = [];
+    for(let i = 1; i < 7; i++){
+        let sql = "SELECT ro.path, ro.phase, ro.operation, "
+        sql += "ro.unit_index, ro.base_id, u.character_name, "
+        sql += "p.ally_code, p.ally_name "
+        sql += "FROM rote_operation ro "
+        sql += "INNER JOIN unit u "
+        sql += "    ON u.base_id = ro.base_id "
+        sql += "LEFT OUTER JOIN player p "
+        sql += "    ON  ro.ally_code = p.ally_code "
+        sql += "WHERE ro.path = ? ";
+        sql += "AND ro.phase = ? ";
+        sql += "AND ro.operation = ? ";
+        sql += "ORDER BY ro.unit_index "
+
+        const operation = await runSQL(sql, [path, phase, i]);
+        operations.push(operation);
+    }
+
+    return operations;
+}
 
 module.exports = rote;

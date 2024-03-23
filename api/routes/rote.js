@@ -38,4 +38,16 @@ router.get('/operation/:path/:phase', async (req, res) => {
   
 });
 
+router.get('/operation/allocate/:path/:phase', async (req, res) => {
+
+    const path = req.params.path;
+    const phase = req.params.phase;
+    await rote.allocateOperations(path, phase);
+    
+    const result = await rote.getOperations(path, phase);
+    
+    res.status(200).json(result);
+  
+});
+
 module.exports = router;

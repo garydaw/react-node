@@ -35,22 +35,42 @@ export default function RoteOperations() {
           setOperations(res.data);
         });
   }
+
+  //does user have access to admin
+  const access = localStorage.getItem("access");
+
+  const allocateOperation = () => {
+    const path = document.getElementById("rote_operations_path").value;
+    const phase = document.getElementById("rote_operations_phase").value;
+
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+    };
+    axios
+        .get(process.env.REACT_APP_API_URL + "rote/operation/allocate/" + path + "/" + phase, {headers})
+        .then((res) => {
+            
+          setOperations(res.data);
+        });
+  }
   
   return (
     <div className="p-3">
        
       <div className="row">
-        <div className="col-4 col-md-3">
+        <div className="col-md-3">
           <div className="input-group">
             <span className="input-group-text">Path</span>
             <select id="rote_operations_path" className="form-select" aria-label="Path">
                 <option value="light">Light</option>
-                <option value="netural">Netural</option>
+                <option value="neutral">Neutral</option>
                 <option value="dark">Dark</option>
             </select>
           </div>
         </div>
-        <div className="col-4 col-md-3">
+        <div className="col-md-3">
           <div className="input-group">
             <span className="input-group-text">Phase</span>
             <select id="rote_operations_phase" className="form-select" aria-label="Phase">
@@ -63,9 +83,14 @@ export default function RoteOperations() {
             </select>
           </div>
         </div>
-        <div className="col-4 col-md-3">
+        <div className="col-md-3">
           <button type="button" className="btn btn-primary" onClick={viewOperation}>View</button>
         </div>
+        {operations.length > 0 && access === "1" &&
+          <div className="col-md-3">
+            <button type="button" className="btn btn-primary" onClick={allocateOperation}>Auto Allocate</button>
+          </div>
+        }
       </div>
 
       <div className="row">
@@ -85,9 +110,9 @@ export default function RoteOperations() {
                       <div className="card-body">
                            {operation[team_index] !== undefined && 
                           
-                            <div key={"RoteOperation_unit_"+team_index} className="d-flex justify-content-between align-items-center">
+                            <div key={"RoteOperation_unit_"+team_index}>
                                 <h5>{operation[team_index].character_name}</h5>
-                               
+                                <p>{operation[team_index].ally_name}</p>
                             </div>
                             
                           }

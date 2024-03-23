@@ -66,7 +66,7 @@ rote.getOperations = async (path, phase) => {
         sql += "WHERE ro.path = ? ";
         sql += "AND ro.phase = ? ";
         sql += "AND ro.operation = ? ";
-        sql += "ORDER BY ro.unit_index "
+        sql += "ORDER BY ro.unit_index ";
 
         const operation = await runSQL(sql, [path, phase, i]);
         operations.push(operation);
@@ -75,4 +75,206 @@ rote.getOperations = async (path, phase) => {
     return operations;
 }
 
+rote.getEmptyAllocations = async (path, phase, operations) => {
+
+    let sql = "SELECT op.base_id, u.combat_type, op.relic_level, "
+        + "op.required, COUNT(*) AS guild_count, GREATEST(op.required - COUNT(*), 0) AS missing "
+        + "FROM (SELECT base_id, relic_level, COUNT(*) AS required "
+        + "FROM rote_operation "
+        + "WHERE ally_code IS NULL "
+        + "AND path = ? "
+        + "AND PHASE = ? "
+        + "AND operation IN (?) "
+        + "GROUP BY  base_id, relic_level) op "
+        + "INNER JOIN unit u "
+        + "ON u.base_id = op.base_id "
+        + "LEFT OUTER JOIN (SELECT pu1.* "
+        + "                FROM player_unit pu1 "
+        + "                LEFT OUTER JOIN rote_operation ro1 "
+        + "                    ON  pu1.base_id = ro1.base_id "
+        + "                    AND pu1.ally_code = ro1.ally_code "
+        + "                    AND   ro1.path = ? "
+        + "                    AND   ro1.PHASE = ? "
+        + "                    AND   ro1.operation IN (?)  "
+        + "                WHERE ro1.base_id IS NULL"
+        + "                AND   pu1.ally_code NOT IN (SELECT ally_code "
+        + "                                               FROM rote_operation "
+        + "                                               WHERE path = ? "
+        + "                                               AND PHASE = ? "
+        + "                                               AND operation IN (?) "
+        + "                                               GROUP BY ally_code "
+        + "                                               HAVING COUNT(*) < 10) "
+        + "                                             ) AS pu "
+        + "ON 	op.base_id = pu.base_id "
+        + "AND	pu.rarity = 7 "
+        + "AND CASE WHEN u.combat_type = 1 THEN pu.relic_tier - 2 ELSE op.relic_level END >= op.relic_level "
+        + "GROUP BY op.base_id, op.required ";
+
+    const empty_operations = await runSQL(sql, [path, phase, operations, path, phase, operations, path, phase, operations]);
+
+    return empty_operations;
+}
+
+rote.getAllyCountAvailableAllocations = async (path, phase, operations) => {
+
+    const sql = 
+    "SELECT 	pu.ally_code, COUNT(*) AS ally_available, "
+    +"    IFNULL((SELECT 	COUNT(*) AS ally_allocation "
+    +"        FROM 		rote_operation ro1 "
+    +"        WHERE		ro1.PATH = ? "
+    +"        AND 		ro1.PHASE = ? "
+    +"        AND		ro1.ally_code = pu.ally_code "
+    +"        GROUP BY pu.ally_code), 0) AS ally_allocated "
+    +"    FROM 	(SELECT DISTINCT ro1.base_id, ro1.relic_level, u.combat_type "
+    +"                FROM	rote_operation ro1 "
+    +"                INNER JOIN unit u "
+    +"                    ON	ro1.base_id = u.base_id "
+    +"                WHERE		ro1.PATH = ? "
+    +"                AND 		ro1.PHASE = ? "
+    +"                AND     	ro1.operation IN (?) "
+    +"                AND		ro1.ally_code IS NULL) ro "
+    +"        INNER JOIN player_unit pu "
+    +"        ON  	pu.base_id = ro.base_id "
+    +"        AND	pu.rarity = 7 "
+    +"        AND	CASE WHEN ro.combat_type = 1 THEN pu.relic_tier - 2 ELSE ro.relic_level END >= ro.relic_level "
+    +"    GROUP BY pu.ally_code "
+    +"    ORDER BY ally_available";
+
+    return await runSQL(sql, [path, phase, path, phase, operations]);
+}
+
+rote.allocateAlly = async (path, phase, operations, ally_code) => {
+    
+    let sql = 
+    "SELECT 	DISTINCT ro.base_id "
+    +"    FROM 	rote_operation ro "
+    +"    INNER JOIN unit u "
+    +"        ON	ro.base_id = u.base_id "
+    +"    INNER JOIN player_unit pu "
+    +"       ON  	pu.base_id = ro.base_id "
+    +"       AND	pu.rarity = 7 "
+    +"       AND	CASE WHEN u.combat_type = 1 THEN pu.relic_tier - 2 ELSE ro.relic_level END >= ro.relic_level "
+    +"    WHERE		ro.PATH = ? "
+    +"    AND 		ro.PHASE = ? "
+    +"    AND     	ro.operation IN (?) "
+    +"    AND		ro.ally_code IS NULL "
+    +"    AND		pu.ally_code = ?";
+
+    const base_ids = await runSQL(sql, [path, phase, operations, ally_code]);
+    
+    base_ids.forEach(async function (ally, index) {
+        sql = "UPDATE rote_operation SET ally_code = ? WHERE base_id = ? AND path = ? "
+            + "AND phase = ? AND operation IN (?) AND ally_code IS NULL ORDER BY operation, unit_index LIMIT 1";
+        await runSQL(sql, [ally_code, ally.base_id, path, phase, operations]);
+    });
+}
+
+rote.allocateOperations = async (path, phase) => {
+
+    //reset allocation
+    let sql = "UPDATE rote_operation SET ally_code = null WHERE path = ? AND phase = ?";
+    await runSQL(sql, [path, phase]);
+
+    //all operations
+    const all_operations = [1,2,3,4,5,6];
+
+    //operations that cant be filled
+    sql = "SELECT DISTINCT operation ";
+    sql += "FROM rote_operation ro ";
+    sql += "INNER JOIN unit u ";
+    sql += "    ON	ro.base_id = u.base_id ";
+    sql += "LEFT OUTER JOIN player_unit pu ";
+    sql += "ON 	ro.base_id = pu.base_id ";
+    sql += "AND	pu.rarity = 7 ";
+    sql += "AND CASE WHEN u.combat_type = 1 THEN pu.relic_tier -2 ELSE ro.relic_level END >= ro.relic_level ";
+    sql += "WHERE ro.path = ? ";
+    sql += "AND 	ro.PHASE = ? ";
+    sql += "AND	pu.base_id IS NULL ";
+
+    const impossible_operations = await runSQL(sql, [path, phase]);
+
+    //possible operations, but may need multiple phases
+    const makeable_operations = all_operations.filter(item => !impossible_operations.includes(item));
+
+    let fill_operations = makeable_operations;
+
+    //check makeable operations
+    let base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
+
+    //filter by missing != 0
+    let missing_base_ids = base_ids.filter(item => item.missing > 0);
+    
+    while (missing_base_ids.length > 0){
+        missing_base_ids.sort((a, b) => b.missing < a.missing ? -1 : (b.missing > a.missing ? 1 : 0));
+
+        sql = "SELECT operation, COUNT(*) as unit_count "
+         + "FROM    rote_operation "
+         + "WHERE   path = ? "
+         + "AND 	PHASE = ? "
+         + "AND     operation IN (?) "
+         + "AND     base_id = ? "
+         + "GROUP BY operation "
+         + "ORDER BY COUNT(*) DESC"
+
+         const unit_count = await runSQL(sql, [path, phase, fill_operations, missing_base_ids[0].base_id]);
+
+         const remove_operation = rote.minNumbersToAddUpToTarget(unit_count, missing_base_ids[0].missing);
+
+         fill_operations = fill_operations.filter(item => !remove_operation.includes(item));
+
+         base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
+
+        //filter by missing != 0
+        missing_base_ids = base_ids.filter(item => item.missing > 0);
+    }
+
+    let allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, fill_operations);
+    let found = true;
+    while(allocation_left.length > 0 && found){
+        found = false;
+        for(var i = 0; i < allocation_left.length; i++){
+            if(allocation_left[i].ally_available + allocation_left[i].ally_allocated < 10){
+                found = true;
+                await rote.allocateAlly(path, phase, fill_operations, allocation_left[i].ally_code);
+            }
+        }
+        allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, fill_operations);
+    }
+/*
+    allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, [1,4]);
+    found = true;
+    while(allocation_left.length > 0 && found){
+        found = false;
+        for(var i = 0; i < allocation_left.length; i++){
+            if(allocation_left[i].ally_available + allocation_left[i].ally_allocated < 10){
+                found = true;
+                await rote.allocateAlly(path, phase, [1,4], allocation_left[i].ally_code);
+            }
+        }
+        allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, [1,4]);
+    }
+*/
+}
+
+rote.minNumbersToAddUpToTarget = (arr, target) => {
+   
+    let sum = BigInt(0);
+    let index = arr.length - 1;
+    const usedNumbers = [];
+    
+    while (sum < target && index >= 0) {
+        while (sum + arr[index].unit_count <= target) {
+            sum += arr[index].unit_count;
+            usedNumbers.push(arr[index].operation);
+            if (sum >= target) {
+                return usedNumbers;
+            }
+        }
+        index--;
+    }
+    
+    return null; // If no combination of numbers adds up to the target
+}
+
 module.exports = rote;
+

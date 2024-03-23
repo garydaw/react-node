@@ -121,7 +121,7 @@ export default function RoteAdmin({unitData}) {
             <span className="input-group-text">Path</span>
             <select id="rote_path" className="form-select" aria-label="Path">
                 <option value="light">Light</option>
-                <option value="netural">Netural</option>
+                <option value="neutral">Neutral</option>
                 <option value="dark">Dark</option>
             </select>
           </div>

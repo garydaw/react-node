@@ -119,28 +119,34 @@ rote.getAllyCountAvailableAllocations = async (path, phase, operations) => {
 
     const sql = 
     "SELECT 	pu.ally_code, COUNT(*) AS ally_available, "
-    +"    IFNULL((SELECT 	COUNT(*) AS ally_allocation "
-    +"        FROM 		rote_operation ro1 "
-    +"        WHERE		ro1.PATH = ? "
-    +"        AND 		ro1.PHASE = ? "
-    +"        AND		ro1.ally_code = pu.ally_code "
-    +"        GROUP BY pu.ally_code), 0) AS ally_allocated "
-    +"    FROM 	(SELECT DISTINCT ro1.base_id, ro1.relic_level, u.combat_type "
-    +"                FROM	rote_operation ro1 "
-    +"                INNER JOIN unit u "
-    +"                    ON	ro1.base_id = u.base_id "
-    +"                WHERE		ro1.PATH = ? "
-    +"                AND 		ro1.PHASE = ? "
-    +"                AND     	ro1.operation IN (?) "
-    +"                AND		ro1.ally_code IS NULL) ro "
-    +"        INNER JOIN player_unit pu "
-    +"        ON  	pu.base_id = ro.base_id "
-    +"        AND	pu.rarity = 7 "
-    +"        AND	CASE WHEN ro.combat_type = 1 THEN pu.relic_tier - 2 ELSE ro.relic_level END >= ro.relic_level "
-    +"    GROUP BY pu.ally_code "
-    +"    ORDER BY ally_available";
+    +"          IFNULL((SELECT 	COUNT(*) AS ally_allocation "
+    +"              FROM 		rote_operation ro1 "
+    +"              WHERE		ro1.PATH = ? "
+    +"              AND 		ro1.PHASE = ? "
+    +"              AND		ro1.ally_code = pu.ally_code "
+    +"              GROUP BY pu.ally_code), 0) AS ally_allocated "
+    +"FROM 	(SELECT DISTINCT ro1.base_id, ro1.relic_level, u.combat_type "
+    +"       FROM	rote_operation ro1 "
+    +"       INNER JOIN unit u "
+    +"          ON	ro1.base_id = u.base_id "
+    +"       WHERE		ro1.PATH = ? "
+    +"       AND 		ro1.PHASE = ? "
+    +"       AND     	ro1.operation IN (?) "
+    +"       AND		ro1.ally_code IS NULL) ro "
+    +"INNER JOIN player_unit pu "
+    +"  ON  	pu.base_id = ro.base_id "
+    +"  AND	pu.rarity = 7 "
+    +"  AND	CASE WHEN ro.combat_type = 1 THEN pu.relic_tier - 2 ELSE ro.relic_level END >= ro.relic_level "
+    +"LEFT OUTER JOIN rote_operation ro_allocate "
+    +"  ON		ro_allocate.base_id = pu.base_id "
+    +"  AND 	ro_allocate.ally_code = pu.ally_code "
+    +"  AND	    ro_allocate.PATH = ?  "
+    +"  AND 	ro_allocate.PHASE = ? "
+    +"WHERE ro_allocate.base_id IS NULL "
+    +"GROUP BY pu.ally_code "
+    +"ORDER BY ally_available";
 
-    return await runSQL(sql, [path, phase, path, phase, operations]);
+    return await runSQL(sql, [path, phase, path, phase, operations, path, phase]);
 }
 
 rote.allocateAlly = async (path, phase, operations, ally_code) => {
@@ -154,13 +160,19 @@ rote.allocateAlly = async (path, phase, operations, ally_code) => {
     +"       ON  	pu.base_id = ro.base_id "
     +"       AND	pu.rarity = 7 "
     +"       AND	CASE WHEN u.combat_type = 1 THEN pu.relic_tier - 2 ELSE ro.relic_level END >= ro.relic_level "
+    +"    LEFT OUTER JOIN rote_operation ro_allocate "
+    +"      ON		ro_allocate.base_id = pu.base_id "
+    +"      AND 	ro_allocate.ally_code = pu.ally_code "
+    +"      AND	    ro_allocate.PATH = ?  "
+    +"      AND 	ro_allocate.PHASE = ? "
     +"    WHERE		ro.PATH = ? "
     +"    AND 		ro.PHASE = ? "
     +"    AND     	ro.operation IN (?) "
     +"    AND		ro.ally_code IS NULL "
+    +"    AND		ro_allocate.base_id IS NULL "
     +"    AND		pu.ally_code = ?";
 
-    const base_ids = await runSQL(sql, [path, phase, operations, ally_code]);
+    const base_ids = await runSQL(sql, [path, phase, path, phase, operations, ally_code]);
     
     base_ids.forEach(async function (ally, index) {
         sql = "UPDATE rote_operation SET ally_code = ? WHERE base_id = ? AND path = ? "

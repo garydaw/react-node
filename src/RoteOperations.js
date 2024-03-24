@@ -114,9 +114,17 @@ export default function RoteOperations() {
                 
                 {row.map((team_index, index) => {
                   
+                  let this_class = "card";
+                  if(operation[team_index] !== undefined){
+                    if(operation[team_index].ally_code === null){
+                      this_class += " bg-danger bg-opacity-75";
+                    } else {
+                      this_class += " bg-success bg-opacity-25";
+                    }
+                  }
                   return (
-                  <div key={"RoteOperation_card_"+index+"_"+team_index} className="col-6 col-md-4 col-lg-2 pe-3 pb-3">
-                    <div className="card">
+                  <div key={"RoteOperation_card_"+index+"_"+team_index} className="col-6 col-md-4 col-lg-2 pe-3 pb-3 ">
+                    <div className={this_class}>
                       <div className="card-body">
                            {operation[team_index] !== undefined && 
                           

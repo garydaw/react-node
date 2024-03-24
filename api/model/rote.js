@@ -192,9 +192,10 @@ rote.allocateOperations = async (path, phase) => {
     sql += "AND	pu.base_id IS NULL ";
 
     const impossible_operations = await runSQL(sql, [path, phase]);
+    const impossible_array = impossible_operations.map(obj => obj.operation);
 
     //possible operations, but may need multiple phases
-    const makeable_operations = all_operations.filter(item => !impossible_operations.includes(item));
+    const makeable_operations = all_operations.filter(num => !impossible_array.includes(num));
 
     let fill_operations = makeable_operations;
 
@@ -203,7 +204,7 @@ rote.allocateOperations = async (path, phase) => {
 
     //filter by missing != 0
     let missing_base_ids = base_ids.filter(item => item.missing > 0);
-    
+
     while (missing_base_ids.length > 0){
         missing_base_ids.sort((a, b) => b.missing < a.missing ? -1 : (b.missing > a.missing ? 1 : 0));
 
@@ -227,33 +228,28 @@ rote.allocateOperations = async (path, phase) => {
         //filter by missing != 0
         missing_base_ids = base_ids.filter(item => item.missing > 0);
     }
+    
+    await rote.allocateToOperations(path, phase, fill_operations);
+    const removed_operations = all_operations.filter(item => !fill_operations.includes(item));
+    
+    await rote.allocateToOperations(path, phase, removed_operations);
 
-    let allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, fill_operations);
+}
+
+rote.allocateToOperations = async (path, phase, operations) => {
+
+    let allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, operations);
     let found = true;
     while(allocation_left.length > 0 && found){
         found = false;
         for(var i = 0; i < allocation_left.length; i++){
             if(allocation_left[i].ally_available + allocation_left[i].ally_allocated < 10){
                 found = true;
-                await rote.allocateAlly(path, phase, fill_operations, allocation_left[i].ally_code);
+                await rote.allocateAlly(path, phase, operations, allocation_left[i].ally_code);
             }
         }
-        allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, fill_operations);
+        allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, operations);
     }
-/*
-    allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, [1,4]);
-    found = true;
-    while(allocation_left.length > 0 && found){
-        found = false;
-        for(var i = 0; i < allocation_left.length; i++){
-            if(allocation_left[i].ally_available + allocation_left[i].ally_allocated < 10){
-                found = true;
-                await rote.allocateAlly(path, phase, [1,4], allocation_left[i].ally_code);
-            }
-        }
-        allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, [1,4]);
-    }
-*/
 }
 
 rote.minNumbersToAddUpToTarget = (arr, target) => {
@@ -273,7 +269,7 @@ rote.minNumbersToAddUpToTarget = (arr, target) => {
         index--;
     }
     
-    return null; // If no combination of numbers adds up to the target
+    return usedNumbers; // If no combination of numbers adds up to the target
 }
 
 module.exports = rote;

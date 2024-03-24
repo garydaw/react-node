@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import axios from 'axios';
+import { useLoading } from './LoadingContext';
+import { useError } from './ErrorContext';
 
 export default function RoteOperations() {
   const [operations, setOperations] = useState([]);
+  const { showLoading, hideLoading } = useLoading();
+  const { showError } = useError();
 
   //set up 3*5 array to layout the team
   const arrayOfRows = [];
@@ -40,6 +44,7 @@ export default function RoteOperations() {
   const access = localStorage.getItem("access");
 
   const allocateOperation = () => {
+    showLoading("Calculating Allocations.");
     const path = document.getElementById("rote_operations_path").value;
     const phase = document.getElementById("rote_operations_phase").value;
 
@@ -53,7 +58,12 @@ export default function RoteOperations() {
         .then((res) => {
             
           setOperations(res.data);
-        });
+          hideLoading();
+        })
+        .catch(error => {
+          hideLoading();
+          showError(error.response.data.error);
+        })
   }
   
   return (

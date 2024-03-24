@@ -210,41 +210,43 @@ rote.allocateOperations = async (path, phase) => {
     const makeable_operations = all_operations.filter(num => !impossible_array.includes(num));
 
     let fill_operations = makeable_operations;
-
-    //check makeable operations
-    let base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
-
-    //filter by missing != 0
-    let missing_base_ids = base_ids.filter(item => item.missing > 0);
-
-    while (missing_base_ids.length > 0){
-        missing_base_ids.sort((a, b) => b.missing < a.missing ? -1 : (b.missing > a.missing ? 1 : 0));
-
-        sql = "SELECT operation, COUNT(*) as unit_count "
-         + "FROM    rote_operation "
-         + "WHERE   path = ? "
-         + "AND 	PHASE = ? "
-         + "AND     operation IN (?) "
-         + "AND     base_id = ? "
-         + "GROUP BY operation "
-         + "ORDER BY COUNT(*) DESC"
-
-         const unit_count = await runSQL(sql, [path, phase, fill_operations, missing_base_ids[0].base_id]);
-
-         const remove_operation = rote.minNumbersToAddUpToTarget(unit_count, missing_base_ids[0].missing);
-
-         fill_operations = fill_operations.filter(item => !remove_operation.includes(item));
-
-         base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
+    if(fill_operations.length > 0){
+        //check makeable operations
+        let base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
 
         //filter by missing != 0
-        missing_base_ids = base_ids.filter(item => item.missing > 0);
+        let missing_base_ids = base_ids.filter(item => item.missing > 0);
+
+        while (missing_base_ids.length > 0){
+            missing_base_ids.sort((a, b) => b.missing < a.missing ? -1 : (b.missing > a.missing ? 1 : 0));
+
+            sql = "SELECT operation, COUNT(*) as unit_count "
+            + "FROM    rote_operation "
+            + "WHERE   path = ? "
+            + "AND 	PHASE = ? "
+            + "AND     operation IN (?) "
+            + "AND     base_id = ? "
+            + "GROUP BY operation "
+            + "ORDER BY COUNT(*) DESC"
+
+            const unit_count = await runSQL(sql, [path, phase, fill_operations, missing_base_ids[0].base_id]);
+
+            const remove_operation = rote.minNumbersToAddUpToTarget(unit_count, missing_base_ids[0].missing);
+
+            fill_operations = fill_operations.filter(item => !remove_operation.includes(item));
+
+            base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
+
+            //filter by missing != 0
+            missing_base_ids = base_ids.filter(item => item.missing > 0);
+        }
+        
+        await rote.allocateToOperations(path, phase, fill_operations);
     }
-    
-    await rote.allocateToOperations(path, phase, fill_operations);
+
     const removed_operations = all_operations.filter(item => !fill_operations.includes(item));
-    
-    await rote.allocateToOperations(path, phase, removed_operations);
+    if(removed_operations.length > 0)
+        await rote.allocateToOperations(path, phase, removed_operations);
 
 }
 

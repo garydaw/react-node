@@ -37,6 +37,10 @@ users.delete = async (ally_code) => {
     let sql = "DELETE FROM player_mod WHERE ally_code = ?";
 
     await runSQL(sql, [ally_code]);
+
+    sql = "UPDATE rote_operation SET ally_code = NULL WHERE ally_code = ?"
+    
+    await runSQL(sql, [ally_code]);
     
     sql = "DELETE FROM player_unit WHERE ally_code = ?";
 

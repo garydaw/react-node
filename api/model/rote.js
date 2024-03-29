@@ -300,6 +300,8 @@ rote.minNumbersToAddUpToTarget = (arr, target) => {
         index--;
     }
     
+    //target is lower than any count so just take the first operation 
+    usedNumbers.push(arr[0].operation);
     return usedNumbers; // If no combination of numbers adds up to the target
 }
 

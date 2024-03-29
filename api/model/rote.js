@@ -72,7 +72,24 @@ rote.getOperations = async (path, phase) => {
         operations.push(operation);
     }
 
-    return operations;
+    let sql = "SELECT ro.path, ro.phase, ro.operation, "
+        sql += "ro.unit_index, ro.base_id, u.character_name, "
+        sql += "p.ally_code, IFNULL(p.ally_name, 'To Farm') AS label_ally_name, ally_name "
+        sql += "FROM rote_operation ro "
+        sql += "INNER JOIN unit u "
+        sql += "    ON u.base_id = ro.base_id "
+        sql += "LEFT OUTER JOIN player p "
+        sql += "    ON  ro.ally_code = p.ally_code "
+        sql += "WHERE ro.path = ? ";
+        sql += "AND ro.phase = ? ";
+        sql += "ORDER BY p.ally_name,  ro.operation, ro.unit_index";
+    const ally = await runSQL(sql, [path, phase]);
+
+    let view = {};
+    view.operations = operations;
+    view.ally = ally;
+
+    return view;
 }
 
 rote.getEmptyAllocations = async (path, phase, operations) => {

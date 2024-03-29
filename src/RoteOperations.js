@@ -5,8 +5,13 @@ import { useError } from './ErrorContext';
 
 export default function RoteOperations() {
   const [operations, setOperations] = useState([]);
+  const [ally, setAlly] = useState([]);
   const { showLoading, hideLoading } = useLoading();
   const { showError } = useError();
+  const [viewByAlly, setViewByAlly] = useState(false);
+
+  let previousAllyName = "some ally name";
+  let previousOperation = -1;
 
   //set up 3*5 array to layout the team
   const arrayOfRows = [];
@@ -36,9 +41,14 @@ export default function RoteOperations() {
         .get(process.env.REACT_APP_API_URL + "rote/operation/" + path + "/" + phase, {headers})
         .then((res) => {
             
-          setOperations(res.data);
+          setOperations(res.data.operations);
+          setAlly(res.data.ally);
         });
   }
+
+  const handleViewChange = () => {
+    setViewByAlly(!viewByAlly); 
+  };
 
   //does user have access to admin
   const access = localStorage.getItem("access");
@@ -57,7 +67,8 @@ export default function RoteOperations() {
         .get(process.env.REACT_APP_API_URL + "rote/operation/allocate/" + path + "/" + phase, {headers})
         .then((res) => {
             
-          setOperations(res.data);
+          setOperations(res.data.operations);
+          setAlly(res.data.ally);
           hideLoading();
         })
         .catch(error => {
@@ -93,16 +104,48 @@ export default function RoteOperations() {
             </select>
           </div>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <button type="button" className="btn btn-primary" onClick={viewOperation}>View</button>
         </div>
         {operations.length > 0 && access === "1" &&
-          <div className="col-md-3">
-            <button type="button" className="btn btn-primary" onClick={allocateOperation}>Auto Allocate</button>
-          </div>
+          <>
+            <div className="col-md-2 form-check form-switch">
+              <input className="form-check-input" type="checkbox" role="switch" id="roteViewType"  checked={viewByAlly} onChange={handleViewChange}/>
+              <label className="form-check-label" for="roteViewType">View by Ally</label>
+            </div>
+            <div className="col-md-2">
+              <button type="button" className="btn btn-primary" onClick={allocateOperation}>Auto Allocate</button>
+            </div>
+          </>
         }
       </div>
 
+      {viewByAlly ? (
+        <div>
+          {ally.map((item, index) => {
+            // Check if the current ally_name is different from the previous one
+            const isNewAlly = item.ally_name !== previousAllyName;
+            let isNewOperation = item.operation !== previousOperation;
+            
+            // Update previousAllyName for the next iteration
+            previousAllyName = item.ally_name;
+            previousOperation = item.operation;
+
+            return (
+              <div key={index}>
+                {/* Render a new div if the ally_name changes */}
+                {isNewAlly && <h3>{item.label_ally_name}</h3>}
+                {(isNewAlly || isNewOperation) && <div><b>Operation {item.operation}</b></div>}
+                {/* Render the rest of your data */}
+                <div>
+                  ({item.unit_index+1}) {item.character_name}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      
+      ) :
       <div className="row">
         {operations.map((operation, index) => {
           return (
@@ -145,6 +188,7 @@ export default function RoteOperations() {
 
         )})}
       </div>
+      }
     </div>
   );
 }

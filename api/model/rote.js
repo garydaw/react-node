@@ -252,13 +252,17 @@ rote.allocateOperations = async (path, phase) => {
 
             fill_operations = fill_operations.filter(item => !remove_operation.includes(item));
 
+            if(fill_operations.length === 0)
+                break;
+
             base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
 
             //filter by missing != 0
             missing_base_ids = base_ids.filter(item => item.missing > 0);
         }
         
-        await rote.allocateToOperations(path, phase, fill_operations);
+        if(fill_operations.length > 0)
+            await rote.allocateToOperations(path, phase, fill_operations);
     }
 
     const removed_operations = all_operations.filter(item => !fill_operations.includes(item));

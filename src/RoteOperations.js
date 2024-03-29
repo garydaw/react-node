@@ -10,9 +10,6 @@ export default function RoteOperations() {
   const { showError } = useError();
   const [viewByAlly, setViewByAlly] = useState(false);
 
-  let previousAllyName = "some ally name";
-  let previousOperation = -1;
-
   //set up 3*5 array to layout the team
   const arrayOfRows = [];
   let counter = 0;
@@ -49,6 +46,18 @@ export default function RoteOperations() {
   const handleViewChange = () => {
     setViewByAlly(!viewByAlly); 
   };
+
+  const groupedData = {};
+
+  ally.forEach(item => {
+    if (!groupedData[item.label_ally_name]) {
+      groupedData[item.label_ally_name] = {};
+    }
+    if (!groupedData[item.label_ally_name][item.operation]) {
+      groupedData[item.label_ally_name][item.operation] = [];
+    }
+    groupedData[item.label_ally_name][item.operation].push(item.character_name);
+  });
 
   //does user have access to admin
   const access = localStorage.getItem("access");
@@ -121,30 +130,24 @@ export default function RoteOperations() {
       </div>
 
       {viewByAlly ? (
-        <div>
-          {ally.map((item, index) => {
-            // Check if the current ally_name is different from the previous one
-            const isNewAlly = item.ally_name !== previousAllyName;
-            let isNewOperation = item.operation !== previousOperation;
-            
-            // Update previousAllyName for the next iteration
-            previousAllyName = item.ally_name;
-            previousOperation = item.operation;
-
-            return (
-              <div key={index}>
-                {/* Render a new div if the ally_name changes */}
-                {isNewAlly && <h3>{item.label_ally_name}</h3>}
-                {(isNewAlly || isNewOperation) && <div><b>Operation {item.operation}</b></div>}
-                {/* Render the rest of your data */}
-                <div>
-                  ({item.unit_index+1}) {item.character_name}
-                </div>
-              </div>
-            );
-          })}
-        </div>
       
+        <div>
+          {Object.keys(groupedData).map((allyName, index) => (
+            <div key={index}className="card-body border mt-3">
+              <h3>{allyName}</h3>
+              {Object.keys(groupedData[allyName]).map((operation, idx) => (
+                <div key={idx}>
+                  <h5>Operation {operation}</h5>
+                  <div className="row">
+                    {groupedData[allyName][operation].map((characterName, ind) => (
+                      <div key={ind} className="col-6 col-md-4 col-lg-2 pe-3 pb-3 ">{characterName}</div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       ) :
       <div className="row">
         {operations.map((operation, index) => {

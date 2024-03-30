@@ -85,9 +85,28 @@ rote.getOperations = async (path, phase) => {
         sql += "ORDER BY p.ally_name,  ro.operation, ro.unit_index";
     const ally = await runSQL(sql, [path, phase]);
 
+    sql = "SELECT DISTINCT ro.base_id, p.ally_code, p.ally_name, u.character_name ";
+    sql += "FROM rote_operation ro ";
+    sql += "INNER JOIN unit u "
+    sql += "    ON u.base_id = ro.base_id "
+    sql += "INNER JOIN rote_operation ro2 ";
+    sql += "    ON ro2.path = ro.path ";
+    sql += "    AND ro2.phase = ro.phase ";
+    sql += "    AND ro2.base_id = ro.base_id ";
+    sql += "    AND ro2.ally_code IS NOT NULL ";
+    sql += "INNER JOIN player p "
+    sql += "    ON  ro2.ally_code = p.ally_code "
+    sql += "WHERE ro.path = ? ";
+    sql += "AND ro.phase = ? ";
+    sql += "AND ro.ally_code IS NULL "
+    sql += "ORDER BY ro.base_id, p.ally_name";
+
+    const swaps = await runSQL(sql, [path, phase]);
+
     let view = {};
     view.operations = operations;
     view.ally = ally;
+    view.swaps = swaps;
 
     return view;
 }
@@ -307,6 +326,40 @@ rote.minNumbersToAddUpToTarget = (arr, target) => {
     //target is lower than any count so just take the first operation 
     usedNumbers.push(arr[0].operation);
     return usedNumbers; // If no combination of numbers adds up to the target
+}
+
+rote.swapOperations = async (path, phase, operation, team_index, ally_code) => {
+
+    //get base_id
+    let sql = "SELECT base_id "
+    + "FROM rote_operation "
+    + "WHERE path = ? "
+    + "AND phase = ? "
+    + "AND operation = ? "
+    + "AND unit_index = ? "
+
+    const base_id_result = await runSQL(sql, [path, phase, operation, team_index]);
+
+    const base_id = base_id_result[0].base_id;
+
+    sql = "UPDATE rote_operation "
+    + "SET ally_code = null "
+    + "WHERE path = ? "
+    + "AND phase = ? "
+    + "AND base_id = ? "
+    + "AND ally_code = ?";
+
+    await runSQL(sql, [path, phase, base_id, ally_code]);
+
+    sql = "UPDATE rote_operation "
+    + "SET ally_code = ? "
+    + "WHERE path = ? "
+    + "AND phase = ? "
+    + "AND operation = ? "
+    + "AND unit_index = ? ";
+
+    await runSQL(sql, [ally_code, path, phase, operation, team_index]);
+    
 }
 
 module.exports = rote;

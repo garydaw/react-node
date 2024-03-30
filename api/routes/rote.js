@@ -50,4 +50,20 @@ router.get('/operation/allocate/:path/:phase', async (req, res) => {
   
 });
 
+router.put('/operation/swap/', async (req, res) => {
+    
+    const path = req.body.path;
+    const phase = req.body.phase;
+    const operation = req.body.operation;
+    const team_index = req.body.team_index;
+    const ally_code = req.body.ally_code;
+
+    await rote.swapOperations(path, phase, operation, team_index, ally_code);
+    
+    const result = await rote.getOperations(path, phase);
+    
+    res.status(200).json(result);
+  
+});
+
 module.exports = router;

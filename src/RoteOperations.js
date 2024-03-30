@@ -6,6 +6,9 @@ import { useError } from './ErrorContext';
 export default function RoteOperations() {
   const [operations, setOperations] = useState([]);
   const [ally, setAlly] = useState([]);
+  const [swap, setSwap] = useState([]);
+  const [path, setPath] = useState("");
+  const [phase, setPhase] = useState("");
   const { showLoading, hideLoading } = useLoading();
   const { showError } = useError();
   const [viewByAlly, setViewByAlly] = useState(false);
@@ -26,21 +29,28 @@ export default function RoteOperations() {
   }
   
   const viewOperation = () => {
-    const path = document.getElementById("rote_operations_path").value;
-    const phase = document.getElementById("rote_operations_phase").value;
-
+    const this_path = document.getElementById("rote_operations_path").value
+    const this_phase = document.getElementById("rote_operations_phase").value
+    setPath(this_path);
+    setPhase(this_phase);
+  
     const token = localStorage.getItem('token');
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token,
     };
     axios
-        .get(process.env.REACT_APP_API_URL + "rote/operation/" + path + "/" + phase, {headers})
+        .get(process.env.REACT_APP_API_URL + "rote/operation/" + this_path + "/" + this_phase, {headers})
         .then((res) => {
             
-          setOperations(res.data.operations);
-          setAlly(res.data.ally);
+          setValues(res.data);
         });
+  }
+
+  const setValues = (data) => {
+    setOperations(data.operations);
+    setAlly(data.ally);
+    setSwap(data.swaps)
   }
 
   const handleViewChange = () => {
@@ -59,13 +69,51 @@ export default function RoteOperations() {
     groupedData[item.label_ally_name][item.operation].push(item.character_name);
   });
 
+  const swapData = {};
+
+  swap.forEach(item => {
+    if (!swapData[item.character_name]) {
+      swapData[item.character_name] = [];
+    }
+    swapData[item.character_name].push({"ally_name":item.ally_name,"ally_code":item.ally_code});
+    
+  });
+
+  const swapHandler = (event) => {
+    const data = event.target.dataset;
+
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+    };
+    let postObj = {};
+    postObj.path = path;
+    postObj.phase = phase;
+    postObj.operation = parseInt(data.operation, 10) + 1;
+    postObj.team_index = data.teamindex;
+    postObj.ally_code = document.getElementById("rote_swap_"+data.operation+"_"+data.teamindex).value;
+
+    axios
+        .put(process.env.REACT_APP_API_URL + "rote/operation/swap", postObj, {headers})
+        .then((res) => {
+            
+          setValues(res.data);
+          hideLoading();
+        })
+        .catch(error => {
+          hideLoading();
+          showError(error.response.data.error);
+        })
+  };
+
   //does user have access to admin
   const access = localStorage.getItem("access");
 
   const allocateOperation = () => {
     showLoading("Calculating Allocations.");
-    const path = document.getElementById("rote_operations_path").value;
-    const phase = document.getElementById("rote_operations_phase").value;
+    //const path = document.getElementById("rote_operations_path").value;
+    //const phase = document.getElementById("rote_operations_phase").value;
 
     const token = localStorage.getItem('token');
     const headers = {
@@ -76,8 +124,7 @@ export default function RoteOperations() {
         .get(process.env.REACT_APP_API_URL + "rote/operation/allocate/" + path + "/" + phase, {headers})
         .then((res) => {
             
-          setOperations(res.data.operations);
-          setAlly(res.data.ally);
+          setValues(res.data);
           hideLoading();
         })
         .catch(error => {
@@ -120,7 +167,7 @@ export default function RoteOperations() {
           <>
             <div className="col-md-2 form-check form-switch">
               <input className="form-check-input" type="checkbox" role="switch" id="roteViewType"  checked={viewByAlly} onChange={handleViewChange}/>
-              <label className="form-check-label" for="roteViewType">View by Ally</label>
+              <label className="form-check-label" htmlFor="roteViewType">View by Ally</label>
             </div>
             <div className="col-md-2">
               <button type="button" className="btn btn-primary" onClick={allocateOperation}>Auto Allocate</button>
@@ -154,11 +201,11 @@ export default function RoteOperations() {
           return (
           <div className="card-body border mt-3">
             <h3>Operation {index + 1}</h3>
-            {arrayOfRows.map((row, index) => {
+            {arrayOfRows.map((row, arrarRowindex) => {
             return (
-              <div key={"RoteOperation_"+index} className="row row-cols-6">
+              <div key={"RoteOperation_"+arrarRowindex} className="row row-cols-6">
                 
-                {row.map((team_index, index) => {
+                {row.map((team_index, rowindex) => {
                   
                   let this_class = "card";
                   if(operation[team_index] !== undefined){
@@ -168,6 +215,7 @@ export default function RoteOperations() {
                       this_class += " bg-success bg-opacity-25";
                     }
                   }
+                  
                   return (
                   <div key={"RoteOperation_card_"+index+"_"+team_index} className="col-6 col-md-4 col-lg-2 pe-3 pb-3 ">
                     <div className={this_class}>
@@ -177,6 +225,19 @@ export default function RoteOperations() {
                             <div key={"RoteOperation_unit_"+team_index}>
                                 <h5>{operation[team_index].character_name}</h5>
                                 <p>{operation[team_index].ally_name}</p>
+                                {access === "1" && operation[team_index].ally_name === null && swapData[operation[team_index].character_name] &&
+                                  <div>
+                                    <select id={"rote_swap_"+index+"_"+team_index}>
+                                      {swapData[operation[team_index].character_name].map((allies, ally_index) => {
+                                        return (<option key={ally_index} value={allies.ally_code}>{allies.ally_name}</option>)
+                                      })}
+                                    </select>
+                                    <button data-operation={index}
+                                            data-teamindex={team_index}
+                                            className="btn btn-primary"
+                                            onClick={swapHandler}>Swap</button>
+                                  </div>
+                                }
                             </div>
                             
                           }

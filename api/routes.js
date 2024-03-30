@@ -45,6 +45,7 @@ const myMiddleware = (req, res, next) => {
           || (req.method === "POST" && req.path.slice(0, 6) === '/team/')
           || req.path.slice(0, 7) === '/users/' 
           || req.path.slice(0, 25) === '/rote/operation/allocate/' 
+          || req.path.slice(0, 20) === '/rote/operation/swap'
           || (req.method === "POST" && req.path.slice(0, 6) === '/journeyGuide/')
           
         ) {

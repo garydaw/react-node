@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useLoading } from './LoadingContext';
 import { useError } from './ErrorContext';
+import { CSVLink } from "react-csv";
 
 export default function RoteOperations() {
   const [operations, setOperations] = useState([]);
@@ -56,6 +57,35 @@ export default function RoteOperations() {
   const handleViewChange = () => {
     setViewByAlly(!viewByAlly); 
   };
+
+  let csvData = [];
+  let csvHeaders = []
+  if(viewByAlly){
+    
+    ally.forEach(allocation => {
+      csvData = csvData.concat(allocation);  
+    });
+
+    csvHeaders = [
+      { label: "Path", key: "path" },
+      { label: "Phase", key: "phase" },
+      { label: "Operation", key: "operation" },
+      { label: "Ally", key: "ally_name" },
+      { label: "Character Name", key: "character_name" },
+    ];
+  } else {
+    operations.forEach(operation => {
+      csvData = csvData.concat(operation);  
+    });
+
+    csvHeaders = [
+      { label: "Path", key: "path" },
+      { label: "Phase", key: "phase" },
+      { label: "Operation", key: "operation" },
+      { label: "Character Name", key: "character_name" },
+      { label: "Ally", key: "ally_name" }
+    ];
+  }
 
   const groupedData = {};
 
@@ -160,8 +190,11 @@ export default function RoteOperations() {
             </select>
           </div>
         </div>
-        <div className="col-md-2">
+        <div className="col-md-1">
           <button type="button" className="btn btn-primary" onClick={viewOperation}>View</button>
+        </div>
+        <div className="col-md-1">
+          {operations.length > 0 && <CSVLink filename={"rote_"+path+"_phase_"+phase+".csv"} data={csvData} headers={csvHeaders}><button className="btn btn-primary">CSV</button></CSVLink>}
         </div>
         {operations.length > 0 && access === "1" &&
           <>

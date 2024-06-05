@@ -1,4 +1,6 @@
 const runSQL = require('./database');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 let player = {};
 
@@ -22,6 +24,22 @@ player.setPassword = async (username, password) => {
     const this_user = await runSQL(sql, [password, username]);
     
     return this_user;
+}
+
+player.checkPassword = async (username, password) => {
+
+    const this_user = await player.login(username);
+    
+    // Compare the entered password with the stored hashed password
+    return await bcrypt.compare(password, this_user[0].password);
+    
+}
+
+player.getUserToken = async (username) => {
+
+    const this_user = await player.login(username);
+    this_user[0].token = jwt.sign({ username: this_user[0].ally_code, access: this_user[0].access}, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '168h' });
+    return this_user[0];
 }
 
 player.get = async (ally_code) => {

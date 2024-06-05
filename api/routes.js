@@ -30,7 +30,7 @@ const myMiddleware = (req, res, next) => {
       return res.status(403).json({ message: 'Token not provided' });
     }
   
-    jwt.verify(token.replace('Bearer ', ''), 'wehave0bananasToday!', (err, decoded) => {
+    jwt.verify(token.replace('Bearer ', ''), process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {
         return res.status(401).json({ message: 'Failed to authenticate token' });
       }

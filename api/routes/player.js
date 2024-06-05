@@ -3,29 +3,22 @@ const express = require('express');
 const router = express.Router();
 const player = require("../model/player");
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
   
-    // Find the user in the database
-    const this_user = await player.login(username);
-    
-    if (Object.keys(this_user).length === 0) {
-      return res.status(401).json({ message: 'Invalid username or password' });
-    }
-    
-    // Compare the entered password with the stored hashed password
-    const passwordMatch = await bcrypt.compare(password, this_user[0].password);
+    // check password
+    const passwordMatch = await player.checkPassword(username, password);
   
+    // reject if failure
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Invalid username or password' });
     }
   
-    // Create a JWT token for authentication
-    const token = jwt.sign({ username: this_user[0].ally_code, access: this_user[0].access}, 'wehave0bananasToday!', { expiresIn: '168h' });
-  
-    res.json({ token, user:{ally_code: this_user[0].ally_code, access: this_user[0].access}});
+    // get token and return
+    const userToken = await player.getUserToken(username);
+
+    res.json({ token: userToken.token, user:{ally_code: userToken.ally_code, access: userToken.access}});
   });
 
   router.post('/password', async (req, res) => {

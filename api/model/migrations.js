@@ -11,11 +11,58 @@ migrations.run = async (version) => {
         case "2":
             await versionTwo();
             break;
+        case "3":
+            await versionThree();
+            break;
         default:
             console.log("doh!");
     }
 
 } 
+
+async function versionThree (){
+
+    console.log("starting version three");
+    console.log("creating tw_wall");
+    await runSQL("CREATE TABLE IF NOT EXISTS tw_wall ("+
+        "tw_wall_id varchar(8) NOT NULL, "+
+        "tw_wall_name varchar(32) NOT NULL, "+
+        "combat_type int NOT NULL, "+
+        "primary key(tw_wall_id) "+
+        ");");
+
+    console.log("add tw_wall data");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FT', 'Front Wall Top', 1 WHERE 'FT' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FB', 'Front Wall Bottom', 1 WHERE 'FB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'ST', 'Second Wall Top', 1 WHERE 'ST' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'SB', 'Second Wall Bottom', 1 WHERE 'SB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'TM', 'Third Wall Middle', 1 WHERE 'TM' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'TB', 'Third Wall Bottom', 1 WHERE 'TB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'BM', 'Back Wall Middle', 1 WHERE 'BM' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'BB', 'Back Wall Bottom', 1 WHERE 'BB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FlF', 'Fleet Wall Front', 2 WHERE 'FlF' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FlB', 'Fleet Wall Back', 2 WHERE 'FlB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+
+    console.log("add combat type to teams");
+    await runSQL("ALTER TABLE team ADD IF NOT EXISTS combat_type INT NOT NULL DEFAULT 1");
+
+    console.log("creating tw_wall_team");
+    await runSQL("CREATE TABLE IF NOT EXISTS tw_wall_team ("+
+        "tw_wall_id varchar(8) NOT NULL, "+
+        "team_id int NOT NULL, "+
+        "ally_code int NOT NULL, "+
+        "primary key(team_id, ally_code), "+
+        "CONSTRAINT fk_tw_wall_team__player "+
+        "FOREIGN KEY (ally_code) REFERENCES player (ally_code) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_tw_wall_team__team "+
+        "FOREIGN KEY (team_id) REFERENCES team (team_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT "+
+        ");");
+
+}
 
 async function versionTwo (){
 

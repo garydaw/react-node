@@ -13,6 +13,7 @@ export default function Teams({team_type, ally_code, team_size}) {
     const [guildTeams, setGuildTeams] = useState([]);
     const [isTeamGuildFullRelic, setTeamGuildFullRelic] = useState(false);
     const [walls, setWalls] = useState([]);
+    const [warAllyTeams, setWarAllyTeams] = useState([]);
 
     const helpText = "List of some of the best teams for "+team_type.toUpperCase()+", this are broken down by the number of units you have/don't have."+
                 " The details shown for the unit are your details.";
@@ -101,6 +102,12 @@ export default function Teams({team_type, ally_code, team_size}) {
         getWalls();
         
     }, []);
+
+    const setTWList = (e) => {
+        setPreviousContent(previousContent);
+        setActiveContent(team_type+"War_"+team_size+"_wall_list");
+        console.log(e.target.dataset);
+    }
 
 
     let offense = [];
@@ -227,7 +234,23 @@ export default function Teams({team_type, ally_code, team_size}) {
                       
                     </div>
                     <div id={team_type+"War_"+team_size} className={activeContent === team_type+"War_"+team_size ? "d-show" : "d-none"}>
-                        <TeamsWar key={team_type+"War_"+team_size} team_type={team_type} team_size={team_size}></TeamsWar>
+                        <TeamsWar key={team_type+"War_"+team_size} team_type={team_type} team_size={team_size} setTWList={setTWList}></TeamsWar>
+                    </div>
+                    <div id={team_type+"War_"+team_size+"_wall_list"} className={activeContent === team_type+"War_"+team_size+"_wall_list" ? "d-show" : "d-none"}>
+                        
+                        <div className="card-body border">
+                            <div className="d-flex justify-content-between align-items-center pb-3">
+                                <h4 className="card-title">WALL NAME</h4>
+                            </div>
+                            <div className="card-text">
+                                <ul className="p-0">
+                                    {warAllyTeams.map(team => (
+                                        <Team team_type={team_type} team={team} offense="true" key={team_type+"War_"+team_size+"_wall_list_"+team.list_order}></Team>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                       
                     </div>
                 </div>
             </div>

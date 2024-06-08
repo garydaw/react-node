@@ -4,7 +4,7 @@ import axios from 'axios';
 import CharacterImage from './CharacterImage';
 import { Alert } from 'react-bootstrap';
 
-export default function TeamsWar({team_type, team_size}) {
+export default function TeamsWar({team_type, team_size, setTWList}) {
   const [twTeams, setTWTeams] = useState([]);
 
   let getTWTeams = () => {
@@ -42,31 +42,51 @@ return (
     <div className="row" style={{height:"500px"}}>
       <div className="col">
         <div className="row" style={{height:"34%"}}>
-          <div className="col border border-dark-subtle border-2 text-end bg-primary-subtle" style={{borderTopLeftRadius: "200px"}}>
+          <div className="col border border-dark-subtle border-2 text-end bg-primary-subtle"
+              style={{borderTopLeftRadius: "200px"}}
+              data-tw_wall_id="FlB"
+              onClick={setTWList}
+              role="button">
             <h5>Fleet Wall Back</h5>
             {teamSummary["FlB"]}
           </div>
-          <div className="col border border-dark-subtle border-2 bg-primary-subtle">
+          <div className="col border border-dark-subtle border-2 bg-primary-subtle"
+              data-tw_wall_id="FlF"
+              onClick={setTWList}
+              role="button">
             <h5>Fleet Wall Front</h5>
             {teamSummary["FlF"]}
           </div>
         </div>
         <div className="row" style={{height:"33%"}}>
-          <div className="col border border-dark-subtle border-2 text-end bg-secondary-subtle">
+          <div className="col border border-dark-subtle border-2 text-end bg-secondary-subtle"
+              data-tw_wall_id="BM"
+              onClick={setTWList}
+              role="button">
           <h5>Back Wall Middle</h5>
             {teamSummary["BM"]}
           </div>
-          <div className="col border border-dark-subtle border-2 bg-success-subtle">
+          <div className="col border border-dark-subtle border-2 bg-success-subtle"
+              data-tw_wall_id="TM"
+              onClick={setTWList}
+              role="button">
             <h5>Third Wall Middle</h5>
               {teamSummary["TM"]}
           </div>
         </div>
         <div className="row" style={{height:"33%"}}>
-          <div className="col border border-dark-subtle border-2 text-end bg-secondary-subtle" style={{borderBottomLeftRadius: "200px"}}>
+          <div className="col border border-dark-subtle border-2 text-end bg-secondary-subtle"
+            style={{borderBottomLeftRadius: "200px"}}
+            data-tw_wall_id="BB"
+            onClick={setTWList}
+            role="button">
             <h5>Back Wall Bottom</h5>
             {teamSummary["BB"]}
           </div>
-          <div className="col border border-dark-subtle border-2 bg-success-subtle">
+          <div className="col border border-dark-subtle border-2 bg-success-subtle"
+              data-tw_wall_id="TB"
+              onClick={setTWList}
+              role="button">
             <h5>Third Wall Bottom</h5>
             {teamSummary["TB"]}
           </div>
@@ -74,21 +94,35 @@ return (
       </div>
       <div className="col">
         <div className="row h-50">
-          <div className="col border border-dark-subtle border-2 bg-warning-subtle">
+          <div className="col border border-dark-subtle border-2 bg-warning-subtle"
+              data-tw_wall_id="ST"
+              onClick={setTWList}
+              role="button">
             <h5>Second Wall Top</h5>
             {teamSummary["ST"]}
           </div>
-          <div className="col border border-dark-subtle border-2 bg-danger-subtle" style={{borderTopRightRadius: "200px"}}>
+          <div className="col border border-dark-subtle border-2 bg-danger-subtle"
+            style={{borderTopRightRadius: "200px"}}
+            data-tw_wall_id="FT"
+            onClick={setTWList}
+            role="button">
             <h5>Front Wall Top</h5>
             {teamSummary["FT"]}
           </div>
         </div>
         <div className="row h-50">
-          <div className="col border border-dark-subtle border-2 bg-warning-subtle">
+          <div className="col border border-dark-subtle border-2 bg-warning-subtle"
+              data-tw_wall_id="SB"
+              onClick={setTWList}
+              role="button">
             <h5>Second Wall Bottom</h5>
             {teamSummary["SB"]}
           </div>
-          <div className="col border border-dark-subtle border-2 bg-danger-subtle" style={{borderBottomRightRadius: "200px"}}>
+          <div className="col border border-dark-subtle border-2 bg-danger-subtle"
+            style={{borderBottomRightRadius: "200px"}}
+            data-tw_wall_id="FB"
+            onClick={setTWList}
+            role="button">
             <h5>Front Wall Bottom</h5>
             {teamSummary["FB"]}
           </div>

@@ -1,6 +1,7 @@
 import TeamUnitOverview from "./TeamUnitOverview";
+import axios from 'axios';
 
-export default function Team({team_type, team, offense,  deleteTeam, showGuildTeams}) {
+export default function Team({team_type, team, offense,  deleteTeam, showGuildTeams, walls}) {
     let units = [];
     let url_param = "";
     let param_count = 0;
@@ -39,9 +40,54 @@ export default function Team({team_type, team, offense,  deleteTeam, showGuildTe
 
     const numFormatter = new Intl.NumberFormat('en-US');
     
+    const twWallRadioChanged = (e) => {
+      
+      const token = localStorage.getItem('token');
+      const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+      };
+      team.tw_wall_id = e.target.dataset.tw_wall_id;
+      axios.post(process.env.REACT_APP_API_URL + "team/" + team_type + "/5/walls/", e.target.dataset, {headers})
+        .then(response => {
+          console.log("team set")
+        });
+    }
+
     return (
         <div className="p-3">
             <h4>{team.team_name} ({numFormatter.format(team.team_power)})</h4>
+            {access === "1" && team_type === "guild" &&
+              <div>
+                {walls.map((wall, index) => {
+                  if(wall.combat_type !== team.combat_type){
+                    return (<></>);
+                  }
+                  
+                  return (
+                  <div key={team_type + "team_"+team.list_order+"_wall_div_"+index} className="form-check form-check-inline" id={team_type + "team_"+team.list_order+"_wall_div_"+index}>
+                    <input className="form-check-input" 
+                          type="radio"
+                          data-team_id={team.team_id}
+                          data-ally_code={team.ally_code}
+                          data-tw_wall_id={wall.tw_wall_id}
+                          name={team_type + "team_"+team.list_order+"_wall"} 
+                          id={team_type + "team_"+team.list_order+"_wall_radio_"+index} 
+                          key={team_type + "team_"+team.list_order+"_wall_radio_"+index} 
+                          value={wall.tw_wall_id}
+                          onChange={twWallRadioChanged}
+                          checked={team.tw_wall_id === wall.tw_wall_id}/>
+                    <label className="form-check-label"
+                            htmlFor={team_type + "team_"+team.list_order+"_wall_radio_"+index}
+                            key={team_type + "team_"+team.list_order+"_wall_radio_label_"+index}>
+                      {wall.tw_wall_name}
+                    </label>
+                  </div>
+                  );
+                })}
+                
+              </div>
+            }
             <div className="row d-flex">
               {units.map((unit, index) => {
                   return (
@@ -54,6 +100,7 @@ export default function Team({team_type, team, offense,  deleteTeam, showGuildTe
           {access === "1" && team_type !== "guild" &&
             <button type="button" className={style} onClick={() => deleteTeam(team.team_id, offense)}>Delete</button>
           }
+          
         </div>
       );
 }

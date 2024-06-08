@@ -61,6 +61,17 @@ team.getTeams = async (ally_code, team_size, team_type) => {
     return teams;
 }
 
+team.getWalls = async (team_size, team_type) => {
+
+    let sql = "SELECT tw_wall_id, tw_wall_name, combat_type ";
+    sql += "FROM tw_wall ";
+
+    const walls = await runSQL(sql, []);
+    
+    return walls;
+
+}
+
 team.getUnits = async () => {
 
     let sql = "SELECT base_id, character_name, unit_image ";
@@ -76,8 +87,8 @@ team.getUnits = async () => {
 
 team.getGuildTeams = async (team_id) => {
 
-    let sql = "SELECT p.ally_name AS team_name, ";
-    sql += "    u1.base_id AS base_id_1, u1.character_name AS character_name_1, u1.alignment AS alignment_1, ";
+    let sql = "SELECT p.ally_name AS team_name, t.list_order, t.team_id, p.ally_code, ";
+    sql += "    u1.base_id AS base_id_1, u1.character_name AS character_name_1, u1.alignment AS alignment_1, t.combat_type, twt.tw_wall_id, ";
     sql += "    u2.base_id AS base_id_2, u2.character_name AS character_name_2, u2.alignment AS alignment_2, ";
     sql += "    u3.base_id AS base_id_3, u3.character_name AS character_name_3, u3.alignment AS alignment_3, ";
     sql += "    u4.base_id AS base_id_4, u4.character_name AS character_name_4, u4.alignment AS alignment_4, ";
@@ -126,6 +137,9 @@ team.getGuildTeams = async (team_id) => {
     sql += "LEFT OUTER JOIN player_unit pu5 ";
     sql += "    ON t.base_id_5 = pu5.base_id ";
     sql += "    AND pu5.ally_code = p.ally_code ";
+    sql += "LEFT OUTER JOIN tw_wall_team twt ";
+    sql += "    ON  twt.team_id = t.team_id ";
+    sql += "    AND twt.ally_code = p.ally_code ";
     sql += "WHERE t.team_id = ? ";
     sql += "AND (t.base_id_2 IS NOT NULL AND pu2.base_id IS NOT NULL) "
     sql += "AND (t.base_id_3 IS NOT NULL AND pu3.base_id IS NOT NULL) "
@@ -137,6 +151,34 @@ team.getGuildTeams = async (team_id) => {
     
     return units;
 
+}
+
+team.getWarTeams = async (team_size, team_type) => {
+    
+    let sql = "SELECT twt.tw_wall_id, twt.team_id, u.character_name, CAST(COUNT(*) AS varchar(4)) AS count "+
+                "FROM tw_wall_team twt "+
+                "INNER JOIN team t "+
+                "    ON t.team_id = twt.team_id "+
+                "INNER JOIN unit u "+
+                "    ON u.base_id = t.base_id_1 "+
+                "GROUP BY twt.tw_wall_id, twt.team_id, u.character_name";
+
+    const teams = await runSQL(sql, []);
+    
+    return teams;
+}
+
+
+team.setTeamWalls = async (data, team_size, team_type) => {
+    
+    let teamSql = "DELETE from tw_wall_team WHERE ally_code = ? and team_id = ?";
+    await runSQL(teamSql, [data.ally_code, data.team_id]);
+    
+    teamSql = "INSERT INTO tw_wall_team (ally_code, team_id, tw_wall_id)" +
+                "VALUES (?, ?, ?)";
+    
+    await runSQL(teamSql, [data.ally_code, data.team_id, data.tw_wall_id]);
+    
 }
 
 team.addTeam = async (data, team_type) => {

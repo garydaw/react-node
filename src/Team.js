@@ -97,7 +97,7 @@ export default function Team({team_type, team, offense,  deleteTeam, showGuildTe
           </div>
           {team_type === "tw" && <button type="button" className="btn btn-primary" onClick={() => showGuildTeams(team.team_id)}>Guild Teams</button>}
           {offense === "true" && team_type === "gac" && <a href={"https://swgoh.gg/gac/who-to-attack/"+url_param} target="_blank" rel="noreferrer">Who to attack?</a>}
-          {access === "1" && team_type !== "guild" &&
+          {access === "1" && team_type !== "guild" && team_type !== "tw_wall" &&
             <button type="button" className={style} onClick={() => deleteTeam(team.team_id, offense)}>Delete</button>
           }
           

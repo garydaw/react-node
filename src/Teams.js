@@ -14,6 +14,7 @@ export default function Teams({team_type, ally_code, team_size}) {
     const [isTeamGuildFullRelic, setTeamGuildFullRelic] = useState(false);
     const [walls, setWalls] = useState([]);
     const [warAllyTeams, setWarAllyTeams] = useState([]);
+    const [warWall, setWarWall] = useState("FT");
 
     const helpText = "List of some of the best teams for "+team_type.toUpperCase()+", this are broken down by the number of units you have/don't have."+
                 " The details shown for the unit are your details.";
@@ -104,12 +105,26 @@ export default function Teams({team_type, ally_code, team_size}) {
     }, []);
 
     const setTWList = (e) => {
-        setPreviousContent(previousContent);
-        setActiveContent(team_type+"War_"+team_size+"_wall_list");
-        console.log(e.target.dataset);
+        setWarAllyTeams([]);
+       
+        setWarWall(walls.find(obj => obj.tw_wall_id === e.currentTarget.dataset.tw_wall_id));
+
+        const token = localStorage.getItem('token');
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+        };
+        axios
+        .get(process.env.REACT_APP_API_URL + "team/war/" + team_type + "/" + team_size +"/" + e.currentTarget.dataset.tw_wall_id, {headers})
+            .then((res) => {
+                setPreviousContent(previousContent);
+                setActiveContent(team_type+"War_"+team_size+"_wall_list");
+                setWarAllyTeams(res.data);
+            });
+
     }
 
-
+    
     let offense = [];
     let defense = [];
 
@@ -240,12 +255,12 @@ export default function Teams({team_type, ally_code, team_size}) {
                         
                         <div className="card-body border">
                             <div className="d-flex justify-content-between align-items-center pb-3">
-                                <h4 className="card-title">WALL NAME</h4>
+                                <h4 className="card-title">{warWall ? warWall.tw_wall_name : 'Not found'}</h4>
                             </div>
                             <div className="card-text">
                                 <ul className="p-0">
                                     {warAllyTeams.map(team => (
-                                        <Team team_type={team_type} team={team} offense="true" key={team_type+"War_"+team_size+"_wall_list_"+team.list_order}></Team>
+                                        <Team team_type={team_type+"_wall"} team={team} offense="true" key={team_type+"War_"+team_size+"_wall_list_"+team.list_order}></Team>
                                     ))}
                                 </ul>
                             </div>

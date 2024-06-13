@@ -170,7 +170,12 @@ team.getWarTeams = async (team_size, team_type) => {
 
 team.getWarTeamsWall = async (team_size, team_type, tw_wall_id) => {
     
-    let sql = "SELECT p.ally_name AS team_name, t.team_id, p.ally_code,";
+    let sql = "SELECT  t.team_id, p.ally_code, p.ally_name, tw.tw_wall_name, ";
+    if(tw_wall_id !== ""){
+        sql += "p.ally_name AS team_name, ";
+    } else {
+        sql += "tw.tw_wall_name AS team_name, ";
+    }
     sql += "    u1.base_id AS base_id_1, u1.character_name AS character_name_1, u1.alignment AS alignment_1, t.combat_type, twt.tw_wall_id, ";
     sql += "    u2.base_id AS base_id_2, u2.character_name AS character_name_2, u2.alignment AS alignment_2, ";
     sql += "    u3.base_id AS base_id_3, u3.character_name AS character_name_3, u3.alignment AS alignment_3, ";
@@ -184,6 +189,8 @@ team.getWarTeamsWall = async (team_size, team_type, tw_wall_id) => {
     sql += "    CAST(IFNULL(pu1.`power`, 0) + IFNULL(pu2.`power`, 0) + IFNULL(pu3.`power`, 0) + IFNULL(pu4.`power`, 0) + IFNULL(pu5.`power`, 0) AS varchar(32)) AS team_power,";
     sql += "    CASE WHEN pu1.relic_tier > 2 AND pu2.relic_tier > 2 AND pu3.relic_tier > 2 AND pu4.relic_tier > 2 AND pu5.relic_tier > 2 THEN 1 ELSE 0 END AS full_relic ";
     sql += "FROM tw_wall_team twt ";
+    sql += "INNER JOIN tw_wall tw ";
+    sql += "    ON tw.tw_wall_id = twt.tw_wall_id ";
     sql += "INNER JOIN team t ";
     sql += "    ON twt.team_id = t.team_id ";
     sql += "INNER JOIN player p ";
@@ -213,8 +220,12 @@ team.getWarTeamsWall = async (team_size, team_type, tw_wall_id) => {
     sql += "LEFT OUTER JOIN player_unit pu5 ";
     sql += "    ON t.base_id_5 = pu5.base_id ";
     sql += "    AND pu5.ally_code = p.ally_code ";
-    sql += "WHERE twt.tw_wall_id = ? ";
-    sql += "ORDER BY u1.character_name, CAST(team_power AS int) DESC";
+    if(tw_wall_id !== ""){
+        sql += "WHERE twt.tw_wall_id = ? ";
+        sql += "ORDER BY u1.character_name, CAST(team_power AS int) DESC";
+    } else {
+        sql += "ORDER BY p.ally_name, tw.tw_wall_name";
+    }
 
     const teams = await runSQL(sql, [tw_wall_id]);
     

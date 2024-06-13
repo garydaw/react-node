@@ -40,6 +40,16 @@ router.post('/:team_type/:team_size/walls', async (req, res) => {
   
 });
 
+router.get('/war/:team_type/:team_size/ally', async (req, res) => {
+    
+    const team_size = req.params.team_size;
+    const team_type = req.params.team_type;
+    const teams = await team.getWarTeamsWall(team_size, team_type, '');
+    
+    res.status(200).json(teams);
+  
+});
+
 router.get('/war/:team_type/:team_size/:tw_wall_id', async (req, res) => {
     
     const team_size = req.params.team_size;

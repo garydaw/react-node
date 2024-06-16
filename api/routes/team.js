@@ -20,6 +20,57 @@ router.post('/:team_type', async (req, res) => {
   
 });
 
+router.get('/:team_type/:team_size/walls', async (req, res) => {
+    
+    const team_size = req.params.team_size;
+    const team_type = req.params.team_type;
+    const teams = await team.getWalls(team_size, team_type);
+    
+    res.status(200).json(teams);
+  
+});
+
+router.post('/:team_type/:team_size/walls', async (req, res) => {
+    
+    const team_size = req.params.team_size;
+    const team_type = req.params.team_type;
+    const teams = await team.setTeamWalls(req.body, team_size, team_type);
+    
+    res.status(200).json(teams);
+  
+});
+
+router.get('/war/:team_type/:team_size/ally', async (req, res) => {
+    
+    const team_size = req.params.team_size;
+    const team_type = req.params.team_type;
+    const teams = await team.getWarTeamsWall(team_size, team_type, '');
+    
+    res.status(200).json(teams);
+  
+});
+
+router.get('/war/:team_type/:team_size/:tw_wall_id', async (req, res) => {
+    
+    const team_size = req.params.team_size;
+    const team_type = req.params.team_type;
+    const tw_wall_id = req.params.tw_wall_id;
+    const teams = await team.getWarTeamsWall(team_size, team_type, tw_wall_id);
+    
+    res.status(200).json(teams);
+  
+});
+
+router.get('/war/:team_type/:team_size', async (req, res) => {
+    
+    const team_size = req.params.team_size;
+    const team_type = req.params.team_type;
+    const teams = await team.getWarTeams(team_size, team_type);
+    
+    res.status(200).json(teams);
+  
+});
+
 router.get('/:team_type/:team_size/:ally_code', async (req, res) => {
     
     const ally_code = req.params.ally_code;

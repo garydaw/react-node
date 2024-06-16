@@ -111,13 +111,13 @@ mod.searchUnassigned = async (ally_code, date, search) => {
     sql += "            ON	u.base_id = ud.base_id ";
     sql += "        INNER JOIN unit_mod set_1 ";
     sql += "            ON	ud.base_id = set_1.base_id ";
-    sql += "            AND set_1.slot_id = 1 ";
+    sql += "            AND set_1.slot_id = 2 ";
     sql += "        INNER JOIN unit_mod set_2 ";
     sql += "            ON	ud.base_id = set_2.base_id ";
-    sql += "            AND set_2.slot_id = 3 ";
+    sql += "            AND set_2.slot_id = 4 ";
     sql += "        INNER JOIN unit_mod set_3 ";
     sql += "            ON	ud.base_id = set_3.base_id ";
-    sql += "            AND set_3.slot_id = 5 ";
+    sql += "            AND set_3.slot_id = 6 ";
     sql += "        INNER JOIN slot s ";
     sql += "            ON s.slot_id = ud.slot_id ";
     sql += "        INNER JOIN group_set gs1 ";

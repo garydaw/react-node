@@ -11,11 +11,78 @@ migrations.run = async (version) => {
         case "2":
             await versionTwo();
             break;
+        case "3":
+            await versionThree();
+            break;
         default:
             console.log("doh!");
     }
 
 } 
+
+async function versionThree (){
+
+    console.log("starting version three");
+    console.log("creating tw_wall");
+    await runSQL("CREATE TABLE IF NOT EXISTS tw_wall ("+
+        "tw_wall_id varchar(8) NOT NULL, "+
+        "tw_wall_name varchar(32) NOT NULL, "+
+        "combat_type int NOT NULL, "+
+        "primary key(tw_wall_id) "+
+        ");");
+
+    console.log("add tw_wall data");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FT', 'Front Wall Top', 1 WHERE 'FT' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FB', 'Front Wall Bottom', 1 WHERE 'FB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'ST', 'Second Wall Top', 1 WHERE 'ST' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'SB', 'Second Wall Bottom', 1 WHERE 'SB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'TM', 'Third Wall Middle', 1 WHERE 'TM' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'TB', 'Third Wall Bottom', 1 WHERE 'TB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'BM', 'Back Wall Middle', 1 WHERE 'BM' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'BB', 'Back Wall Bottom', 1 WHERE 'BB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FlF', 'Fleet Wall Front', 2 WHERE 'FlF' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+    await runSQL("INSERT INTO tw_wall (tw_wall_id, tw_wall_name, combat_type) SELECT 'FlB', 'Fleet Wall Back', 2 WHERE 'FlB' NOT IN (SELECT tw_wall_id FROM tw_wall)");
+
+    console.log("add combat type to teams");
+    await runSQL("ALTER TABLE team ADD IF NOT EXISTS combat_type INT NOT NULL DEFAULT 1");
+
+    console.log("creating tw_wall_team");
+    await runSQL("CREATE TABLE IF NOT EXISTS tw_wall_team ("+
+        "tw_wall_id varchar(8) NOT NULL, "+
+        "team_id int NOT NULL, "+
+        "ally_code int NOT NULL, "+
+        "primary key(team_id, ally_code), "+
+        "CONSTRAINT fk_tw_wall_team__player "+
+        "FOREIGN KEY (ally_code) REFERENCES player (ally_code) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT, "+
+        "CONSTRAINT fk_tw_wall_team__team "+
+        "FOREIGN KEY (team_id) REFERENCES team (team_id) "+
+        "ON DELETE CASCADE "+
+        "ON UPDATE RESTRICT "+
+        ");");
+
+        await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 7, 'Cross', 'Multiplexer' WHERE 7 NOT IN (SELECT slot_id FROM slot)");
+        await runSQL("UPDATE player_mod SET slot_id = 7 WHERE slot_id = 6 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 7) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 7 WHERE slot_id = 6 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 7) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Circle', slot_long_name = 'Data-Bus' WHERE slot_id = 6");
+        await runSQL("UPDATE player_mod SET slot_id = 6 WHERE slot_id = 5 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 6) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 6 WHERE slot_id = 5 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 6) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Triangle', slot_long_name = 'Holo-Array' WHERE slot_id = 5");
+        await runSQL("UPDATE player_mod SET slot_id = 5 WHERE slot_id = 4 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 5) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 5 WHERE slot_id = 4 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 5) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Diamond', slot_long_name = 'Processor' WHERE slot_id = 4");
+        await runSQL("UPDATE player_mod SET slot_id = 4 WHERE slot_id = 3 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 4) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 4 WHERE slot_id = 3 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 4) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Arrow', slot_long_name = 'Receiver' WHERE slot_id = 3");
+        await runSQL("UPDATE player_mod SET slot_id = 3 WHERE slot_id = 2 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 3) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 3 WHERE slot_id = 2 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 3) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Square', slot_long_name = 'Transmitter' WHERE slot_id = 2");
+        await runSQL("UPDATE player_mod SET slot_id = 2 WHERE slot_id = 1 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 2) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 2 WHERE slot_id = 1 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 2) = 0)");
+
+        await runSQL("DELETE FROM slot WHERE slot_id = 1");
+}
 
 async function versionTwo (){
 

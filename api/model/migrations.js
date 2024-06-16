@@ -62,6 +62,26 @@ async function versionThree (){
         "ON UPDATE RESTRICT "+
         ");");
 
+        await runSQL("INSERT INTO slot (slot_id, slot_name, slot_long_name) SELECT 7, 'Cross', 'Multiplexer' WHERE 7 NOT IN (SELECT slot_id FROM slot)");
+        await runSQL("UPDATE player_mod SET slot_id = 7 WHERE slot_id = 6 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 7) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 7 WHERE slot_id = 6 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 7) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Circle', slot_long_name = 'Data-Bus' WHERE slot_id = 6");
+        await runSQL("UPDATE player_mod SET slot_id = 6 WHERE slot_id = 5 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 6) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 6 WHERE slot_id = 5 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 6) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Triangle', slot_long_name = 'Holo-Array' WHERE slot_id = 5");
+        await runSQL("UPDATE player_mod SET slot_id = 5 WHERE slot_id = 4 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 5) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 5 WHERE slot_id = 4 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 5) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Diamond', slot_long_name = 'Processor' WHERE slot_id = 4");
+        await runSQL("UPDATE player_mod SET slot_id = 4 WHERE slot_id = 3 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 4) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 4 WHERE slot_id = 3 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 4) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Arrow', slot_long_name = 'Receiver' WHERE slot_id = 3");
+        await runSQL("UPDATE player_mod SET slot_id = 3 WHERE slot_id = 2 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 3) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 3 WHERE slot_id = 2 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 3) = 0)");
+        await runSQL("UPDATE slot SET slot_name = 'Square', slot_long_name = 'Transmitter' WHERE slot_id = 2");
+        await runSQL("UPDATE player_mod SET slot_id = 2 WHERE slot_id = 1 AND ((SELECT COUNT(*) FROM player_mod WHERE slot_id = 2) = 0)");
+        await runSQL("UPDATE unit_mod SET slot_id = 2 WHERE slot_id = 1 AND ((SELECT COUNT(*) FROM unit_mod WHERE slot_id = 2) = 0)");
+
+        await runSQL("DELETE FROM slot WHERE slot_id = 1");
 }
 
 async function versionTwo (){

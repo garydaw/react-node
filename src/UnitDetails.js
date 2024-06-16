@@ -51,9 +51,9 @@ export default function UnitDetails({unitDetails, closeDetails}) {
             </div>
             <div className="row pb-3 d-none d-lg-flex">
                 <div className="col-4">
-                    <ModDetails mod={modArray[1]}></ModDetails>
-                    <ModDetails mod={modArray[3]}></ModDetails>
-                    <ModDetails mod={modArray[5]}></ModDetails>
+                    <ModDetails mod={modArray[2]}></ModDetails>
+                    <ModDetails mod={modArray[4]}></ModDetails>
+                    <ModDetails mod={modArray[6]}></ModDetails>
                 </div>
                 <div className="col-4">
                     <div className="row d-flex justify-content-between align-items-center">
@@ -99,9 +99,9 @@ export default function UnitDetails({unitDetails, closeDetails}) {
                     </div>
                 </div>
                 <div className="col-4">
-                    <ModDetails mod={modArray[2]}></ModDetails>
-                    <ModDetails mod={modArray[4]}></ModDetails>
-                    <ModDetails mod={modArray[6]}></ModDetails>
+                    <ModDetails mod={modArray[3]}></ModDetails>
+                    <ModDetails mod={modArray[5]}></ModDetails>
+                    <ModDetails mod={modArray[7]}></ModDetails>
                 </div>
             </div>
             
@@ -151,14 +151,14 @@ export default function UnitDetails({unitDetails, closeDetails}) {
             </div>
             <div className="row pb-3 d-lg-none">
                 <div className="col-12 col-md-6">
-                    <ModDetails mod={modArray[1]}></ModDetails>
-                    <ModDetails mod={modArray[3]}></ModDetails>
-                    <ModDetails mod={modArray[5]}></ModDetails>
-                </div>
-                <div className="col-12 col-md-6">
                     <ModDetails mod={modArray[2]}></ModDetails>
                     <ModDetails mod={modArray[4]}></ModDetails>
                     <ModDetails mod={modArray[6]}></ModDetails>
+                </div>
+                <div className="col-12 col-md-6">
+                    <ModDetails mod={modArray[3]}></ModDetails>
+                    <ModDetails mod={modArray[5]}></ModDetails>
+                    <ModDetails mod={modArray[7]}></ModDetails>
                 </div>
             </div>
         </div>

@@ -185,7 +185,7 @@ rote.getAllyCountAvailableAllocations = async (path, phase, operations) => {
     return await runSQL(sql, [path, phase, path, phase, operations, path, phase]);
 }
 
-rote.allocateAlly = async (path, phase, operations, ally_code) => {
+rote.allocateAlly = async (path, phase, operations, ally_code, allocated) => {
     
     let sql = 
     "SELECT 	DISTINCT ro.base_id "
@@ -211,9 +211,12 @@ rote.allocateAlly = async (path, phase, operations, ally_code) => {
     const base_ids = await runSQL(sql, [path, phase, path, phase, operations, ally_code]);
     
     base_ids.forEach(async function (ally, index) {
-        sql = "UPDATE rote_operation SET ally_code = ? WHERE base_id = ? AND path = ? "
-            + "AND phase = ? AND operation IN (?) AND ally_code IS NULL ORDER BY operation, unit_index LIMIT 1";
-        await runSQL(sql, [ally_code, ally.base_id, path, phase, operations]);
+        if(allocated < 10){
+            sql = "UPDATE rote_operation SET ally_code = ? WHERE base_id = ? AND path = ? "
+                + "AND phase = ? AND operation IN (?) AND ally_code IS NULL ORDER BY operation, unit_index LIMIT 1";
+            await runSQL(sql, [ally_code, ally.base_id, path, phase, operations]);
+            allocated++;
+        }
     });
 }
 
@@ -247,6 +250,7 @@ rote.allocateOperations = async (path, phase) => {
 
     let fill_operations = makeable_operations;
     if(fill_operations.length > 0){
+
         //check makeable operations
         let base_ids = await rote.getEmptyAllocations(path, phase, fill_operations);
 
@@ -263,10 +267,9 @@ rote.allocateOperations = async (path, phase) => {
             + "AND     operation IN (?) "
             + "AND     base_id = ? "
             + "GROUP BY operation "
-            + "ORDER BY COUNT(*) DESC"
+            + "ORDER BY COUNT(*) "
 
             const unit_count = await runSQL(sql, [path, phase, fill_operations, missing_base_ids[0].base_id]);
-
             const remove_operation = rote.minNumbersToAddUpToTarget(unit_count, missing_base_ids[0].missing);
 
             fill_operations = fill_operations.filter(item => !remove_operation.includes(item));
@@ -279,12 +282,13 @@ rote.allocateOperations = async (path, phase) => {
             //filter by missing != 0
             missing_base_ids = base_ids.filter(item => item.missing > 0);
         }
-        
+    
         if(fill_operations.length > 0)
             await rote.allocateToOperations(path, phase, fill_operations);
     }
 
     const removed_operations = all_operations.filter(item => !fill_operations.includes(item));
+
     if(removed_operations.length > 0)
         await rote.allocateToOperations(path, phase, removed_operations);
 
@@ -294,12 +298,14 @@ rote.allocateToOperations = async (path, phase, operations) => {
 
     let allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, operations);
     let found = true;
+
     while(allocation_left.length > 0 && found){
+
         found = false;
         for(var i = 0; i < allocation_left.length; i++){
-            if(allocation_left[i].ally_available + allocation_left[i].ally_allocated < 10){
+            if(allocation_left[i].ally_allocated < 10){
                 found = true;
-                await rote.allocateAlly(path, phase, operations, allocation_left[i].ally_code);
+                await rote.allocateAlly(path, phase, operations, allocation_left[i].ally_code, allocation_left[i].ally_allocated);
             }
         }
         allocation_left = await rote.getAllyCountAvailableAllocations(path, phase, operations);
@@ -307,7 +313,7 @@ rote.allocateToOperations = async (path, phase, operations) => {
 }
 
 rote.minNumbersToAddUpToTarget = (arr, target) => {
-   
+    
     let sum = BigInt(0);
     let index = arr.length - 1;
     const usedNumbers = [];
@@ -322,7 +328,6 @@ rote.minNumbersToAddUpToTarget = (arr, target) => {
         }
         index--;
     }
-    
     //target is lower than any count so just take the first operation 
     usedNumbers.push(arr[0].operation);
     return usedNumbers; // If no combination of numbers adds up to the target
